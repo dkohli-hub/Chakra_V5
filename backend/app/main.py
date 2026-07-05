@@ -31,3 +31,13 @@ app.include_router(ocr.router)
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+
+@app.get("/debug/accounts")
+async def debug_accounts():
+    from .config import settings
+    try:
+        accounts = settings.get_user_accounts()
+        return {"count": len(accounts), "ids": [u["id"] for u in accounts]}
+    except Exception as e:
+        return {"error": str(e), "raw": settings.USER_ACCOUNTS[:100]}
