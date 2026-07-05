@@ -19,13 +19,13 @@ export default function ChakraFAB() {
 
   return (
     <div className="chakra-fab-row">
+      <div className="sf-fab-inline" onClick={openSmartFetch} title="Smart Fetch">
+        🔍
+      </div>
       <div className="chakra-fab-wrap" ref={wrapRef}>
         <div className="chakra-fab-img" onClick={openFab} title="Quick add">
           🕉
         </div>
-      </div>
-      <div className="sf-fab-inline" onClick={openSmartFetch} title="Smart Fetch">
-        🔍
       </div>
     </div>
   )

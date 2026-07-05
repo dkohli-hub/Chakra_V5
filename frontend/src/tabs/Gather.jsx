@@ -6,12 +6,12 @@ import { parseWeightage, parseMultitask, parseHorizon, suggestCalendar } from '.
 import { BUCKETS, CAL_KEYWORDS } from '../constants'
 
 const LIFE_AREAS = [
-  'Self / Soul', 'Health / Body', 'Relationships', 'Career / Work',
-  'Finance / Wealth', 'Learning / Growth', 'Family / Home', 'Society / World'
+  'Personal/Family', 'Work/Employment', 'Picturizze',
+  'Health / Body', 'Finance / Wealth', 'Learning / Growth', 'Other'
 ]
 
-const HORIZONS = ['today', 'thisWeek', 'nextWeek', 'later']
-const H_LABEL = { today: 'Today', thisWeek: 'This Week', nextWeek: 'Next Week', later: 'Later' }
+const HORIZONS = ['today', 'thisWeek', 'nextWeek', 'thisMonth', 'later']
+const H_LABEL = { today: 'Today', thisWeek: 'This Week', nextWeek: 'Next Week', thisMonth: 'Next Month', later: 'Later' }
 
 export default function Gather() {
   const { state, dispatch, addTask, showToast } = useApp()
@@ -44,9 +44,10 @@ export default function Gather() {
       }
       reader.readAsDataURL(file)
     } catch {
-      dispatch({ type: 'SHOW_TOAST', payload: { msg: 'OCR failed', type: 'error' } })
+      showToast('OCR failed', 'error')
     } finally {
       setOcrLoading(false)
+      e.target.value = ''
     }
   }
 
@@ -64,12 +65,12 @@ export default function Gather() {
         if (j.lifeArea) setLifeArea(j.lifeArea)
         if (j.multitask) setMultitask(j.multitask)
         setTagsOpen(true)
-        dispatch({ type: 'SHOW_TOAST', payload: { msg: 'Smart parsed', type: 'ok' } })
+        showToast('Smart parsed ✓', 'ok')
       } catch {
-        dispatch({ type: 'SHOW_TOAST', payload: { msg: 'Could not parse response', type: 'error' } })
+        showToast('Could not parse response', 'warn')
       }
     } catch {
-      dispatch({ type: 'SHOW_TOAST', payload: { msg: 'LLM call failed', type: 'error' } })
+      showToast('LLM call failed', 'warn')
     } finally {
       setLlmLoading(false)
     }
@@ -104,107 +105,111 @@ export default function Gather() {
       setMultitask('No')
       setBucket('Karya')
       setTagsOpen(false)
-      showToast('Added to Chakra', 'ok')
+      showToast('Added to Chakra ✓', 'ok')
     } catch {
-      showToast('Failed to add task', 'error')
+      showToast('Failed to add task', 'warn')
     }
   }
 
   return (
-    <div className="wrap">
-      <div className="gather-section">
+    <div className="gather-wrap">
+      <div className="gather-card">
         <div className="gather-prompt">What is the task?</div>
         <textarea
-          className="gather-ta"
-          placeholder="Type a task, thought, or intention…"
+          className="gather-textarea"
+          placeholder="One task per line — type or paste from photo"
           value={title}
           onChange={e => setTitle(e.target.value)}
           onKeyDown={e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) handleAdd() }}
           rows={3}
         />
-        <div className="gather-row-btns">
-          <button className="btn-ghost" onClick={handleSmartParse} disabled={llmLoading || !title.trim()}>
-            {llmLoading ? 'Parsing…' : '⚡ Smart Parse'}
-          </button>
-        </div>
-      </div>
 
-      <div className="img-section">
-        <div className="img-section-lbl">Scan from image</div>
-        <div className="img-upload-area" onClick={() => fileRef.current.click()}>
-          {ocrLoading ? 'Scanning…' : '📷 Tap to upload image'}
-        </div>
-        <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleOcr} />
-        {context !== undefined && (
+        <button
+          className="smart-parse-btn"
+          onClick={handleSmartParse}
+          disabled={llmLoading || !title.trim()}
+        >
+          {llmLoading ? 'Parsing…' : '⚡ Smart Parse'}
+        </button>
+
+        <div className="img-section">
+          <div className="img-section-lbl">📷 Upload photo or screenshot</div>
+          <label className="img-upload-btn">
+            {ocrLoading ? '⟳ Scanning…' : '📷 Choose image'}
+            <input ref={fileRef} type="file" accept="image/*" onChange={handleOcr} />
+          </label>
           <textarea
             className="img-commentary"
-            placeholder="Add context (optional)…"
+            placeholder="Context (optional): duration, multitask, urgency…"
             value={context}
             onChange={e => setContext(e.target.value)}
             rows={2}
           />
-        )}
-      </div>
-
-      <div className="tags-section">
-        <div className="tags-hdr" onClick={() => setTagsOpen(o => !o)}>
-          <span className="tags-hdr-txt">Tags &amp; Options</span>
-          <span className="tags-toggle">{tagsOpen ? '▲' : '▼'}</span>
         </div>
-        {tagsOpen && (
-          <div className="tags-body">
-            <div className="tag-row">
-              <div className="tag-lbl">Bucket</div>
-              <div className="tag-chips">
-                {BUCKETS.map(b => (
-                  <div key={b.key} className={`tag-chip${bucket === b.key ? ' sel' : ''}`} onClick={() => setBucket(b.key)}>{b.key}</div>
-                ))}
-              </div>
-            </div>
-            <div className="tag-row">
-              <div className="tag-lbl">Weightage</div>
-              <div className="tag-chips">
-                {['W1', 'W2', 'W3', 'W4', 'W5'].map(w => (
-                  <div key={w} className={`tag-chip${weightage === w ? ' sel' : ''}`} onClick={() => setWeightage(w)}>{w}</div>
-                ))}
-              </div>
-            </div>
-            <div className="tag-row">
-              <div className="tag-lbl">Time Horizon</div>
-              <div className="tag-chips">
-                {HORIZONS.map(h => (
-                  <div key={h} className={`tag-chip${horizon === h ? ' sel' : ''}`} onClick={() => setHorizon(h)}>{H_LABEL[h]}</div>
-                ))}
-              </div>
-            </div>
-            <div className="tag-row">
-              <div className="tag-lbl">Life Area</div>
-              <div className="tag-chips">
-                {LIFE_AREAS.map(la => (
-                  <div key={la} className={`tag-chip${lifeArea === la ? ' sel' : ''}`} onClick={() => setLifeArea(lifeArea === la ? '' : la)}>{la}</div>
-                ))}
-              </div>
-            </div>
-            <div className="tag-row">
-              <div className="tag-lbl">Multitask</div>
-              <div className="tag-chips">
-                {['Yes', 'No'].map(m => (
-                  <div key={m} className={`tag-chip${multitask === m ? ' sel' : ''}`} onClick={() => setMultitask(m)}>{m}</div>
-                ))}
-              </div>
+
+        <div className="tags-toggle" onClick={() => setTagsOpen(o => !o)}>
+          <span className="tags-toggle-lbl">Tags &amp; Options</span>
+          <span className={`tags-chevron${tagsOpen ? ' open' : ''}`}>▼</span>
+        </div>
+        <div className={`tags-body${tagsOpen ? ' open' : ''}`}>
+          <div className="tag-group">
+            <div className="tag-lbl">Bucket</div>
+            <div className="tag-opts">
+              {BUCKETS.map(b => (
+                <span key={b.key} className={`tag-chip${bucket === b.key ? ' sel' : ''}`} onClick={() => setBucket(b.key)}>{b.key}</span>
+              ))}
             </div>
           </div>
-        )}
+          <div className="tag-group">
+            <div className="tag-lbl">Weightage</div>
+            <div className="tag-opts">
+              {['W1','W2','W3','W4','W5'].map((w, i) => (
+                <span key={w} className={`tag-chip${weightage === w ? ' sel' : ''}`} onClick={() => setWeightage(w)}>{w} · {['5m','30m','1h','½d','Day'][i]}</span>
+              ))}
+            </div>
+          </div>
+          <div className="tag-group">
+            <div className="tag-lbl">Time Horizon</div>
+            <div className="tag-opts">
+              {HORIZONS.map(h => (
+                <span key={h} className={`tag-chip${horizon === h ? ' sel' : ''}`} onClick={() => setHorizon(h)}>{H_LABEL[h]}</span>
+              ))}
+            </div>
+          </div>
+          <div className="tag-group">
+            <div className="tag-lbl">Life Area</div>
+            <div className="tag-opts">
+              {LIFE_AREAS.map(la => (
+                <span key={la} className={`tag-chip${lifeArea === la ? ' sel' : ''}`} onClick={() => setLifeArea(lifeArea === la ? '' : la)}>{la}</span>
+              ))}
+            </div>
+          </div>
+          <div className="tag-group">
+            <div className="tag-lbl">Multitaskable?</div>
+            <div className="tag-opts">
+              <span className={`tag-chip${multitask === 'Yes' ? ' sel' : ''}`} onClick={() => setMultitask('Yes')}>Yes — driving/walk</span>
+              <span className={`tag-chip${multitask === 'No' ? ' sel' : ''}`} onClick={() => setMultitask('No')}>No — full focus</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {recent.length > 0 && (
         <div className="recent-section">
-          <div className="recent-lbl">Recent Entries</div>
+          <div className="recent-hdr">
+            <span className="recent-lbl">Recent Entries</span>
+            <span className="recent-count">{state.tasks.filter(t => !t.completed).length} active</span>
+          </div>
           {recent.map(t => <TaskCard key={t.id} task={t} />)}
         </div>
       )}
 
-      <div className="gather-fab" onClick={handleAdd}>Add to Chakra ＋</div>
+      <button
+        className={`gather-fab${title.trim() ? ' visible' : ''}`}
+        onClick={handleAdd}
+      >
+        Add to Chakra ＋
+      </button>
     </div>
   )
 }
