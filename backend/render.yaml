@@ -16,8 +16,8 @@ services:
         sync: false
       - key: OPENROUTER_MODEL
         value: anthropic/claude-sonnet-4
-      - key: GOOGLE_VISION_API_KEY
-        sync: false
+      - key: OPENROUTER_VISION_MODEL
+        value: google/gemini-flash-1.5
       - key: USER_ACCOUNTS
         sync: false
 
