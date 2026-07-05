@@ -33,6 +33,18 @@ BACKUP_PATH = Path(__file__).parent.parent / "karma-kshetra-backup-2026-07-05.js
 USER_ID = "dk"
 
 
+def parse_dt(val):
+    """Convert ISO string or None to datetime; return None if blank."""
+    if not val:
+        return None
+    if isinstance(val, datetime):
+        return val
+    try:
+        return datetime.fromisoformat(str(val).replace("Z", "+00:00"))
+    except Exception:
+        return None
+
+
 def normalise(raw: dict) -> dict:
     """Normalise a single task dict from JSON backup to DB column names."""
     bucket = raw.get("bucket", "Karya")
@@ -68,12 +80,14 @@ def normalise(raw: dict) -> dict:
         "state_history": sh,
         "transition_count": raw.get("transition_count") or raw.get("transitionCount") or 0,
         "completed": raw.get("completed", False),
-        "completed_timestamp": (
+        "completed_timestamp": parse_dt(
             raw.get("completed_timestamp")
             or raw.get("completedTimestamp")
             or raw.get("completionDate")
         ),
-        "entry_timestamp": raw.get("entry_timestamp") or raw.get("entryTimestamp"),
+        "entry_timestamp": parse_dt(
+            raw.get("entry_timestamp") or raw.get("entryTimestamp")
+        ),
         "aging_days": raw.get("aging_days") or raw.get("agingDays") or 0,
     }
 
@@ -121,8 +135,8 @@ async def seed():
                         :id, :user_id, :num, :title, :bucket, :weightage, :time_horizon,
                         :life_area, :ch, :multitask, CAST(:state_history AS jsonb),
                         :transition_count, :origin_bucket, :completed,
-                        CAST(:completed_timestamp AS timestamptz),
-                        CAST(:entry_timestamp AS timestamptz), :aging_days
+                        :completed_timestamp,
+                        :entry_timestamp, :aging_days
                     )
                 """),
                 {
@@ -141,7 +155,7 @@ async def seed():
                     "origin_bucket": norm["origin_bucket"],
                     "completed": norm["completed"],
                     "completed_timestamp": norm["completed_timestamp"],
-                    "entry_timestamp": norm["entry_timestamp"],
+                    "entry_timestamp": norm["entry_timestamp"] or datetime.utcnow(),
                     "aging_days": norm["aging_days"],
                 },
             )
