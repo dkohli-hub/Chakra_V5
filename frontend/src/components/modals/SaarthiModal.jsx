@@ -20,7 +20,7 @@ export default function SaarthiModal() {
   async function process() {
     const raw = text.trim()
     if (!raw) { showToast('⚠ Nothing pasted yet', 'warn'); return }
-    const jsonStart = raw.indexOf('{')
+    const jsonStart = raw.search(/[\[{]/)
     const cleaned = jsonStart > 0 ? raw.slice(jsonStart) : raw
     try {
       const parsed = JSON.parse(cleaned)
