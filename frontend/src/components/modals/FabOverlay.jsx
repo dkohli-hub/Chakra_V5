@@ -58,7 +58,7 @@ export default function FabOverlay() {
 
   function openCal() {
     close()
-    dispatch({ type: 'SET_CAL_MODAL', payload: { taskTitle: lastTitle } })
+    dispatch({ type: 'SET_CAL_MODAL', payload: { open: true, taskTitle: lastTitle } })
   }
 
   return (
