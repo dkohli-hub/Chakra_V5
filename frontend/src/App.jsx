@@ -87,7 +87,7 @@ export default function App() {
   const showSaarthiModal = saarthiOpen && (!ocrLines || ocrLines.length === 0)
 
   return (
-    <div id="app" className={state.krishnaMode ? 'krishna-mode' : ''}>
+    <div id="app" className={[state.krishnaMode ? 'krishna-mode' : '', fabOverlayOpen ? 'fab-open' : ''].filter(Boolean).join(' ')}>
       <Header onExport={handleExport} onImportFile={handleImportFile} />
       <div id="content">
         <TabComponent />
