@@ -83,8 +83,9 @@ export default function CalendarModal() {
 
   useEffect(() => {
     if (modal) {
-      const suggested = suggestCalendar(modal.taskTitle || '', CAL_KEYWORDS)
-      setSelCal(suggested)
+      const title = modal.taskTitle || modal.task?.title || ''
+      const suggested = suggestCalendar(title, CAL_KEYWORDS)
+      setSelCal(suggested || 'personal')
       setBookedSlot(null)
       setConfirmDetail(null)
     }
@@ -92,7 +93,7 @@ export default function CalendarModal() {
 
   if (!modal) return null
 
-  const taskTitle = modal.taskTitle || 'New Task'
+  const taskTitle = modal.taskTitle || modal.task?.title || 'New Task'
 
   function close() { dispatch({ type: 'SET_CAL_MODAL', payload: null }) }
 

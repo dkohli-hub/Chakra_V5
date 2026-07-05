@@ -79,7 +79,7 @@ export default function App() {
 
   function handleCalAskConfirm() {
     if (!calAskTask) return
-    dispatch({ type: 'SET_CAL_MODAL', payload: { open: true, task: calAskTask } })
+    dispatch({ type: 'SET_CAL_MODAL', payload: { open: true, taskTitle: calAskTask.title, task: calAskTask } })
     dispatch({ type: 'SET_CAL_ASK', payload: null })
   }
 
@@ -128,17 +128,14 @@ export default function App() {
       )}
 
       {calAskTask && (
-        <div className="cal-ask-overlay" onClick={() => dispatch({ type: 'SET_CAL_ASK', payload: null })}>
-          <div className="cal-ask-panel" onClick={e => e.stopPropagation()}>
-            <div className="cal-ask-title">Add to Calendar?</div>
-            <div className="cal-ask-sub">"{calAskTask.title}"</div>
-            {calAskTask.slot && (
-              <div className="cal-ask-sub" style={{ opacity: 0.7 }}>Suggested slot: {calAskTask.slot}</div>
-            )}
-            <div className="cal-ask-btns">
-              <button className="cal-ask-btn" onClick={handleCalAskConfirm}>Yes, book it</button>
-              <button className="cal-ask-btn ghost" onClick={() => dispatch({ type: 'SET_CAL_ASK', payload: null })}>Skip</button>
-            </div>
+        <div className="cal-ask-toast show">
+          <div className="cal-ask-txt">✓ Saved — Add to Calendar?</div>
+          <div style={{ fontFamily: 'Montserrat,sans-serif', fontSize: '11px', color: 'var(--text-faint)', marginBottom: '8px' }}>
+            "{calAskTask.title}"
+          </div>
+          <div className="cal-ask-btns">
+            <button className="cal-btn go" onClick={handleCalAskConfirm}>Yes — Schedule It</button>
+            <button className="cal-btn cancel" onClick={() => dispatch({ type: 'SET_CAL_ASK', payload: null })}>Not now</button>
           </div>
         </div>
       )}
