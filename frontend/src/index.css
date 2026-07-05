@@ -58,7 +58,8 @@ html,body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-s
 .sec-hdr{padding:12px 14px 6px;display:flex;justify-content:space-between;align-items:center;}
 .sec-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);font-weight:600;}
 .sec-count{font-size:11px;color:var(--text-faint);}
-.wrap{padding:8px 10px;}
+.wrap{padding:8px 10px 160px;}
+#content{padding-bottom:0;}
 
 /* COLLAPSIBLE COLUMN */
 .col{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden;}
@@ -128,7 +129,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-s
 .bat-drill-close{background:none;border:none;font-size:20px;color:var(--text-faint);cursor:pointer;line-height:1;padding:0;}
 
 /* GATHER TAB */
-.gather-wrap{padding:10px 12px 80px;}
+.gather-wrap{padding:10px 12px 160px;}
 .gather-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px;}
 .gather-prompt{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);font-style:italic;margin-bottom:10px;line-height:1.4;}
 .gather-textarea{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Montserrat',sans-serif;font-size:13px;padding:10px;resize:none;outline:none;min-height:72px;}
@@ -261,7 +262,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-s
 .chakra-fab-wrap.spinning .chakra-fab-img{transform:rotate(30deg) scale(1.08);}
 
 /* KRISHNA MODE */
-.km-badge{position:fixed;top:10px;right:10px;z-index:400;font-size:9px;letter-spacing:1px;padding:4px 10px;border-radius:12px;border:1px solid rgba(160,120,40,.5);color:#A07828;background:rgba(160,120,40,.08);cursor:pointer;font-family:'Montserrat',sans-serif;font-weight:600;transition:all .2s;}
+.km-badge{position:fixed;bottom:136px;right:10px;z-index:400;font-size:9px;letter-spacing:1px;padding:4px 10px;border-radius:12px;border:1px solid rgba(160,120,40,.5);color:#A07828;background:rgba(160,120,40,.08);cursor:pointer;font-family:'Montserrat',sans-serif;font-weight:600;transition:all .2s;}
 .km-badge.on{background:#A07828;color:#1A1000;}
 .krishna-verse{position:fixed;top:52px;left:50%;transform:translateX(-50%);z-index:500;background:#FBF4E3;border:1px solid #A07828;border-radius:10px;padding:10px 16px;font-family:'Cormorant Garamond',serif;font-size:12px;font-style:italic;color:#1A3A2A;max-width:320px;text-align:center;line-height:1.6;box-shadow:0 4px 14px rgba(160,120,40,.18);display:none;}
 .krishna-verse.show{display:block;}

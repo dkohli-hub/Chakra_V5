@@ -43,13 +43,14 @@ export default function FabOverlay() {
           agingDays: 0,
         })
       }
-      showToast(`✓ ${lines.length === 1 ? '1 task' : lines.length + ' tasks'} added to Chakra ＋`)
       if (lines.length === 1) {
         setLastTitle(lines[0])
         setCalShow(true)
+        // panel itself shows "✓ Saved — Add to Calendar?" — no floating toast needed
       } else {
         setText('')
         close()
+        showToast(`✓ ${lines.length} tasks added to Chakra ＋`)
       }
     } catch {
       showToast('Failed to save task', 'warn')
