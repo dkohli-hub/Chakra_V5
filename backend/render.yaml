@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: chakra-v5-backend
+    env: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: chakra-postgres
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: OPENROUTER_MODEL
+        value: anthropic/claude-sonnet-4
+      - key: GOOGLE_VISION_API_KEY
+        sync: false
+      - key: USER_ACCOUNTS
+        sync: false
+
+databases:
+  - name: chakra-postgres
+    databaseName: chakra
+    user: chakra

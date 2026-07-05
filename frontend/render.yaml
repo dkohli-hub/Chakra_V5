@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: chakra-v5-frontend
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    pullRequestPreviewsEnabled: false
+    envVars:
+      - key: VITE_API_URL
+        sync: false
+      - key: VITE_GOOGLE_CLIENT_ID
+        sync: false
+      - key: VITE_CAL_PERSONAL
+        sync: false
+      - key: VITE_CAL_PICTURIZZE
+        sync: false
+      - key: VITE_CAL_ITC
+        sync: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

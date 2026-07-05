@@ -1,0 +1,3916 @@
+[
+  {
+    "title": "Eye drops — not regular",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "today",
+    "life_area": "Personal/Family",
+    "ch": 6,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345010"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T17:42:21.345010"
+  },
+  {
+    "title": "Pay Sudhir + reconciliation sheet",
+    "bucket": "Karya",
+    "weightage": "W3",
+    "time_horizon": "today",
+    "life_area": "Personal/Family",
+    "ch": 17,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345019"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T17:42:21.345019"
+  },
+  {
+    "title": "Mounjaro and other shots — tonight",
+    "bucket": "Karya",
+    "weightage": "W2",
+    "time_horizon": "today",
+    "life_area": "Personal/Family",
+    "ch": 6,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-22T17:42:21.345036"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-22T17:42:21.345036"
+  },
+  {
+    "title": "Recheck Picturizze inventory — before Sunday",
+    "bucket": "Karya",
+    "weightage": "W5",
+    "time_horizon": "thisWeek",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345042"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T17:42:21.345042"
+  },
+  {
+    "title": "iDeploy v1 — first version for Saturday",
+    "bucket": "Karya",
+    "weightage": "W4",
+    "time_horizon": "thisWeek",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-20T17:42:21.345045"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-20T17:42:21.345045"
+  },
+  {
+    "title": "Follow up payment — Hasta Punjab",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "today",
+    "life_area": "Picturizze",
+    "ch": 17,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345048"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T17:42:21.345048"
+  },
+  {
+    "title": "Tesla — draft and send intro letter",
+    "bucket": "Dhairya",
+    "weightage": "W2",
+    "time_horizon": "today",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Dhairya",
+        "timestamp": "2026-05-19T17:42:21.345055"
+      }
+    ],
+    "origin_bucket": "Dhairya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-19T17:42:21.345055"
+  },
+  {
+    "title": "Su — client relationship doesn't click",
+    "bucket": "Manan",
+    "weightage": "W2",
+    "time_horizon": "thisWeek",
+    "life_area": "Work/Employment",
+    "ch": 12,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Manan",
+        "timestamp": "2026-05-19T17:42:21.345062"
+      }
+    ],
+    "origin_bucket": "Manan",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-19T17:42:21.345062"
+  },
+  {
+    "title": "Calendar printout — all calendars, 3 months",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "today",
+    "life_area": "Work/Employment",
+    "ch": 11,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-22T17:42:21.345065"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-22T17:42:21.345065"
+  },
+  {
+    "title": "Book Milwaukee trip — Larry, Jason, Kendi",
+    "bucket": "Dhairya",
+    "weightage": "W3",
+    "time_horizon": "thisWeek",
+    "life_area": "Work/Employment",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Dhairya",
+        "timestamp": "2026-05-20T17:42:21.345071"
+      }
+    ],
+    "origin_bucket": "Dhairya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-20T17:42:21.345071"
+  },
+  {
+    "title": "Email Kumud — Harish demo",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "thisWeek",
+    "life_area": "Work/Employment",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345074"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T17:42:21.345074"
+  },
+  {
+    "title": "Message Dhruv & Priya for Mila birthday film",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "nextWeek",
+    "life_area": "Personal/Family",
+    "ch": 12,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345078"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T17:42:21.345078"
+  },
+  {
+    "title": "Drive back May 23 — record book content",
+    "bucket": "Karya",
+    "weightage": "W2",
+    "time_horizon": "nextWeek",
+    "life_area": "Personal/Family",
+    "ch": 16,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-20T17:42:21.345081"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-20T17:42:21.345081"
+  },
+  {
+    "title": "I do not like working for anyone",
+    "bucket": "Manan",
+    "weightage": "W2",
+    "time_horizon": "thisYear",
+    "life_area": "Personal/Family",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Manan",
+        "timestamp": "2026-05-12T17:42:21.345084"
+      }
+    ],
+    "origin_bucket": "Manan",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-12T17:42:21.345084"
+  },
+  {
+    "title": "Legal disclaimer — Chakra app",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "thisWeek",
+    "life_area": "Personal/Family",
+    "ch": 17,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345087"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T17:42:21.345087"
+  },
+  {
+    "title": "Car wash — after new paint job",
+    "bucket": "Vishram",
+    "weightage": "W4",
+    "time_horizon": "nextWeek",
+    "life_area": "Personal/Family",
+    "ch": 16,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Vishram",
+        "timestamp": "2026-05-17T17:42:21.345090"
+      }
+    ],
+    "origin_bucket": "Vishram",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-17T17:42:21.345090"
+  },
+  {
+    "title": "Review all Claude deliverables",
+    "bucket": "Manthan",
+    "weightage": "W4",
+    "time_horizon": "thisMonth",
+    "life_area": "Personal/Family",
+    "ch": 4,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Manthan",
+        "timestamp": "2026-05-19T17:42:21.345094"
+      }
+    ],
+    "origin_bucket": "Manthan",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-19T17:42:21.345094"
+  },
+  {
+    "title": "Boss misread email — nervous",
+    "bucket": "Dhairya",
+    "weightage": "W1",
+    "time_horizon": "thisMonth",
+    "life_area": "Work/Employment",
+    "ch": 1,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Dhairya",
+        "timestamp": "2026-05-16T17:42:21.345097"
+      }
+    ],
+    "origin_bucket": "Dhairya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-16T17:42:21.345097"
+  },
+  {
+    "title": "Kumud — politically savvy, on hold",
+    "bucket": "Dhairya",
+    "weightage": "W2",
+    "time_horizon": "thisMonth",
+    "life_area": "Work/Employment",
+    "ch": 12,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Dhairya",
+        "timestamp": "2026-05-18T17:42:21.345100"
+      }
+    ],
+    "origin_bucket": "Dhairya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-18T17:42:21.345100"
+  },
+  {
+    "title": "Insurance policy — watch market to cash",
+    "bucket": "Prarabdha",
+    "weightage": "W2",
+    "time_horizon": "thisYear",
+    "life_area": "Personal/Family",
+    "ch": 16,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Prarabdha",
+        "timestamp": "2026-05-02T17:42:21.345106"
+      }
+    ],
+    "origin_bucket": "Prarabdha",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-02T17:42:21.345106"
+  },
+  {
+    "title": "Clean office — Sanjeev coming",
+    "bucket": "Karya",
+    "weightage": "W2",
+    "time_horizon": "thisWeek",
+    "life_area": "Personal/Family",
+    "ch": 13,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345109"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T17:42:21.345109"
+  },
+  {
+    "title": "Politely decline Sameer — insurance policy",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "thisWeek",
+    "life_area": "Personal/Family",
+    "ch": 16,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345123"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T17:42:21.345123"
+  },
+  {
+    "title": "Pay Rania — 3 hours Picturizze",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "nextWeek",
+    "life_area": "Picturizze",
+    "ch": 17,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-20T17:42:21.345126"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-20T17:42:21.345126"
+  },
+  {
+    "title": "Pay Kavya $100 — Picturizze Flatbush",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "nextWeek",
+    "life_area": "Picturizze",
+    "ch": 17,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-20T17:42:21.345129"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-20T17:42:21.345129"
+  },
+  {
+    "title": "Pay Vinod — Picturizze assistance",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "nextWeek",
+    "life_area": "Picturizze",
+    "ch": 17,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-20T17:42:21.345132"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-20T17:42:21.345132"
+  },
+  {
+    "title": "Pay Sai — Picturizze assistance",
+    "bucket": "Karya",
+    "weightage": "W2",
+    "time_horizon": "nextWeek",
+    "life_area": "Picturizze",
+    "ch": 17,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-20T17:42:21.345135"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-20T17:42:21.345135"
+  },
+  {
+    "title": "Find & deliver Apsara clips — Dr. Nisha",
+    "bucket": "Dhairya",
+    "weightage": "W5",
+    "time_horizon": "Q3",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Dhairya",
+        "timestamp": "2026-05-17T17:42:21.344993"
+      }
+    ],
+    "origin_bucket": "Dhairya",
+    "completed": true,
+    "completed_timestamp": "2026-07-05T09:39:03.876054",
+    "entry_timestamp": "2026-05-17T17:42:21.344993"
+  },
+  {
+    "title": "Text Katie for July 11 photo shoot",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "thisWeek",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345068"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": true,
+    "completed_timestamp": "2026-07-05T09:39:08.433318",
+    "entry_timestamp": "2026-05-21T17:42:21.345068"
+  },
+  {
+    "title": "Pay Shruti — Picturizze assistance",
+    "bucket": "Karya",
+    "weightage": "W2",
+    "time_horizon": "nextWeek",
+    "life_area": "Picturizze",
+    "ch": 17,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-20T17:42:21.345139"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-20T17:42:21.345139"
+  },
+  {
+    "title": "Send Larry's resume to Visteon",
+    "bucket": "Karya",
+    "weightage": "W2",
+    "time_horizon": "thisWeek",
+    "life_area": "Personal/Family",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345142"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T17:42:21.345142"
+  },
+  {
+    "title": "B-12 shots — this Sunday recurring",
+    "bucket": "Karya",
+    "weightage": "W2",
+    "time_horizon": "today",
+    "life_area": "Personal/Family",
+    "ch": 6,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-22T17:42:21.345145"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-22T17:42:21.345145"
+  },
+  {
+    "title": "Carry Rajiv's USB to Dallas — May 16",
+    "bucket": "Karya",
+    "weightage": "W2",
+    "time_horizon": "nextWeek",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345148"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T17:42:21.345148"
+  },
+  {
+    "title": "Order Alka-Seltzer from Costco",
+    "bucket": "Karya",
+    "weightage": "W2",
+    "time_horizon": "nextWeek",
+    "life_area": "Personal/Family",
+    "ch": 6,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-20T17:42:21.345152"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-20T17:42:21.345152"
+  },
+  {
+    "title": "Reschedule Mark Gellings meeting — ITC",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "thisWeek",
+    "life_area": "Work/Employment",
+    "ch": 3,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345155"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T17:42:21.345155"
+  },
+  {
+    "title": "Book India tickets — Jan 30-31 2027",
+    "bucket": "Vishram",
+    "weightage": "W3",
+    "time_horizon": "thisMonth",
+    "life_area": "Picturizze",
+    "ch": 11,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Vishram",
+        "timestamp": "2026-05-15T17:42:21.345158"
+      }
+    ],
+    "origin_bucket": "Vishram",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-15T17:42:21.345158"
+  },
+  {
+    "title": "Plan wildlife visit — January India trip",
+    "bucket": "Vishram",
+    "weightage": "W3",
+    "time_horizon": "thisMonth",
+    "life_area": "Picturizze",
+    "ch": 11,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Vishram",
+        "timestamp": "2026-05-15T17:42:21.345161"
+      }
+    ],
+    "origin_bucket": "Vishram",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-15T17:42:21.345161"
+  },
+  {
+    "title": "Ask Manisha to pay Sudhir — next week",
+    "bucket": "Karya",
+    "weightage": "W2",
+    "time_horizon": "nextWeek",
+    "life_area": "Personal/Family",
+    "ch": 17,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345164"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T17:42:21.345164"
+  },
+  {
+    "title": "Email Underwriter Laboratories — ITC",
+    "bucket": "Karya",
+    "weightage": "W2",
+    "time_horizon": "nextWeek",
+    "life_area": "Work/Employment",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-20T17:42:21.345167"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-20T17:42:21.345167"
+  },
+  {
+    "title": "Plan hardware, share with Julio — ITC",
+    "bucket": "Karya",
+    "weightage": "W3",
+    "time_horizon": "thisMonth",
+    "life_area": "Work/Employment",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-19T17:42:21.345170"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-19T17:42:21.345170"
+  },
+  {
+    "title": "Connect Ankita with Disha in Houston",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "nextWeek",
+    "life_area": "Personal/Family",
+    "ch": 12,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-20T17:42:21.345173"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-20T17:42:21.345173"
+  },
+  {
+    "title": "Get DK medical records from Dr. Neeraj — May 30",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "thisMonth",
+    "life_area": "Personal/Family",
+    "ch": 6,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-19T17:42:21.345176"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-19T17:42:21.345176"
+  },
+  {
+    "title": "Send Godiva chocolates to Dr. Neeraj — May 30",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "nextWeek",
+    "life_area": "Personal/Family",
+    "ch": 12,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-20T17:42:21.345179"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-20T17:42:21.345179"
+  },
+  {
+    "title": "Plan next Milwaukee trip",
+    "bucket": "Karya",
+    "weightage": "W2",
+    "time_horizon": "nextWeek",
+    "life_area": "Work/Employment",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345182"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T17:42:21.345182"
+  },
+  {
+    "title": "Plan meeting with Livy — June 15",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "thisMonth",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-19T17:42:21.345190"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-19T17:42:21.345190"
+  },
+  {
+    "title": "Update Livy location schedule in calendar",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "thisWeek",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345194"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T17:42:21.345194"
+  },
+  {
+    "title": "Follow up Vikram — ZTV registration",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "nextWeek",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-20T17:42:21.345197"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-20T17:42:21.345197"
+  },
+  {
+    "title": "Follow up Gayatri TV Asia — Picturizze",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "nextWeek",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-20T17:42:21.345203"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-20T17:42:21.345203"
+  },
+  {
+    "title": "Send voice note to Rohit Verma — Times",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "nextWeek",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345207"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T17:42:21.345207"
+  },
+  {
+    "title": "Follow up Rohit Verma — close Times Sports deal",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "nextWeek",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-20T17:42:21.345210"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-20T17:42:21.345210"
+  },
+  {
+    "title": "Find sports editor from Mumbai phone — F1 connect",
+    "bucket": "Karya",
+    "weightage": "W2",
+    "time_horizon": "nextWeek",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-19T17:42:21.345213"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-19T17:42:21.345213"
+  },
+  {
+    "title": "Connect Zee Nitya — Picturizze media companies",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "thisMonth",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-18T17:42:21.345216"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-18T17:42:21.345216"
+  },
+  {
+    "title": "Assign projects to interns",
+    "bucket": "Karya",
+    "weightage": "W2",
+    "time_horizon": "thisWeek",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345220"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T17:42:21.345220"
+  },
+  {
+    "title": "Decide Mayur monthly pay — retain Picturizze",
+    "bucket": "Dhairya",
+    "weightage": "W2",
+    "time_horizon": "nextWeek",
+    "life_area": "Picturizze",
+    "ch": 16,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Dhairya",
+        "timestamp": "2026-05-19T17:42:21.345223"
+      }
+    ],
+    "origin_bucket": "Dhairya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-19T17:42:21.345223"
+  },
+  {
+    "title": "Find social media person for Picturizze — May end",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "nextWeek",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-20T17:42:21.345226"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-20T17:42:21.345226"
+  },
+  {
+    "title": "Take passwords from Ishika — hand over Picturizze",
+    "bucket": "Karya",
+    "weightage": "W2",
+    "time_horizon": "thisWeek",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345229"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T17:42:21.345229"
+  },
+  {
+    "title": "Redo all passwords into proper file",
+    "bucket": "Vishram",
+    "weightage": "W2",
+    "time_horizon": "thisMonth",
+    "life_area": "Personal/Family",
+    "ch": 9,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Vishram",
+        "timestamp": "2026-05-17T17:42:21.345232"
+      }
+    ],
+    "origin_bucket": "Vishram",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-17T17:42:21.345232"
+  },
+  {
+    "title": "Plan DK contacts migration to better database",
+    "bucket": "Vishram",
+    "weightage": "W4",
+    "time_horizon": "Q3",
+    "life_area": "Personal/Family",
+    "ch": 11,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Vishram",
+        "timestamp": "2026-05-12T17:42:21.345236"
+      }
+    ],
+    "origin_bucket": "Vishram",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-12T17:42:21.345236"
+  },
+  {
+    "title": "DK2Learn — tethering with Sony cameras by June 15",
+    "bucket": "Vishram",
+    "weightage": "W4",
+    "time_horizon": "thisMonth",
+    "life_area": "Picturizze",
+    "ch": 4,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Vishram",
+        "timestamp": "2026-05-16T17:42:21.345239"
+      }
+    ],
+    "origin_bucket": "Vishram",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-16T17:42:21.345239"
+  },
+  {
+    "title": "Review poses document for Katie shoot — June 15",
+    "bucket": "Karya",
+    "weightage": "W4",
+    "time_horizon": "thisMonth",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-19T17:42:21.345242"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-19T17:42:21.345242"
+  },
+  {
+    "title": "Brief Shruti on June 11 photoshoot",
+    "bucket": "Karya",
+    "weightage": "W2",
+    "time_horizon": "nextWeek",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-20T17:42:21.345245"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-20T17:42:21.345245"
+  },
+  {
+    "title": "Leave one camera set with Shruti — Dallas May 23",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "nextWeek",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345248"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T17:42:21.345248"
+  },
+  {
+    "title": "Send IANT pictures to India Bazaar",
+    "bucket": "Karya",
+    "weightage": "W3",
+    "time_horizon": "nextWeek",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-20T17:42:21.345251"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-20T17:42:21.345251"
+  },
+  {
+    "title": "Tell Rajiv — India Bazaar as corporate client",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "nextWeek",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345258"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T17:42:21.345258"
+  },
+  {
+    "title": "Order 200W anchor charger for travel",
+    "bucket": "Karya",
+    "weightage": "W2",
+    "time_horizon": "thisWeek",
+    "life_area": "Personal/Family",
+    "ch": 13,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345261"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T17:42:21.345261"
+  },
+  {
+    "title": "Complete Picturizze inventory",
+    "bucket": "Karya",
+    "weightage": "W4",
+    "time_horizon": "nextWeek",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-20T17:42:21.345264"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-20T17:42:21.345264"
+  },
+  {
+    "title": "Check iDeploy status",
+    "bucket": "Karya",
+    "weightage": "W3",
+    "time_horizon": "nextWeek",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T17:42:21.345267"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T17:42:21.345267"
+  },
+  {
+    "title": "Get North Annuity login with Sonia",
+    "bucket": "Vishram",
+    "weightage": "W2",
+    "time_horizon": "thisMonth",
+    "life_area": "Personal/Family",
+    "ch": 16,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Vishram",
+        "timestamp": "2026-05-14T17:42:21.345270"
+      }
+    ],
+    "origin_bucket": "Vishram",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-14T17:42:21.345270"
+  },
+  {
+    "title": "Send Sudhir about stocks and money",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "nextWeek",
+    "life_area": "Personal/Family",
+    "ch": 17,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-20T17:42:21.345275"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-20T17:42:21.345275"
+  },
+  {
+    "title": "Prepare Aux Services P&L in Claude",
+    "bucket": "Karya",
+    "weightage": "W3",
+    "time_horizon": "nextWeek",
+    "life_area": "Personal/Family",
+    "ch": 11,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-19T17:42:21.345278"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-19T17:42:21.345278"
+  },
+  {
+    "title": "Prepare F-Bar for tax returns with Sonia",
+    "bucket": "Karya",
+    "weightage": "W3",
+    "time_horizon": "thisMonth",
+    "life_area": "Personal/Family",
+    "ch": 17,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-18T18:07:36.823640"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-18T18:07:36.823640"
+  },
+  {
+    "title": "Decide which MacBook to keep — four weeks",
+    "bucket": "Manthan",
+    "weightage": "W2",
+    "time_horizon": "thisMonth",
+    "life_area": "Personal/Family",
+    "ch": 16,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Manthan",
+        "timestamp": "2026-05-17T18:07:36.823642"
+      }
+    ],
+    "origin_bucket": "Manthan",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-17T18:07:36.823642"
+  },
+  {
+    "title": "Send follow-up email to Discover",
+    "bucket": "Karya",
+    "weightage": "W2",
+    "time_horizon": "nextWeek",
+    "life_area": "Personal/Family",
+    "ch": 17,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T18:07:36.823645"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T18:07:36.823645"
+  },
+  {
+    "title": "Activate HSA 2026 — ITC",
+    "bucket": "Karya",
+    "weightage": "W3",
+    "time_horizon": "thisMonth",
+    "life_area": "Personal/Family",
+    "ch": 17,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-19T18:07:36.823647"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-19T18:07:36.823647"
+  },
+  {
+    "title": "Consolidate all HSA accounts",
+    "bucket": "Vishram",
+    "weightage": "W3",
+    "time_horizon": "thisMonth",
+    "life_area": "Personal/Family",
+    "ch": 16,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Vishram",
+        "timestamp": "2026-05-16T18:07:36.823649"
+      }
+    ],
+    "origin_bucket": "Vishram",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-16T18:07:36.823649"
+  },
+  {
+    "title": "Decide HCL 401k merge with ITC 401k",
+    "bucket": "Manthan",
+    "weightage": "W3",
+    "time_horizon": "Q3",
+    "life_area": "Work/Employment",
+    "ch": 16,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Manthan",
+        "timestamp": "2026-05-14T18:07:36.823651"
+      }
+    ],
+    "origin_bucket": "Manthan",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-14T18:07:36.823651"
+  },
+  {
+    "title": "Deepankar appraisal — ITC next week",
+    "bucket": "Karya",
+    "weightage": "W2",
+    "time_horizon": "nextWeek",
+    "life_area": "Work/Employment",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-20T18:07:36.823689"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-20T18:07:36.823689"
+  },
+  {
+    "title": "Follow up Sanjeev Edward — GMR think tank",
+    "bucket": "Vishram",
+    "weightage": "W2",
+    "time_horizon": "thisMonth",
+    "life_area": "Personal/Family",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Vishram",
+        "timestamp": "2026-05-13T18:07:36.823695"
+      }
+    ],
+    "origin_bucket": "Vishram",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-13T18:07:36.823695"
+  },
+  {
+    "title": "Send money with Sanjeev — May 17",
+    "bucket": "Karya",
+    "weightage": "W2",
+    "time_horizon": "thisWeek",
+    "life_area": "Personal/Family",
+    "ch": 17,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T18:07:36.823700"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T18:07:36.823700"
+  },
+  {
+    "title": "Find ENT doctor for DK right ear",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "nextWeek",
+    "life_area": "Personal/Family",
+    "ch": 6,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-19T18:07:36.823704"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-19T18:07:36.823704"
+  },
+  {
+    "title": "Reschedule Dr. V Baylor Scott — this Monday",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "thisWeek",
+    "life_area": "Personal/Family",
+    "ch": 6,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T18:07:36.823706"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T18:07:36.823706"
+  },
+  {
+    "title": "Order Dexcom for DK — next week",
+    "bucket": "Karya",
+    "weightage": "W2",
+    "time_horizon": "nextWeek",
+    "life_area": "Personal/Family",
+    "ch": 6,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-20T18:07:36.823709"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-20T18:07:36.823709"
+  },
+  {
+    "title": "Pending payment from Sameera — $500 May 23",
+    "bucket": "Dhairya",
+    "weightage": "W1",
+    "time_horizon": "nextWeek",
+    "life_area": "Picturizze",
+    "ch": 17,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Dhairya",
+        "timestamp": "2026-05-19T18:07:36.823711"
+      }
+    ],
+    "origin_bucket": "Dhairya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-19T18:07:36.823711"
+  },
+  {
+    "title": "Tell Priyanka — check Katie shoot inspiration pics",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "nextWeek",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-21T18:07:36.823721"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-21T18:07:36.823721"
+  },
+  {
+    "title": "Confirm Pugs Rescue Austin dates for July",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "thisMonth",
+    "life_area": "Picturizze",
+    "ch": 3,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-18T18:07:36.823724"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-18T18:07:36.823724"
+  },
+  {
+    "title": "Start monthly cloud P&L with auto alarms — June 1",
+    "bucket": "Karya",
+    "weightage": "W4",
+    "time_horizon": "nextWeek",
+    "life_area": "Personal/Family",
+    "ch": 11,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-19T18:07:36.823726"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-19T18:07:36.823726"
+  },
+  {
+    "title": "Find Lakme Fashion Week dates — align India trip",
+    "bucket": "Vishram",
+    "weightage": "W1",
+    "time_horizon": "thisMonth",
+    "life_area": "Picturizze",
+    "ch": 11,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Vishram",
+        "timestamp": "2026-05-15T18:07:36.823728"
+      }
+    ],
+    "origin_bucket": "Vishram",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-15T18:07:36.823728"
+  },
+  {
+    "title": "Plan Tirth (puja) in India — next year trip",
+    "bucket": "Manan",
+    "weightage": "W2",
+    "time_horizon": "thisMonth",
+    "life_area": "Picturizze",
+    "ch": 7,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Manan",
+        "timestamp": "2026-05-14T18:07:36.823733"
+      }
+    ],
+    "origin_bucket": "Manan",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-14T18:07:36.823733"
+  },
+  {
+    "title": "Book India tickets — by June end",
+    "bucket": "Vishram",
+    "weightage": "W3",
+    "time_horizon": "thisMonth",
+    "life_area": "Picturizze",
+    "ch": 11,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Vishram",
+        "timestamp": "2026-05-16T18:07:36.823735"
+      }
+    ],
+    "origin_bucket": "Vishram",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-16T18:07:36.823735"
+  },
+  {
+    "title": "ITC Office Tasks — shadow domain (Outlook)",
+    "bucket": "Vishram",
+    "weightage": "W1",
+    "time_horizon": "nextWeek",
+    "life_area": "Work/Employment",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Vishram",
+        "timestamp": "2026-05-13T14:09:47.836344"
+      }
+    ],
+    "origin_bucket": "Vishram",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-13T14:09:47.836344"
+  },
+  {
+    "title": "How do we map relationships on the Sajik Tam Singh graph?",
+    "bucket": "Vishram",
+    "weightage": "W1",
+    "time_horizon": "thisMonth",
+    "life_area": "Work/Employment",
+    "ch": 12,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Vishram",
+        "timestamp": "2026-05-18T14:09:47.836346"
+      }
+    ],
+    "origin_bucket": "Vishram",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-18T14:09:47.836346"
+  },
+  {
+    "title": "Call Purveys Bhai on Sunday morning — not available today",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "thisWeek",
+    "life_area": "Personal/Family",
+    "ch": 3,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T14:09:47.836349"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T14:09:47.836349"
+  },
+  {
+    "title": "Set up time with Parvez bhai — around July 11 (KT trip)",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "thisMonth",
+    "life_area": "Personal/Family",
+    "ch": 3,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T14:09:47.836353"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T14:09:47.836353"
+  },
+  {
+    "title": "Text Dennis — swap car this Sunday in Dallas. Send contract number + expiration date.",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "today",
+    "life_area": "Personal/Family",
+    "ch": 3,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T14:09:47.836356"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T14:09:47.836356"
+  },
+  {
+    "title": "Upload current medications from iKAVACH into Saarthi project — tonight (10 min focused)",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "today",
+    "life_area": "Personal/Family",
+    "ch": 6,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T14:09:47.836360"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T14:09:47.836360"
+  },
+  {
+    "title": "1st of every month: generate RIDs + update Saarthi Soul Document (30 min focused, recurring)",
+    "bucket": "Karya",
+    "weightage": "W2",
+    "time_horizon": "thisMonth",
+    "life_area": "Personal/Family",
+    "ch": 3,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T14:09:47.836363"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T14:09:47.836363"
+  },
+  {
+    "title": "I need to work on the Solon paperwork. The detailed explanation is: I need to prepare a no-dues form and get it verified and endorsed by the Consulate General of India, Houston, and then Rupali has to do the same thing from the Consulate in Chicago. I have to talk to the Chandigarh guy if he is interested in buying it or initiate a discussion with Anju and Neeraj to buy this out, the Solon house. This task to sit and plan, to dig out the details, would take about three hours to prepare a file and everything. This has to be done in a dedicated mode, and the deadline for this one is the 15th of June.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:09:11.587811"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:09:11.592068"
+  },
+  {
+    "title": "I need to take out the documents and paperwork for the Chandigarh home for selling purposes and prepare it for when mom is in Chandigarh in September. This would need again three hours. It has to be done in a dedicated mode, and the deadline is 30th of June.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:11:24.793284"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:11:24.795671"
+  },
+  {
+    "title": "I am checking this again, and I want this to be scheduled in my calendar.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T17:55:29.853280"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T17:55:29.855496"
+  },
+  {
+    "title": "I don't know if this got saved or not, but I need to connect with friends on a regular basis, and that would be over the weekends, right, Sunday morning or Saturday morning. The friends are classified as opportunistic or real friends. This whole block, Chakranath, will go into my grow project so that the grow project can schedule it in my calendar.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:13:58.031016"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:13:58.033564"
+  },
+  {
+    "title": "Here is the list of opportunistic and real friends:",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:13:58.113767"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:13:58.116313"
+  },
+  {
+    "title": "- Anmol Sethi, opportunistic",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:13:58.191795"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:13:58.194097"
+  },
+  {
+    "title": "- the Chandigarh orthopedic doctor, real friend",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:13:58.273299"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:13:58.275605"
+  },
+  {
+    "title": "- Sandeep Mishra, real friend",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:13:58.349155"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:13:58.351546"
+  },
+  {
+    "title": "- I have to stay in touch with them, right",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:13:58.433000"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:13:58.435439"
+  },
+  {
+    "title": "- mom, real",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:13:58.509324"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:13:58.511948"
+  },
+  {
+    "title": "- my Rupali, real",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:13:58.584601"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:13:58.587130"
+  },
+  {
+    "title": "- Dhruv, Disha, real",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:13:58.661023"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:13:58.663562"
+  },
+  {
+    "title": "- Ria, real",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:13:58.739902"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:13:58.742405"
+  },
+  {
+    "title": "There is this pathology guy in Delhi. His name is... He's a relative: Sanjeev Jolly, opportunistic Rahul Choudhary, real Hema, real Bunty, real Manisha, real Dubais. I have to add it to the group project so that the project can schedule it in my calendar or prepare a list. This is a multi-taskable activity to be completed by tomorrow.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:13:58.821973"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:13:58.824444"
+  },
+  {
+    "title": "I have to put some Kalpana Puja Sunday morning, and this is dedicated. It has to be done dedicated, and this will take 30 minutes Sunday morning at 06:00 AM along with Kapoor Aarti.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:16:21.536537"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:16:21.539296"
+  },
+  {
+    "title": "Second task I have in mind is to plan my India trip and maybe do an Osar, the big kinds that I had in mind. This planning would take about one hour, and it can be done on any of the weekends. Deadline would be by July end.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:16:21.701220"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:16:21.703630"
+  },
+  {
+    "title": "Put this in the parking lot. Whenever I have time, or whenever there is a holiday, vacation, or long weekend (Christmas or something), I need to put the P-Touch labels properly on the camera equipment. What the trainee did was not good and clean; it was only a time gap thing. I need to properly label my camera equipment so that it looks nice.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:28:28.349408"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:28:28.351943"
+  },
+  {
+    "title": "Now, all of this activity would take about four hours, but it is not important. This can go in the parking lot.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:28:28.428342"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:28:28.430753"
+  },
+  {
+    "title": "Put it in the parking lot that I need to start cycling at some point in time. I am enthusiastic about cycling. I have a good, good bike, but it is just the time availability and the wind power. I hope I will get organized in the next one month from today, which is the 23rd of May, and then I should get on my bike at least 30 minutes every day.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": "today",
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:29:51.385887"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:29:51.388460"
+  },
+  {
+    "title": "Let Deepali know to pay me $150 an hour. 10 minutes multi-taskable to be done this weekend.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": "thisWeek",
+    "life_area": null,
+    "ch": null,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:30:20.081414"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:30:20.084033"
+  },
+  {
+    "title": "In my self-learning tasks, I have to learn about connecting the Sigma and Sony lenses with the internet and updating them. They come with USB-C updating, and they come with the jig on how to update. I have to understand:",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:32:07.056325"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:32:07.059273"
+  },
+  {
+    "title": "- if there are any updates and what those are",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:32:07.139282"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:32:07.142039"
+  },
+  {
+    "title": "- why the lens needs to be updated",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:32:07.223735"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:32:07.226281"
+  },
+  {
+    "title": "- check for the lenses I have if there is any update, then update them",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:32:07.310619"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:32:07.313418"
+  },
+  {
+    "title": "I mean, find time, Claude. You will have to find time in my calendar and put it in the training plan or in the activity plan, but this would take a good, good one day dedicated.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:32:07.390917"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:32:07.393536"
+  },
+  {
+    "title": "I have a lot of Sony and Canon camera equipment which has not been updated for a while. I need to understand how to update Sony and how to update Canon cameras, see if there are updates available for them, and update my fleet of cameras. This would take one day. Claude, you will have to find time in my calendar and block one day or a long weekend or Christmas time or sometime when I update my fleet of cameras.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:33:03.466371"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:33:03.468830"
+  },
+  {
+    "title": "I have to send an email to Mahinder at IANT about doing a coaching for the kids, for the students, about life and career coachingThis thing would take an hour and has to be done dedicated. Let's do it by the end of June. .",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:34:40.327297"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:34:40.329615"
+  },
+  {
+    "title": "Sort out my claims and the most recent Milwaukee visit, and send the details to Harsha apps. This is dedicated stuff, three hours, and it has to be done this weekend, no exceptions.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": "thisWeek",
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:37:00.967041"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:37:00.969230"
+  },
+  {
+    "title": "Assign Harsha the task of putting all IDs and passwords in one place. Do it sometime in the next week. This will take 30 minutes, and a dedicated, no multi-tasking call is fine.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": "nextWeek",
+    "life_area": null,
+    "ch": null,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:39:36.835442"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:39:36.837456"
+  },
+  {
+    "title": "I gathered some material for DK Academy. It is in the personal Chanakya tab. I need to move all that stuff onto DK Academy and then delete that chat from the cloud. This would take approximately 30 minutes, and it has to be done by this weekend. It cannot multitask.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": "thisWeek",
+    "life_area": null,
+    "ch": null,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:45:21.116685"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:45:21.118461"
+  },
+  {
+    "title": "Claude, I have to figure it out with you. The science that I have marketing on one side, and then I have DK Academy generating those quotes for me and generating banners. While the knowledge will stay in DK Academy, how will I transfer them? It would be best that I generate the JPEG content from DK Academy itself, but if I am doing that there, then I am not applying my marketing principles and vice-versa. How do I solve this paradox. Help me with this. We need to figure this out today itself, and it cannot be multi-tasked. You and I have to brainstorm on that. This is urgent.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": "today",
+    "life_area": null,
+    "ch": null,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:46:36.689935"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:46:36.691524"
+  },
+  {
+    "title": "I need to learn and also figure out and find out why HDR mode in Lightroom makes the picture shiny, but then when I export it, it gets exported as JPEG, but the shine is not there. The picture is still flat. Claude, you will have to find some time over the weekend. It cannot be multi-tasked. This has to be learned and tried.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T17:51:00.521363"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T17:51:00.522779"
+  },
+  {
+    "title": "I need to learn how to create an overlay of two logos on top of the pictures. This is where I do events. I know how to place my https://drive.google.com/file/d/11xaHuOFioreEzK-4A8BjgvRoZFkEC9qD/view?usp=sharing as a watermark, but in case I have to put a second logo also, I need to learn that. Claude, you will have to find me time for learning this. This I think would take two hours, because they do not know Photoshop and it cannot be multitasked.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T18:06:39.291348"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T18:06:39.292453"
+  },
+  {
+    "title": "Need to fix the ceiling fan in the backyard patio. . 30 minutes of work, dedicated. Clock to assign one of the weekends to do it, or maybe this coming Monday is a long weekend holiday, so assign 30 minutes dedicated.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T20:14:22.650721"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T20:14:22.657770"
+  },
+  {
+    "title": "Sonia mentioned that the backyard has a lot of mosquitoes. DK to study options on what can be sprayed behind in the vegetable garden to reduce the number of mosquitoes. This is a multi-tasking task I can do while watching TV. 30 minutes of research on Claude or ChatGPT",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T20:15:32.596602"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T20:15:32.601031"
+  },
+  {
+    "title": "DK to study why his iMac microphone is not as effective, because on Google Meet my team says they can't hear me, and also when I do transcription, my voice does not go well into the system. 30 minutes, I can multi-task it probably while watching TV.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-23T20:16:10.093617"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-23T20:16:10.097858"
+  },
+  {
+    "title": "Set up a lunch or dinner meeting with Brijesh to be done this week, and it can be multi-tasked. It will take 15 minutes.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": "thisWeek",
+    "life_area": null,
+    "ch": null,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-25T16:02:47.213816"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-25T16:02:47.214623"
+  },
+  {
+    "title": "Set up a lunch meeting with Smriti. This week, 15 minutes, and it can multi-task.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": "thisWeek",
+    "life_area": null,
+    "ch": null,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-25T16:03:07.762702"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-25T16:03:07.763603"
+  },
+  {
+    "title": "Send pictures of the left side walkway to HOA or Flatbush to close the modification request. By the 15th of June, it would take one hour and be dedicated.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-25T16:03:50.058073"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-25T16:03:50.059024"
+  },
+  {
+    "title": "I have to get a new kind of ghee for Puja. It cannot be multi-tasked. It will take two hours, and I have to complete it by this coming Sunday.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-28T05:27:57.910708"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-28T05:27:57.914138"
+  },
+  {
+    "title": "I have to upload pictures from my phone to start, but it will take about three hours, and yes, this can be multi-cast. I have to finish it by this coming Sunday.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-28T05:28:47.350196"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-28T05:28:47.352264"
+  },
+  {
+    "title": "I need to fix the dining table chair. It cannot be multi-tasked. It would need an hour, and I have to do it this Sunday. Chakra, can you add it to my calendar?",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-28T18:29:51.852396"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-28T18:29:51.852116"
+  },
+  {
+    "title": "I need to get the food business out of my DBA. Champi, can you schedule it for me? Yes. Okay.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-28T18:30:51.429921"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-28T18:30:51.429451"
+  },
+  {
+    "title": "Find time to build the entire photography project and the MIDs and RIDs. This will take about four or five hours, and the best time would be on Thursday or Friday because my Claude weekly limit ends on Saturdays.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-30T11:07:44.678675"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-30T11:07:44.678434"
+  },
+  {
+    "title": "I'm testing an entry.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-30T17:38:03.118717"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-30T17:38:03.120779"
+  },
+  {
+    "title": "I need to pack my suitcases for a one-hour move-out scenario. This will take good four hours, and I want to do it by this weekend. It is non-multitaskable.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-30T18:09:38.449913"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-30T18:09:38.452908"
+  },
+  {
+    "title": "I have to restart the land lookout and connect with the people who had approached me earlier. This I want to do in the next week, and it is absolutely multi-taskable.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-30T18:10:10.638704"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-30T18:10:10.643114"
+  },
+  {
+    "title": "Reward back with the Sikh families wedding proposal. I have to do it today, and it will take one hour, no multi-tasking.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-30T18:35:33.702919"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-30T18:35:33.706494"
+  },
+  {
+    "title": "This is a test sample. Mayur, this works. Probably your rendering took some time, but this works perfectly. Thank you. You can sleep.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-30T20:14:26.395141"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-30T20:14:26.398077"
+  },
+  {
+    "title": "Complete DK Academy for all other areas. The 29 chapters it can be multitasked, and I need to complete it in the next one month.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-30T21:09:18.519759"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-30T21:09:18.522873"
+  },
+  {
+    "title": "Send a picture about Mila this evening, and if Dhruv does not react, send a text to him on Tuesday after checking with Sarathi. That if he does not respond, then I will gradually back out. First off, this can be multitasked, but check with Sarathi first and push here first.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-30T21:10:22.738782"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-30T21:10:22.742601"
+  },
+  {
+    "title": "Send the Athens perfume picture to Dheeraj Bhardwaj. Do it today. 15 minutes dedicated",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-30T21:10:47.689981"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-30T21:10:47.692740"
+  },
+  {
+    "title": "Prepare a message or a card for parents who would want to pay for their kids to be coached with regards to DK Academy.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-30T22:36:55.314038"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-30T22:36:55.315860"
+  },
+  {
+    "title": "I'm trying it again after my use text, and I want to see if it is adding to my calendar.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T17:55:52.404725"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T17:55:52.407404"
+  },
+  {
+    "title": "DK Academy looks very bullish. I don't want people to laugh that I have an academy unless I mention it in my note itself, something that nullifies this. Think about it 30 minutes uninterrupted by this weekend.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-30T22:37:07.298381"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-30T22:37:07.300186"
+  },
+  {
+    "title": "DK to check if Aayigati forms part of House of DK Master Reference Version 27, and then try and plot a new or chart that shows Gati also. If Gati does not exist, then House of DK has a Gati, so Aayigati, so document that, then bring that out. I'll do it today, in focus.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-31T18:40:40.308207"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-31T18:40:40.315711"
+  },
+  {
+    "title": "Next time DK generates a master document, House of DK master document, then he should also include his philosophies in there. We made a beautiful deliverable connecting all my philosophies and everything that is a second option. Point DK to make that kind of a document in the coming week, one hour in the coming week, and focused",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-31T18:43:27.122379"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-31T18:43:27.126049"
+  },
+  {
+    "title": "DK, to fix the entire Picturizze cluster. This would take good four hours or a full one day. Keep it for one of the weekends, please. Claude, you will have to find me time, or Chakra, you will have to find me time in my calendar, and this is focused.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-31T18:46:06.432207"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-31T18:46:06.435968"
+  },
+  {
+    "title": "The whole org chart I can print, and then on that org chart I can mark where all how's our DK master reference goes and where all brand guidelines go. I think I should keep it this way, because when the next version generates, I know where to go and change it. This would take one hour. I'll do it another weekend, dedicated.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-31T18:56:09.389396"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-31T18:56:09.393211"
+  },
+  {
+    "title": "India to impact has a document attached in the project files which says the book full initial conversation. DK should fire that query sometime to compare that with the current book and see where we have reached and if there is any difference. This would take about two hours, and it will be dedicated. Let me complete it in the next two weeks.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-05-31T18:58:46.974495"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-05-31T18:58:46.986028"
+  },
+  {
+    "title": "DK, study what is the difference between marketing and external communications. Accordingly, the org chart for House of DK will get modified. Let's finish it today. This can be a multi-task when I'm lying down on the bed or when I'm watching TV.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-01T00:12:09.090167"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-01T00:12:09.098563"
+  },
+  {
+    "title": "We can bring the following addition to mind. Whenever I upload an image of my poop, it should evaluate against what I ate 24 to 72 hours back. Also say that, based on what you ate and what you entered into Mint, Iris feels that this food was rich in fiber, or this food did not suit you, that you have got a loose poop, or you ate spinach or some green leafy vegetable in too much quantity, blah blah blah. Some inference we should say that we have some inference to show that Iris did evaluate what you ate 24 to 72 hours back.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-01T13:07:59.219371"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-01T13:07:59.221423"
+  },
+  {
+    "title": "In the next version of Mint, we should ask for a range of dates, and then we should show the events that have happened in that range.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-01T13:09:05.423670"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-01T13:09:05.425635"
+  },
+  {
+    "title": "If someone threw up thrice, what did the person eat? In short, we don't have to describe the analysis.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-01T13:09:05.587964"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-01T13:09:05.590186"
+  },
+  {
+    "title": "- You ate two rotis and chawal, and then you threw up thrice.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-01T13:09:05.778359"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-01T13:09:05.780606"
+  },
+  {
+    "title": "- You took a Manjaro shot.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-01T13:09:05.879761"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-01T13:09:05.882091"
+  },
+  {
+    "title": "- You recorded a Manjaro shot, and then you had loose poop.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-01T13:09:05.981359"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-01T13:09:05.983553"
+  },
+  {
+    "title": "That timeline should show up chronologically.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-01T13:09:06.094014"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-01T13:09:06.096323"
+  },
+  {
+    "title": "Wednesday morning, I need to go see a man or two at Harry Himes to get my car fixed, so at around 8 a.m. I need to leave and go see",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-10T09:33:06.750962"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-10T09:33:06.750833"
+  },
+  {
+    "title": "I'm testing my app.",
+    "bucket": "Karya",
+    "weightage": "W3",
+    "time_horizon": "today",
+    "life_area": "Personal/Family",
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-20T00:00:32.413813"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-20T00:00:32.414811"
+  },
+  {
+    "title": "I am testing this app, and I want to set up a calendar invite.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T16:02:58.804348"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T16:02:58.808239"
+  },
+  {
+    "title": "Can you create me a calendar invite in my personal calendar?",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T16:06:04.217017"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T16:06:04.220785"
+  },
+  {
+    "title": "Testing testing",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T16:27:41.122216"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T16:27:41.125782"
+  },
+  {
+    "title": "I am testint wirh mayur",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T16:28:50.936195"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T16:28:50.939504"
+  },
+  {
+    "title": "Fotohsoot aith graciella on monday 22 jun 2026 at 11 am  to 12 noon",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T16:30:40.760243"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T16:30:40.763521"
+  },
+  {
+    "title": "test",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T16:32:38.963427"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T16:32:38.966698"
+  },
+  {
+    "title": "I want to schedule a photoshoot with Mauiur for 2 hra",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T16:32:39.438517"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T16:32:39.441742"
+  },
+  {
+    "title": "test",
+    "bucket": "Karya",
+    "weightage": "W4",
+    "time_horizon": "today",
+    "life_area": "Picturizze",
+    "ch": null,
+    "multitask": true,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T17:35:02.784595"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T17:35:02.787054"
+  },
+  {
+    "title": "test",
+    "bucket": "Karya",
+    "weightage": "W1",
+    "time_horizon": "today",
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T17:36:18.885294"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T17:36:18.887695"
+  },
+  {
+    "title": "test",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T17:36:39.162214"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T17:36:39.164711"
+  },
+  {
+    "title": "test1",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T17:36:56.771447"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T17:36:56.773978"
+  },
+  {
+    "title": "test2",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": "today",
+    "life_area": "Other",
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T17:40:47.716034"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T17:40:47.718296"
+  },
+  {
+    "title": "test3",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T17:43:36.194253"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T17:43:36.196567"
+  },
+  {
+    "title": "test4",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T17:43:51.591742"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T17:43:51.594238"
+  },
+  {
+    "title": "test5",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T17:45:04.631528"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T17:45:04.633805"
+  },
+  {
+    "title": "I am testing again after my used text. If this starts my calendar scheduling, I want to schedule something for me at 10 am on may 22 to see a doctor",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T17:57:13.675949"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T17:57:13.678334"
+  },
+  {
+    "title": "Hello, I'm testing. I want to set up something for June 22, 10 a.m.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T17:59:08.334918"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T17:59:08.337180"
+  },
+  {
+    "title": "23rd, 9 a.m. is what we are testing.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T18:01:30.644320"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T18:01:30.648438"
+  },
+  {
+    "title": "test",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T18:02:18.371937"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T18:02:18.374200"
+  },
+  {
+    "title": "I want to work on a Picturizze project on the 24th at 2 p.m. If my spine allows, then book it for 2 p.m. Otherwise, book it in the first slot available on 24 June 2026.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T18:05:32.431978"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T18:05:32.434509"
+  },
+  {
+    "title": "testtest",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T18:39:39.904856"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T18:39:39.907466"
+  },
+  {
+    "title": "test1",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T18:39:52.753945"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T18:39:52.756584"
+  },
+  {
+    "title": "Typing a calendar invite for May 25, 9 am.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-21T19:03:34.905970"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-21T19:03:34.909024"
+  },
+  {
+    "title": "I want to get my ferritin infusion done in Dallas this Saturday with Dr. Furqan. It would be a two-hour block this coming Saturday, which is the 26th of June.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-23T14:23:44.615507"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-23T14:23:44.614918"
+  },
+  {
+    "title": "Wells fargo 9947 payment made on 24th June’26",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-24T20:29:14.618478"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-24T20:29:14.626460"
+  },
+  {
+    "title": "Add it for reference",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-24T20:30:42.790615"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-24T20:30:42.796839"
+  },
+  {
+    "title": "test",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-27T18:23:03.812849"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-27T18:23:03.816023"
+  },
+  {
+    "title": "test",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-27T18:25:47.646546"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-27T18:25:47.649669"
+  },
+  {
+    "title": "I am adding a task into Chakra to test if I can schedule it for coming Wednesday at 10:00.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-27T19:01:07.278290"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-27T19:01:07.281924"
+  },
+  {
+    "title": "So this Tuesday at 4 pm, when I drive back home, I have to pick up some of my stuff from laundry.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-27T19:06:43.719810"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-27T19:06:43.723533"
+  },
+  {
+    "title": "On Monday morning, 7:00 am, I have to do puja. On Monday morning at 7 am, I have to do Puja.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-06-27T19:12:19.999225"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-06-27T19:12:20.003998"
+  },
+  {
+    "title": "Decide price line for Expedia to choose the button in car rental admin, and which one is good to become members with. To be done on Monday, 6th July 26th. This will take about 30 minutes.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-07-02T22:45:09.190138"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-07-02T22:45:09.190675"
+  },
+  {
+    "title": "Book lunch with Mark Gellings.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-07-02T22:47:10.013161"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-07-02T22:47:10.013899"
+  },
+  {
+    "title": "- Dinner with Chandra Mauli",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-07-02T22:47:10.143294"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-07-02T22:47:10.143981"
+  },
+  {
+    "title": "- Dinner with Deepak",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-07-02T22:47:10.254796"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-07-02T22:47:10.255514"
+  },
+  {
+    "title": "- Dinner with CD",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-07-02T22:47:10.356623"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-07-02T22:47:10.357210"
+  },
+  {
+    "title": "- Dinner with Larry",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-07-02T22:47:10.470807"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-07-02T22:47:10.471417"
+  },
+  {
+    "title": "for the week of the 13th, and this will take about one hour to be done on the 6th of July 2026",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-07-02T22:47:10.600434"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-07-02T22:47:10.600952"
+  },
+  {
+    "title": "Get Acura MDX serviced on Monday, 6th of July 2020. This would take about four hours in the morning.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-07-02T22:47:50.238721"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-07-02T22:47:50.239339"
+  },
+  {
+    "title": "Deliver IANTpics from250  here's Frisco Flour event. This would take about 2 hours. Tonight is 2nd of July 2026.",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-07-02T22:49:23.816629"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-07-02T22:49:23.817195"
+  },
+  {
+    "title": "Delivery of Rabia pictures tomorrow,. This will take about four hours. 3rd July 2026",
+    "bucket": "Karya",
+    "weightage": null,
+    "time_horizon": null,
+    "life_area": null,
+    "ch": null,
+    "multitask": false,
+    "state_history": [
+      {
+        "bucket": "Karya",
+        "timestamp": "2026-07-02T22:50:07.586586"
+      }
+    ],
+    "origin_bucket": "Karya",
+    "completed": false,
+    "completed_timestamp": null,
+    "entry_timestamp": "2026-07-02T22:50:07.587150"
+  }
+]
