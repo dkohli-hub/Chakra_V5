@@ -24,7 +24,7 @@ export default function ChakraFAB() {
       </div>
       <div className="chakra-fab-wrap" ref={wrapRef}>
         <div className="chakra-fab-img" onClick={openFab} title="Quick add">
-          🕉
+          <img src="/logo.png" alt="Chakra" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
         </div>
       </div>
     </div>
