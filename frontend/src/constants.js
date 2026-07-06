@@ -66,7 +66,9 @@ export const CAL_SLOTS = [
   'Tue 8:30 AM','Tue 3:00 PM',
   'Wed 10:00 AM','Wed 4:00 PM',
   'Thu 9:30 AM','Thu 1:00 PM',
-  'Fri 11:00 AM','Fri 3:00 PM'
+  'Fri 11:00 AM','Fri 3:00 PM',
+  'Sat 9:00 AM','Sat 11:00 AM','Sat 2:00 PM','Sat 4:00 PM',
+  'Sun 10:00 AM','Sun 12:00 PM','Sun 3:00 PM'
 ]
 
 export const KRISHNA_VERSES = [

@@ -161,7 +161,7 @@ export default function CalendarModal() {
             )
           })}
         </div>
-        <div className="cal-sub" style={{ marginTop: '8px' }}>Available slots — Weekdays</div>
+        <div className="cal-sub" style={{ marginTop: '8px' }}>Available slots — All week</div>
         <div className="cal-slot-grid">
           {CAL_SLOTS.map(s => (
             <div
