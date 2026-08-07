@@ -37,6 +37,7 @@ export default function SmartFetchModal() {
   }
 
   function close() { dispatch({ type: 'TOGGLE_SMART_FETCH' }) }
+  function openKWM() { close(); dispatch({ type: 'TOGGLE_KWM' }) }
 
   return (
     <div className="sf-modal open">
@@ -53,6 +54,7 @@ export default function SmartFetchModal() {
             onKeyDown={e => e.key === 'Enter' && search(query)}
           />
           <button className="sf-btn-close" onClick={close}>Close</button>
+          <button className="sf-btn-close" onClick={openKWM} title="Manage keyword lists" style={{ marginLeft: '4px' }}>🔑</button>
         </div>
         <div className="sf-results">
           {results === null && <div className="sf-hint">Type a word or phrase to search your tasks.</div>}

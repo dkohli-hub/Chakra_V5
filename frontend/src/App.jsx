@@ -11,6 +11,7 @@ import OcrModal from './components/modals/OcrModal'
 import SaarthiModal from './components/modals/SaarthiModal'
 import ExportModal from './components/modals/ExportModal'
 import CalendarModal from './components/modals/CalendarModal'
+import KeywordManagerModal from './components/modals/KeywordManagerModal'
 import TodayBattery from './tabs/TodayBattery'
 import Gather from './tabs/Gather'
 import Time from './tabs/Time'
@@ -36,7 +37,7 @@ const TAB_MAP = {
 
 export default function App() {
   const { state, dispatch, doLogout, doImport, showToast } = useApp()
-  const { user, loading, activeTab, fabOverlayOpen, smartFetchOpen, saarthiOpen, exportOpen, calModal, calAskTask, ocrLines } = state
+  const { user, loading, activeTab, fabOverlayOpen, smartFetchOpen, saarthiOpen, exportOpen, calModal, calAskTask, ocrLines, kwmOpen } = state
 
   function handleExport() {
     const json = JSON.stringify(state.tasks, null, 2)
@@ -98,6 +99,7 @@ export default function App() {
 
       {fabOverlayOpen && <FabOverlay />}
       {smartFetchOpen && <SmartFetchModal />}
+      {kwmOpen && <KeywordManagerModal />}
       {showOcrModal && (
         <OcrModal
           lines={ocrLines}

@@ -25,6 +25,21 @@ export default function TaskCard({ task }) {
   const od = isOD(task)
   const tc = tcol(task)
 
+  async function handleToggleCategory(e) {
+    e.stopPropagation()
+    const cur = task.category || task.lifeArea || 'Personal'
+    const next = cur === 'Picturizze' ? 'Personal' : 'Picturizze'
+    try {
+      await patchTask(task.id, { category: next, lifeArea: next })
+      showToast(`Task moved to ${next}`, 'ok', 1800)
+    } catch {
+      showToast('Failed to update category', 'warn')
+    }
+  }
+
+  const catLabel = task.category || task.lifeArea || 'Personal'
+  const catIcon  = catLabel === 'Picturizze' ? '📸' : '🏠'
+
   return (
     <div className={`icard${task.completed ? ' done' : ''}${od ? ' od' : ''}`} id={`ic-${task.id}`}>
       <input
@@ -45,7 +60,13 @@ export default function TaskCard({ task }) {
           {task.timeHorizon && (
             <span className="ith" style={{ color: tc }}>{task.timeHorizon}</span>
           )}
-          {task.lifeArea && <span className="ila">{task.lifeArea}</span>}
+          <span
+            className="cat-badge"
+            onClick={handleToggleCategory}
+            title="Tap to change category"
+          >
+            {catIcon} {catLabel}
+          </span>
           {(task.multitask === true || task.multitask === 'Yes') && <span className="mt-badge">🔀 multitask</span>}
           {od && (
             <>

@@ -1,27 +1,35 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { useApp } from '../../store/AppContext'
 import { parseWeightage, parseMultitask, parseHorizon } from '../../utils'
+
+const _lastSave = { time: 0, text: '' }
 
 export default function FabOverlay() {
   const { state, dispatch, addTask, showToast } = useApp()
   const [text, setText] = useState('')
-  const [calShow, setCalShow] = useState(false)
-  const [lastTitle, setLastTitle] = useState('')
 
   if (!state.fabOverlayOpen) return null
 
   function close() {
     dispatch({ type: 'TOGGLE_FAB_OVERLAY' })
     setText('')
-    setCalShow(false)
   }
 
   async function save() {
     const val = text.trim()
     if (!val) return
+
+    // Duplicate guard: same text within 60 seconds
+    const now = Date.now()
+    if (val.toLowerCase() === _lastSave.text.toLowerCase() && (now - _lastSave.time) < 60000) {
+      if (!window.confirm('This looks like a task you just added (within 1 minute). Add anyway?')) return
+    }
+    _lastSave.time = now
+    _lastSave.text = val
+
     const lines = val.split('\n').map(s => s.trim()).filter(Boolean)
     try {
-      const now = new Date().toISOString()
+      const ts = new Date().toISOString()
       const w = parseWeightage(val) || 'W2'
       const mt = parseMultitask(val)
       const th = parseHorizon(val) || 'thisWeek'
@@ -36,29 +44,23 @@ export default function FabOverlay() {
           timeHorizon: th,
           lifeArea: null,
           multitask: mt,
-          stateHistory: [{ bucket: 'Karya', timestamp: now }],
+          stateHistory: [{ bucket: 'Karya', timestamp: ts }],
           originBucket: 'Karya',
           completed: false,
-          entryTimestamp: now,
+          entryTimestamp: ts,
           agingDays: 0,
         })
       }
       showToast(`✓ ${lines.length === 1 ? '1 task' : lines.length + ' tasks'} added to Chakra ＋`)
+      // Always close overlay first (v6 behavior)
+      close()
+      // For single task, offer calendar via floating banner
       if (lines.length === 1) {
-        setLastTitle(lines[0])
-        setCalShow(true)
-      } else {
-        setText('')
-        close()
+        dispatch({ type: 'SET_CAL_ASK', payload: { title: lines[0] } })
       }
     } catch {
       showToast('Failed to save task', 'warn')
     }
-  }
-
-  function openCal() {
-    close()
-    dispatch({ type: 'SET_CAL_MODAL', payload: { open: true, taskTitle: lastTitle } })
   }
 
   return (
@@ -70,7 +72,7 @@ export default function FabOverlay() {
         </div>
         <textarea
           className="fab-panel-ta"
-          placeholder="Type tasks here — one per line..."
+          placeholder="What's on your mind?"
           value={text}
           onChange={e => setText(e.target.value)}
           rows={4}
@@ -81,15 +83,6 @@ export default function FabOverlay() {
           <div className="fab-panel-mic">🎤</div>
         </div>
         <div className="fab-panel-hint">One task per line · Chakra parses weightage & timing</div>
-        {calShow && (
-          <div className="fab-panel-cal show">
-            <div className="fab-panel-cal-title">✓ Saved — Add to Calendar?</div>
-            <div className="cal-ask-btns">
-              <button className="cal-btn go" onClick={openCal}>Yes — Schedule It</button>
-              <button className="cal-btn cancel" onClick={close}>Not now</button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   )

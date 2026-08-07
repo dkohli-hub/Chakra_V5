@@ -1,7 +1,37 @@
 import React, { useState, useEffect } from 'react'
 import { useApp } from '../../store/AppContext'
-import { CAL_SLOTS, CAL_KEYWORDS } from '../../constants'
 import { suggestCalendar } from '../../utils'
+
+function generateSlots(calKey) {
+  const slots = []
+  const now = new Date()
+  const restricted = calKey === 'personal' || calKey === 'picturizze'
+  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+  for (let d = 1; d <= 21 && slots.length < 12; d++) {
+    const date = new Date(now.getFullYear(), now.getMonth(), now.getDate() + d)
+    const dow = date.getDay()
+    const isWeekend = dow === 0 || dow === 6
+    const times = restricted && !isWeekend
+      ? [{ h: 7, m: 0 }, { h: 7, m: 30 }, { h: 17, m: 30 }, { h: 18, m: 0 }, { h: 19, m: 0 }, { h: 20, m: 0 }]
+      : [{ h: 9, m: 0 }, { h: 10, m: 0 }, { h: 11, m: 0 }, { h: 13, m: 0 }, { h: 14, m: 0 }, { h: 15, m: 0 }, { h: 16, m: 0 }]
+    const mm = String(date.getMonth() + 1).padStart(2, '0')
+    const dd = String(date.getDate()).padStart(2, '0')
+    for (const t of times) {
+      if (slots.length >= 12) break
+      const start = new Date(date.getFullYear(), date.getMonth(), date.getDate(), t.h, t.m)
+      const end   = new Date(start.getTime() + 30 * 60000)
+      const h12   = t.h % 12 || 12
+      const per   = t.h >= 12 ? 'PM' : 'AM'
+      const mStr  = String(t.m).padStart(2, '0')
+      slots.push({
+        label: `${mm}/${dd} ${dayNames[dow]} ${h12}:${mStr} ${per}`,
+        isoStart: start.toISOString(),
+        isoEnd: end.toISOString(),
+      })
+    }
+  }
+  return slots
+}
 
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || ''
 const CAL_INFO = {
@@ -41,35 +71,11 @@ function initGIS(callback) {
   })
 }
 
-function slotLabelToDates(slotLabel) {
-  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-  const parts = slotLabel.split(' ')
-  const dayAbbr = parts[0]
-  const timePart = parts[1] + ' ' + parts[2]
-  const targetDow = days.indexOf(dayAbbr)
-  const now = new Date()
-  const d = new Date(now)
-  let add = (targetDow - now.getDay() + 7) % 7
-  if (add === 0) add = 7
-  d.setDate(now.getDate() + add)
-  const m = timePart.match(/(\d+):(\d+)\s*([AP]M)/i)
-  let hh = parseInt(m[1], 10)
-  const mm = parseInt(m[2], 10)
-  const ap = m[3].toUpperCase()
-  if (ap === 'PM' && hh !== 12) hh += 12
-  if (ap === 'AM' && hh === 12) hh = 0
-  d.setHours(hh, mm, 0, 0)
-  const start = new Date(d)
-  const end = new Date(d.getTime() + 30 * 60000)
-  return { start: start.toISOString(), end: end.toISOString() }
-}
-
-async function createCalEvent(calendarId, title, slotLabel, token) {
-  const dates = slotLabelToDates(slotLabel)
+async function createCalEvent(calendarId, title, isoStart, isoEnd, token) {
   const r = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events`, {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ summary: title, start: { dateTime: dates.start }, end: { dateTime: dates.end } })
+    body: JSON.stringify({ summary: title, start: { dateTime: isoStart }, end: { dateTime: isoEnd } })
   })
   return r.json()
 }
@@ -84,8 +90,8 @@ export default function CalendarModal() {
   useEffect(() => {
     if (modal) {
       const title = modal.taskTitle || modal.task?.title || ''
-      const suggested = suggestCalendar(title, CAL_KEYWORDS)
-      setSelCal(suggested || 'personal')
+      const suggested = suggestCalendar(title, state.calKeywords)
+      setSelCal(suggested || 'itc')
       setBookedSlot(null)
       setConfirmDetail(null)
     }
@@ -105,8 +111,8 @@ export default function CalendarModal() {
     setSelCal(id)
   }
 
-  function bookSlot(slot) {
-    setBookedSlot(slot)
+  function bookSlot(slotObj) {
+    setBookedSlot(slotObj.label)
     const cal = CAL_INFO[selCal]
     if (!cal || cal.outOfScope) {
       setConfirmDetail('ITC is out of Chakra scope — view only. Not written to any calendar.')
@@ -117,10 +123,10 @@ export default function CalendarModal() {
       setConfirmDetail('Connecting to Google Calendar…')
       initGIS(async (token) => {
         try {
-          const result = await createCalEvent(cal.email, taskTitle, slot, token)
+          const result = await createCalEvent(cal.email, taskTitle, slotObj.isoStart, slotObj.isoEnd, token)
           if (result?.htmlLink) {
-            setConfirmDetail(`${taskTitle} · ${slot} · ${cal.name}`)
-            showToast(`✓ Added to ${cal.name} — ${slot}`, 'ok', 3500)
+            setConfirmDetail(`${taskTitle} · ${slotObj.label} · ${cal.name}`)
+            showToast(`✓ Added to ${cal.name} — ${slotObj.label}`, 'ok', 3500)
           } else {
             const msg = result?.error?.message || 'Unknown error'
             setConfirmDetail(`Calendar write failed: ${msg}`)
@@ -134,8 +140,8 @@ export default function CalendarModal() {
       if (_gisTokenClient) _gisTokenClient.requestAccessToken()
       return
     }
-    setConfirmDetail(`${taskTitle} · ${slot} · ${cal.name} (demo mode — not a real calendar write)`)
-    showToast(`✓ Scheduled (demo) — ${slot} · ${cal.name}`, 'ok', 3000)
+    setConfirmDetail(`${taskTitle} · ${slotObj.label} · ${cal.name} (demo mode — not a real calendar write)`)
+    showToast(`✓ Scheduled (demo) — ${slotObj.label} · ${cal.name}`, 'ok', 3000)
   }
 
   return (
@@ -161,14 +167,14 @@ export default function CalendarModal() {
             )
           })}
         </div>
-        <div className="cal-sub" style={{ marginTop: '8px' }}>Available slots — All week</div>
+        <div className="cal-sub" style={{ marginTop: '8px' }}>Available slots — next 21 days</div>
         <div className="cal-slot-grid">
-          {CAL_SLOTS.map(s => (
+          {generateSlots(selCal).map((s, idx) => (
             <div
-              key={s}
-              className={`cal-slot${bookedSlot === s ? ' booked' : ''}`}
+              key={idx}
+              className={`cal-slot${bookedSlot === s.label ? ' booked' : ''}`}
               onClick={() => bookSlot(s)}
-            >{s}</div>
+            >{s.label}</div>
           ))}
         </div>
         {confirmDetail && (

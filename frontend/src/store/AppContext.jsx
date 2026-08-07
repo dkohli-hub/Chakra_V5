@@ -1,7 +1,16 @@
 import React, { createContext, useContext, useReducer, useEffect, useCallback } from 'react'
 import { getTasks, login as apiLogin, createTask, updateTask, clearCompleted as apiClearCompleted, bulkImport as apiBulkImport } from '../api'
+import { CAL_KEYWORDS as DEFAULT_KEYWORDS } from '../constants'
 
 const AppContext = createContext(null)
+
+function loadPersistedKeywords() {
+  try {
+    const raw = localStorage.getItem('chakra_cal_keywords')
+    if (raw) return JSON.parse(raw)
+  } catch {}
+  return null
+}
 
 const initialState = {
   tasks: [],
@@ -20,6 +29,8 @@ const initialState = {
   exportOpen: false,
   calAskTask: null,     // task title to offer calendar for
   syncStatus: '⟳ loading...',
+  kwmOpen: false,
+  calKeywords: loadPersistedKeywords() || DEFAULT_KEYWORDS,
 }
 
 function reducer(state, action) {
@@ -44,6 +55,8 @@ function reducer(state, action) {
     case 'TOGGLE_EXPORT':      return { ...state, exportOpen: !state.exportOpen }
     case 'SET_CAL_ASK':        return { ...state, calAskTask: action.payload }
     case 'SET_SYNC':           return { ...state, syncStatus: action.payload }
+    case 'TOGGLE_KWM':         return { ...state, kwmOpen: !state.kwmOpen }
+    case 'SET_CAL_KEYWORDS':   return { ...state, calKeywords: action.payload }
     default: return state
   }
 }
@@ -51,8 +64,24 @@ function reducer(state, action) {
 export function AppProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState)
 
+  // Persist krishnaMode changes to localStorage
+  useEffect(() => {
+    localStorage.setItem('chakra_krishna_mode', JSON.stringify(state.krishnaMode))
+  }, [state.krishnaMode])
+
+  // Persist calKeywords changes to localStorage
+  useEffect(() => {
+    localStorage.setItem('chakra_cal_keywords', JSON.stringify(state.calKeywords))
+  }, [state.calKeywords])
+
   // On mount: restore session from localStorage
   useEffect(() => {
+    // Restore krishnaMode
+    try {
+      const km = localStorage.getItem('chakra_krishna_mode')
+      if (km !== null) dispatch({ type: 'SET_KRISHNA', payload: JSON.parse(km) })
+    } catch {}
+
     const token = localStorage.getItem('chakra_token')
     const userRaw = localStorage.getItem('chakra_user')
     if (token && userRaw) {
@@ -118,6 +147,11 @@ export function AppProvider({ children }) {
     setTimeout(() => dispatch({ type: 'CLEAR_TOAST' }), duration)
   }, [])
 
+  const setKeywords = useCallback((cat, keywords) => {
+    const updated = { ...state.calKeywords, [cat]: keywords }
+    dispatch({ type: 'SET_CAL_KEYWORDS', payload: updated })
+  }, [state.calKeywords])
+
   const value = {
     state,
     dispatch,
@@ -128,6 +162,7 @@ export function AppProvider({ children }) {
     doClearCompleted,
     doImport,
     showToast,
+    setKeywords,
   }
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>
