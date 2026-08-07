@@ -3,7 +3,7 @@ import { useApp } from '../store/AppContext'
 import { TABS } from '../constants'
 
 export default function Header({ onExport, onImportFile }) {
-  const { state, dispatch, doClearCompleted, showToast } = useApp()
+  const { state, dispatch, doClearCompleted, doLogout, showToast } = useApp()
   const { tasks, activeTab, user, syncStatus } = state
 
   const active = tasks.filter(t => !t.completed).length
@@ -45,6 +45,7 @@ export default function Header({ onExport, onImportFile }) {
               {done} done
             </span>
           </div>
+          <button className="logout-btn" onClick={doLogout} title="Sign out">⏻</button>
         </div>
       </div>
       <div className="tab-bar">
