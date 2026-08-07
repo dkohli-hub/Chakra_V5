@@ -44,8 +44,10 @@ export default function Header({ onExport, onImportFile }) {
             <span className="stat-pill" style={{ color: 'var(--teal2)', borderColor: 'rgba(26,128,96,.3)', background: 'rgba(26,128,96,.06)' }}>
               {done} done
             </span>
+            <button className="user-logout-pill" onClick={doLogout}>
+              👤 {user?.displayName || user?.userId || 'DK'} · Log out
+            </button>
           </div>
-          <button className="logout-btn" onClick={doLogout} title="Sign out">⏻</button>
         </div>
       </div>
       <div className="tab-bar">

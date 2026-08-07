@@ -21,8 +21,8 @@ html,body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-s
 .hdr-stats{text-align:right;}
 .stat-row{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;margin-bottom:3px;}
 .stat-pill{font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;display:inline-flex;align-items:center;gap:3px;border:1px solid;}
-.logout-btn{display:block;margin-left:auto;margin-top:4px;background:none;border:none;font-size:13px;color:var(--text-faint);cursor:pointer;padding:2px 0;line-height:1;opacity:0.6;}
-.logout-btn:hover{opacity:1;color:var(--red);}
+.user-logout-pill{font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;display:inline-flex;align-items:center;gap:3px;border:1px solid rgba(26,79,128,.3);background:rgba(26,79,128,.07);color:var(--blue);cursor:pointer;font-family:'Montserrat',sans-serif;}
+.user-logout-pill:hover{background:rgba(139,26,26,.08);border-color:rgba(139,26,26,.3);color:var(--red);}
 .tab-bar{display:flex;gap:3px;overflow-x:auto;scrollbar-width:none;padding:5px 0 7px;}
 .tab-bar::-webkit-scrollbar{display:none;}
 .vtab{flex:0 0 auto;width:42px;height:42px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:6px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;background:var(--surface2);border:1.5px solid var(--border);color:var(--text-faint);cursor:pointer;transition:all .2s;font-family:'Montserrat',sans-serif;line-height:1.2;text-align:center;padding:3px;}
