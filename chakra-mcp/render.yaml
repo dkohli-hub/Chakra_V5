@@ -1,0 +1,37 @@
+# Deploy as its own Render Web Service, separate from chakra-v5-backend.
+# If you keep a single blueprint at the repo root, merge this services entry
+# into it rather than committing two render.yaml files.
+services:
+  - type: web
+    name: chakra-mcp
+    env: python
+    rootDir: chakra-mcp
+    pythonVersion: "3.12.7"
+    # Free tier spins down after ~15 min idle and the first call from Claude
+    # will time out. Starter keeps it warm.
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: CHAKRA_API_URL
+        value: https://chakra-v5-backend.onrender.com
+      # Must match chakra-v5-backend's SECRET_KEY exactly, so set it by hand.
+      - key: SECRET_KEY
+        sync: false
+      - key: CHAKRA_USER_ID
+        value: dk
+      - key: CHAKRA_DISPLAY_NAME
+        value: DK
+      - key: MCP_ACCESS_TOKEN
+        sync: false
+      - key: MCP_LOGIN_PASSWORD
+        sync: false
+      - key: MCP_SECRET
+        generateValue: true
+      # Set to the URL Render assigns after the first deploy, then redeploy.
+      - key: PUBLIC_URL
+        sync: false
+      - key: TIMEZONE
+        value: America/Chicago
+      - key: PYTHON_VERSION
+        value: "3.12.7"
