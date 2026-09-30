@@ -19,6 +19,10 @@ class TaskCreate(BaseModel):
     completed_timestamp: Optional[datetime] = None
     entry_timestamp: Optional[datetime] = None
     aging_days: Optional[int] = 0
+    short_title: Optional[str] = None
+    category: Optional[str] = None
+    linked_tasks: Optional[List[Any]] = []
+    depends_on: Optional[str] = None
 
 
 class TaskUpdate(BaseModel):
@@ -34,6 +38,10 @@ class TaskUpdate(BaseModel):
     state_history: Optional[List[Any]] = None
     transition_count: Optional[int] = None
     aging_days: Optional[int] = None
+    short_title: Optional[str] = None
+    category: Optional[str] = None
+    linked_tasks: Optional[List[Any]] = None
+    depends_on: Optional[str] = None
 
 
 class TaskOut(BaseModel):
@@ -54,6 +62,10 @@ class TaskOut(BaseModel):
     completed_timestamp: Optional[datetime]
     entry_timestamp: datetime
     aging_days: int
+    short_title: Optional[str] = None
+    category: Optional[str] = None
+    linked_tasks: Optional[List[Any]] = None
+    depends_on: Optional[str] = None
 
     class Config:
         from_attributes = True

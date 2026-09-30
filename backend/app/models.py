@@ -22,3 +22,8 @@ class Task(Base):
     completed_timestamp = Column(DateTime(timezone=True), nullable=True)
     entry_timestamp = Column(DateTime(timezone=True), server_default=func.now())
     aging_days = Column(Integer, default=0)
+    # V9 fields. Columns must exist in Postgres first (ALTER TABLE ... ADD COLUMN).
+    short_title = Column(Text, nullable=True)
+    category = Column(String(100), nullable=True)
+    linked_tasks = Column(JSON, nullable=True)
+    depends_on = Column(String, nullable=True)

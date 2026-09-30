@@ -65,6 +65,10 @@ async def create_task(
         completed_timestamp=body.completed_timestamp,
         entry_timestamp=body.entry_timestamp or now,
         aging_days=body.aging_days or 0,
+        short_title=body.short_title,
+        category=body.category,
+        linked_tasks=body.linked_tasks or [],
+        depends_on=body.depends_on,
     )
     db.add(task)
     await db.commit()
@@ -174,6 +178,10 @@ async def bulk_import(
                     or datetime.utcnow()
                 ),
                 aging_days=raw.get("aging_days") or raw.get("agingDays") or 0,
+                short_title=raw.get("short_title") or raw.get("shortTitle"),
+                category=raw.get("category"),
+                linked_tasks=raw.get("linked_tasks") or raw.get("linkedTasks") or [],
+                depends_on=raw.get("depends_on") or raw.get("dependsOn"),
             )
             db.add(t)
             added += 1
