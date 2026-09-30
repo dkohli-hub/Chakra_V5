@@ -1,22 +1,43 @@
+// Arena names finalized by DK, 28-29 Sep 2026 — supersedes all earlier drafts.
 export const GITA = [
-  {ch:1,name:'My Battlefield',essence:'The courage to face what must be faced.',teaching:'Before every great action, there is doubt. The Gita begins here — not with answers, but with paralysis. This is your starting point too.',color:'#8B1A1A'},
-  {ch:2,name:'My Clarity',essence:'The soul is eternal. Act from knowledge, not fear.',teaching:'You are not the body, not the mind, not the role. You are the witness. When you know this, action becomes clean.',color:'#B87800'},
-  {ch:3,name:'My Work',essence:'Do your work. Do not withhold action from the world.',teaching:'Act without attachment to the fruit. The action is yours. The result belongs to Krishna.',color:'#1A6B5A'},
-  {ch:4,name:'My Learning',essence:'The wise see action in inaction and inaction in action.',teaching:'Knowledge is the boat that carries you across the ocean of karma. Seek it without ego.',color:'#2E7D32'},
-  {ch:5,name:'My Peace',essence:'True renunciation is inner, not outer.',teaching:'The one who acts without claiming the action as theirs — that is true freedom while still in the world.',color:'#A07828'},
-  {ch:6,name:'My Health',essence:'The body is the vehicle. Tend it with discipline.',teaching:'Let food be medicine. Let sleep be restoration. The undisciplined body is the undisciplined mind.',color:'#1A6B5A'},
-  {ch:7,name:'My Faith',essence:'I am in everything. Everything is in Me.',teaching:'The one who knows Me truly — in nature, in events, in people — walks without fear.',color:'#3A6B8A'},
-  {ch:8,name:'My Transition',essence:'What you think at the last moment shapes what follows.',teaching:'Live so consciously that even the end is a conscious act.',color:'#5A5A7A'},
-  {ch:9,name:'My Devotion',essence:'Offer everything to Me. I will carry it.',teaching:'Even the smallest offering — a leaf, a flower, a moment of pure attention — reaches Me when given with love.',color:'#6A3A8A'},
-  {ch:10,name:'My Source',essence:'I am the origin of everything.',teaching:"Your unique gift is a Vibhuti — a divine expression. Use it fully. Withholding your gift is withholding Krishna's work.",color:'#8B6914'},
-  {ch:11,name:'My Planning',essence:'See the whole field before you act.',teaching:'Arjuna saw the full cosmic form — everything simultaneously. Planning is your attempt at that same comprehensive seeing.',color:'#2E7D32'},
-  {ch:12,name:'My People',essence:'Love without condition. Serve without expectation.',teaching:'The one who bears no ill will toward any being — friendly and compassionate — that one is dear to Me.',color:'#B87800'},
-  {ch:13,name:'My Home',essence:'Know the field. Know the knower of the field.',teaching:'Your home, your body, your immediate environment — these are your Kshetra. Tend them as sacred ground.',color:'#8B1A1A'},
-  {ch:14,name:'My Nature',essence:'Rise above the three qualities. Be the witness.',teaching:'Rajas drives. Tamas holds. Sattva illuminates. You are the one watching all three.',color:'#1A6B5A'},
-  {ch:15,name:'My Legacy',essence:'The eternal Ashwattha — the undying tree of life.',teaching:'What will remain when you are gone? Not your possessions. Your light. Your words. The lives you changed.',color:'#2E7D32'},
-  {ch:16,name:'My Character',essence:'Fearlessness, purity of heart, generosity — divine qualities.',teaching:'The divine qualities do not announce themselves. They are simply the residue of right living, accumulated over time.',color:'#A07828'},
-  {ch:17,name:'My Financial',essence:'Even faith has a quality. Choose Sattvic faith.',teaching:'Where you give, where you spend, what you eat — all of this reveals what you truly believe.',color:'#1A6B5A'},
-  {ch:18,name:'My Completions',essence:'Surrender, completion, and the freedom that follows right action.',teaching:'Abandon all varieties of dharma and simply surrender unto Me. I shall deliver you from all sinful reactions. Do not fear. — BG 18.66',color:'#6A3A8A'}
+  {ch:1,name:'Vishad Yoga',essence:'The paralysis before wisdom — Arjuna frozen between duty and love.',teaching:'Two armies face each other. Arjuna sees his own kin on both sides and cannot move. Every arena of life begins here — the honest freeze before the path is clear.',color:'#8B1A1A'},
+  {ch:2,name:'Eternal Soul',essence:'The soul does not die with the body. Act from what is permanent, not what is passing.',teaching:'Grief over the body is grief over something that was never permanent. Know the witness inside you, and act from steadiness rather than fear.',color:'#B87800'},
+  {ch:3,name:'Nishkama Karma',essence:'Do the work. Release your grip on what it earns you.',teaching:'Inaction is not actually possible — everyone acts by their own nature. The work is yours. The result belongs to something larger than you.',color:'#1A6B5A'},
+  {ch:4,name:'Act with Knowledge',essence:'Real renunciation is acting with such clarity that action no longer binds you.',teaching:'Whenever dharma declines, it is restored — that renewal happens through conscious, knowing action, not through escaping the world.',color:'#2E7D32'},
+  {ch:5,name:'Karma Sanyasa',essence:'Renunciation happens inside action, not by escaping it.',teaching:'Work with body and mind, but without personal claim over the result — untouched, like a lotus leaf on water.',color:'#A07828'},
+  {ch:6,name:'Samatva',essence:'Equanimity — the same in heat and cold, success and failure.',teaching:'A trained mind stays even through pleasure and pain. No sincere effort toward that steadiness is ever wasted.',color:'#1A6B5A'},
+  {ch:7,name:'Gyaan Vigyaan',essence:'The difference between knowing about the divine and truly realizing it.',teaching:'Most people turn toward the divine out of need. The wise turn toward it for its own sake — that is realized, not merely learned, knowledge.',color:'#3A6B8A'},
+  {ch:8,name:'Akshara Brahma',essence:'What is imperishable, beyond birth and death.',teaching:'Whatever you dwell on, that is what you become. Train your attention on what does not decay.',color:'#5A5A7A'},
+  {ch:9,name:'Patram Pushpam',essence:'A leaf, a flower, a little water, given with love, is enough.',teaching:'Krishna is supreme, and all roads — however roundabout — lead back to him. Devotion needs no grandeur, only sincerity.',color:'#6A3A8A'},
+  {ch:10,name:'Vibhuti Yoga',essence:'Wherever there is glory or power, know it springs from him.',teaching:'The best in any category — the tallest mountain, the fiercest warrior, the brightest mind — is a spark of the same source.',color:'#8B6914'},
+  {ch:11,name:'Vishwaroop',essence:'The universal form — all of creation, all of time, seen at once.',teaching:'Behind the familiar, personal form is a reality vast enough to contain everything, including outcomes already in motion.',color:'#2E7D32'},
+  {ch:12,name:'Bhakti Yoga',essence:'Devotion, felt and personal, is the most direct path.',teaching:'Free of hatred, compassionate, unattached to outcomes, steady in joy and sorrow — these are the marks of a devotee dear to him.',color:'#B87800'},
+  {ch:13,name:'Kshetra Yoga',essence:'You are not the field. You are the knower of the field.',teaching:'The body, mind, and circumstances are the field — observed, not owned. The awareness watching them is who you actually are.',color:'#8B1A1A'},
+  {ch:14,name:'3 Gunas',essence:'Sattva, Rajas, and Tamas — the three forces that shape mood and tendency.',teaching:'Clarity, restlessness, and inertia are always mixed within a person. Real freedom is recognizing the mix, then rising above all three.',color:'#1A6B5A'},
+  {ch:15,name:'The Inverted Tree',essence:'Roots above, branches below — the visible world hangs from an unseen source.',teaching:'Most people live entirely among the branches. Trace the tree back to its root, and you find what everything else depends on.',color:'#2E7D32'},
+  {ch:16,name:'Daivasura Yoga',essence:'Divine and demonic natures — the qualities that lift you up or pull you down.',teaching:'Lust, anger, and greed are the three gates to self-destruction. The qualities you cultivate actively shape where your life moves.',color:'#A07828'},
+  {ch:17,name:'3 Gunas of Faith',essence:'Even faith, food, and generosity carry the mark of Sattva, Rajas, or Tamas.',teaching:'Sincerity alone does not make faith pure — what colors it is the same three gunas that color everything else you do.',color:'#1A6B5A'},
+  {ch:18,name:'Moksha thru Sanyasa',essence:'The final teaching — surrender every action and its outcome.',teaching:'Abandon all varieties of dharma and simply surrender unto me. I shall deliver you from all sinful reactions. Do not fear. — BG 18.66',color:'#6A3A8A'}
+]
+
+// Bucket tests — Gita principle + plain question per bucket. Locked by DK, 28 Sep 2026.
+export const BUCKET_TESTS = {
+  Karya:     {principle:'Act on your duty without clinging to the result', question:'Can I do this now, in a window, whatever the outcome?'},
+  Dhairya:   {principle:"Steadiness — don't force what isn't ready", question:"Is the action ready but waiting on a person, event, or moment I don't control?"},
+  Vishram:   {principle:'Balance between effort and rest', question:'Is this deliberately at leisure — no deadline, no guilt?'},
+  Manan:     {principle:'Reflection that brings understanding (Sattvic, done in Brahma Muhurta)', question:'Do I need to think or understand before anything can be done?'},
+  Manthan:   {principle:'Arjuna at the crossroads — two pulls, one resolution (Sattvic, done in Brahma Muhurta)', question:'Are two things pulling against each other so that something must be resolved?'},
+  Tyaga:     {principle:'Release the fruit, keep the awareness', question:'Can I consciously let this go, without guilt?'},
+  Prarabdha: {principle:'Some outcomes are already unfolding', question:'Is this already in motion and needing nothing from me now?'}
+}
+
+export const BUCKET_ORDER = ['Karya','Dhairya','Vishram','Manan','Manthan','Tyaga','Prarabdha']
+
+// "Deadline" options — horizon labels, not dates (DK's strategy).
+export const HORIZON_OPTS = [
+  ['today','Today'],['thisWeek','This week'],['nextWeek','Next week'],['thisMonth','Next month'],
+  ['Q3','Q3 2026'],['thisYear','This year'],['1year','1–2 years'],['parkingLot','Parking lot'],
+  ['','No date (Vishram-style)']
 ]
 
 export const TABS = [

@@ -12,6 +12,8 @@ import SaarthiModal from './components/modals/SaarthiModal'
 import ExportModal from './components/modals/ExportModal'
 import CalendarModal from './components/modals/CalendarModal'
 import KeywordManagerModal from './components/modals/KeywordManagerModal'
+import TaskDetailModal from './components/modals/TaskDetailModal'
+import DhairyaModal from './components/modals/DhairyaModal'
 import TodayBattery from './tabs/TodayBattery'
 import Gather from './tabs/Gather'
 import Time from './tabs/Time'
@@ -21,7 +23,6 @@ import Soul from './tabs/Soul'
 import BrainTwin from './tabs/BrainTwin'
 import Data from './tabs/Data'
 import Score from './tabs/Score'
-import { createTask, normaliseTask } from './api'
 
 const TAB_MAP = {
   today:  TodayBattery,
@@ -36,18 +37,27 @@ const TAB_MAP = {
 }
 
 export default function App() {
-  const { state, dispatch, doLogout, doImport, showToast } = useApp()
-  const { user, loading, activeTab, fabOverlayOpen, smartFetchOpen, saarthiOpen, exportOpen, calModal, calAskTask, ocrLines, kwmOpen } = state
+  const { state, dispatch, doLogout, doImport, showToast, commitTasks } = useApp()
+  const { user, loading, activeTab, fabOverlayOpen, smartFetchOpen, saarthiOpen, exportJson, calModal, calAskTask, ocrLines, kwmOpen, leisure, pendingGather } = state
 
+  // Backup: download the file, then offer Notes / WhatsApp / iMessage / Email.
   function handleExport() {
-    const json = JSON.stringify(state.tasks, null, 2)
-    const blob = new Blob([json], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `chakra-backup-${new Date().toISOString().slice(0, 10)}.json`
-    a.click()
-    URL.revokeObjectURL(url)
+    const now = new Date()
+    const dd = String(now.getDate()).padStart(2, '0')
+    const mm = String(now.getMonth() + 1).padStart(2, '0')
+    const yy = String(now.getFullYear()).slice(-2)
+    const filename = `KarmaKshetra_Backup_${mm}${dd}${yy}.json`
+    const json = JSON.stringify({ exportedAt: now.toISOString(), version: 37, taskCount: state.tasks.length, tasks: state.tasks }, null, 2)
+    try {
+      const blob = new Blob([json], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = filename
+      document.body.appendChild(a); a.click(); document.body.removeChild(a)
+      setTimeout(() => URL.revokeObjectURL(url), 1000)
+    } catch {}
+    dispatch({ type: 'SET_EXPORT', payload: json })
   }
 
   function handleImportFile(e) {
@@ -84,11 +94,32 @@ export default function App() {
     dispatch({ type: 'SET_CAL_ASK', payload: null })
   }
 
+  // Deadline-or-leisure prompt (Rule 1/4/7).
+  function endLeisure() { dispatch({ type: 'SET_LEISURE', payload: { leisure: null, pending: null } }) }
+  function leisureDeadline() {
+    const p = pendingGather
+    endLeisure()
+    // Commit with no horizon; the calendar prompt follows for a single task.
+    if (p) commitTasks(p.lines, p.useW, p.useMT, null, p.useLA, false)
+  }
+  function leisureConfirm() {
+    const p = pendingGather
+    endLeisure()
+    if (p) commitTasks(p.lines, p.useW, p.useMT, null, p.useLA, true)
+  }
+
+  function handleLogout() {
+    if (window.confirm('Log out of Chakra?')) doLogout()
+  }
+
   const showOcrModal = saarthiOpen && ocrLines && ocrLines.length > 0
   const showSaarthiModal = saarthiOpen && (!ocrLines || ocrLines.length === 0)
 
   return (
     <div id="app" className={[state.krishnaMode ? 'krishna-mode' : '', fabOverlayOpen ? 'fab-open' : ''].filter(Boolean).join(' ')}>
+      <div className="user-badge" onClick={handleLogout}>
+        👤 {user?.displayName || user?.userId || 'DK'} · Log out
+      </div>
       <Header onExport={handleExport} onImportFile={handleImportFile} />
       <div id="content">
         <TabComponent />
@@ -108,36 +139,48 @@ export default function App() {
             dispatch({ type: 'SET_OCR_LINES', payload: [] })
           }}
           onCommit={async selected => {
-            for (const title of selected) {
-              try {
-                const raw = await createTask({ title, bucket: 'Karya', weightage: 'W2', time_horizon: 'today' })
-                dispatch({ type: 'ADD_TASK', payload: normaliseTask(raw) })
-              } catch {}
-            }
             dispatch({ type: 'TOGGLE_SAARTHI' })
             dispatch({ type: 'SET_OCR_LINES', payload: [] })
-            dispatch({ type: 'SHOW_TOAST', payload: { msg: `${selected.length} task(s) added`, type: 'ok' } })
+            await commitTasks(selected, 'W2', null, 'thisWeek', null, false)
           }}
         />
       )}
       {showSaarthiModal && <SaarthiModal />}
-      {exportOpen && <ExportModal />}
+      {exportJson && <ExportModal jsonStr={exportJson} onClose={() => dispatch({ type: 'SET_EXPORT', payload: null })} />}
       {calModal?.open && (
         <CalendarModal
           task={calModal.task}
           onClose={() => dispatch({ type: 'SET_CAL_MODAL', payload: null })}
         />
       )}
+      <TaskDetailModal />
+      <DhairyaModal />
 
       {calAskTask && (
         <div className="cal-ask-toast show">
           <div className="cal-ask-txt">✓ Saved — Add to Calendar?</div>
-          <div style={{ fontFamily: 'Montserrat,sans-serif', fontSize: '11px', color: 'var(--text-faint)', marginBottom: '8px' }}>
-            "{calAskTask.title}"
-          </div>
           <div className="cal-ask-btns">
             <button className="cal-btn go" onClick={handleCalAskConfirm}>Yes — Schedule It</button>
             <button className="cal-btn cancel" onClick={() => dispatch({ type: 'SET_CAL_ASK', payload: null })}>Not now</button>
+          </div>
+        </div>
+      )}
+
+      {leisure === 'ask' && (
+        <div className="cal-ask-toast show">
+          <div className="cal-ask-txt">Does this have a deadline, or can it be done at leisure?</div>
+          <div className="cal-ask-btns">
+            <button className="cal-btn go" onClick={leisureDeadline}>Deadline — pick date &amp; time</button>
+            <button className="cal-btn cancel" onClick={() => dispatch({ type: 'SET_LEISURE', payload: { leisure: 'warn' } })}>Leisure — no rush</button>
+          </div>
+        </div>
+      )}
+      {leisure === 'warn' && (
+        <div className="cal-ask-toast show" style={{ background: '#5A5A7A' }}>
+          <div className="cal-ask-txt" style={{ color: '#fff' }}>This goes into Vishram — conscious rest, no deadline. You'll pick it up when you have spare time.</div>
+          <div className="cal-ask-btns">
+            <button className="cal-btn go" onClick={leisureConfirm}>OK — send to Vishram</button>
+            <button className="cal-btn cancel" onClick={() => dispatch({ type: 'SET_LEISURE', payload: { leisure: 'ask' } })}>Wait, it has a deadline</button>
           </div>
         </div>
       )}

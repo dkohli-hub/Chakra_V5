@@ -1,6 +1,8 @@
-import React, { createContext, useContext, useReducer, useEffect, useCallback } from 'react'
+import React, { createContext, useContext, useReducer, useEffect, useCallback, useRef } from 'react'
 import { getTasks, login as apiLogin, createTask, updateTask, clearCompleted as apiClearCompleted, bulkImport as apiBulkImport } from '../api'
 import { CAL_KEYWORDS as DEFAULT_KEYWORDS } from '../constants'
+import { shortTitleFrom } from '../utils'
+import { classifyTask, detectLink } from '../ai'
 
 const AppContext = createContext(null)
 
@@ -31,6 +33,12 @@ const initialState = {
   syncStatus: '⟳ loading...',
   kwmOpen: false,
   calKeywords: loadPersistedKeywords() || DEFAULT_KEYWORDS,
+  // V9
+  detail: null,         // { type: 'task', id } | { type: 'tamas' | 'aq' | 'cq' }
+  dhairyaId: null,      // task id for the Dhairya "waiting" menu
+  leisure: null,        // null | 'ask' | 'warn'  — deadline-or-leisure prompt
+  pendingGather: null,  // { lines, useW, useMT, useLA } held while asking
+  exportJson: null,     // backup JSON shown in the share modal
 }
 
 function reducer(state, action) {
@@ -57,12 +65,21 @@ function reducer(state, action) {
     case 'SET_SYNC':           return { ...state, syncStatus: action.payload }
     case 'TOGGLE_KWM':         return { ...state, kwmOpen: !state.kwmOpen }
     case 'SET_CAL_KEYWORDS':   return { ...state, calKeywords: action.payload }
+    case 'SET_DETAIL':         return { ...state, detail: action.payload }
+    case 'SET_DHAIRYA':        return { ...state, dhairyaId: action.payload }
+    case 'SET_LEISURE':        return { ...state, leisure: action.payload.leisure,
+                                        pendingGather: action.payload.pending !== undefined ? action.payload.pending : state.pendingGather }
+    case 'SET_EXPORT':         return { ...state, exportJson: action.payload }
     default: return state
   }
 }
 
 export function AppProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState)
+  // Latest tasks for async callbacks (AI classify / link resolve after a round trip).
+  const tasksRef = useRef(state.tasks)
+  tasksRef.current = state.tasks
+  const sessionAdded = useRef(0)
 
   // Persist krishnaMode changes to localStorage
   useEffect(() => {
@@ -147,6 +164,100 @@ export function AppProvider({ children }) {
     setTimeout(() => dispatch({ type: 'CLEAR_TOAST' }), duration)
   }, [])
 
+  const findTask = useCallback(id => tasksRef.current.find(t => t.id === id), [])
+
+  // Link two tasks both ways so the Dhairya menu cascades either direction.
+  const linkTasks = useCallback(async (idA, idB) => {
+    const a = findTask(idA), b = findTask(idB)
+    if (!a || !b) return
+    const la = Array.from(new Set([...(a.linkedTasks || []), idB]))
+    const lb = Array.from(new Set([...(b.linkedTasks || []), idA]))
+    try {
+      await patchTask(idA, { linkedTasks: la })
+      await patchTask(idB, { linkedTasks: lb })
+    } catch { /* silent — no link is the safe default */ }
+  }, [findTask, patchTask])
+
+  const unlinkTask = useCallback(async (id, otherId) => {
+    const a = findTask(id), b = findTask(otherId)
+    try {
+      if (a) await patchTask(id, { linkedTasks: (a.linkedTasks || []).filter(x => x !== otherId) })
+      if (b) await patchTask(otherId, { linkedTasks: (b.linkedTasks || []).filter(x => x !== id) })
+    } catch {}
+  }, [findTask, patchTask])
+
+  // V9 commitTasks — the single save path for Gather, Quick Add and photo scan.
+  // Rule 15: weight is mandatory, default W2. Leisure tasks go to Vishram with no
+  // horizon and skip AI classification.
+  const commitTasks = useCallback(async (lines, useW, useMT, useTH, useLA, isLeisure) => {
+    const weightFinal = useW || 'W2'
+    const created = []
+    for (let i = 0; i < lines.length; i++) {
+      const clean = (lines[i] || '').trim()
+      if (!clean) continue
+      const nowIso = new Date().toISOString()
+      const placeholderBucket = isLeisure ? 'Vishram' : 'Karya'
+      try {
+        const task = await addTask({
+          id: `task_${Date.now()}${i}`,
+          title: clean,
+          shortTitle: shortTitleFrom(clean),
+          bucket: placeholderBucket,
+          ch: 3,
+          weightage: weightFinal,
+          timeHorizonType: isLeisure ? null : useTH,
+          lifeArea: useLA,
+          multitask: useMT,
+          stateHistory: [{ bucket: placeholderBucket, timestamp: nowIso }],
+          transitionCount: 0,
+          originBucket: placeholderBucket,
+          completed: false,
+          entryTimestamp: nowIso,
+          agingDays: 0,
+          num: tasksRef.current.length + 1,
+        })
+        created.push(task)
+        if (!isLeisure) {
+          // Rule 2/17/3: classify by context. Runs after the task is visible,
+          // so entry is never blocked by the API.
+          classifyTask(clean).then(async result => {
+            const t = findTask(task.id) || task
+            try {
+              await patchTask(task.id, {
+                bucket: result.bucket,
+                ch: result.ch,
+                ...(!t.lifeArea && result.lifeArea ? { lifeArea: result.lifeArea } : {}),
+                stateHistory: [...(t.stateHistory || []), { bucket: result.bucket, timestamp: new Date().toISOString() }],
+              })
+            } catch {}
+          })
+          // Silent auto-linking — only once the backend stores links.
+          if (task.linkedTasks !== undefined) {
+            detectLink(clean, task.id, tasksRef.current).then(linkedId => {
+              if (linkedId) linkTasks(task.id, linkedId)
+            })
+          }
+        }
+      } catch {
+        showToast('Failed to save task', 'warn')
+      }
+    }
+    if (!created.length) return created
+
+    // Remind to back up every 3 tasks added this session.
+    sessionAdded.current += created.length
+    if (sessionAdded.current >= 3 && sessionAdded.current % 3 === 0) {
+      const n = sessionAdded.current
+      setTimeout(() => showToast(`💾 ${n} tasks added this session — tap Backup JSON to save safely`, 'warn', 4500), 1200)
+    }
+    showToast(created.length === 1 ? '✓ 1 task added to Chakra ＋' : `✓ ${created.length} tasks added to Chakra ＋`, 'ok', 3000)
+    // Offer calendar scheduling for single tasks.
+    if (lines.length === 1) {
+      setTimeout(() => dispatch({ type: 'SET_CAL_ASK', payload: { title: created[0].title } }), 900)
+    }
+    return created
+  }, [addTask, patchTask, findTask, linkTasks, showToast])
+
   const setKeywords = useCallback((cat, keywords) => {
     const updated = { ...state.calKeywords, [cat]: keywords }
     dispatch({ type: 'SET_CAL_KEYWORDS', payload: updated })
@@ -163,6 +274,10 @@ export function AppProvider({ children }) {
     doImport,
     showToast,
     setKeywords,
+    commitTasks,
+    linkTasks,
+    unlinkTask,
+    findTask,
   }
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>

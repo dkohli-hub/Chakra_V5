@@ -43,6 +43,12 @@ export function normaliseTask(t) {
     completedTimestamp: t.completed_timestamp,
     entryTimestamp: t.entry_timestamp,
     agingDays: t.aging_days || 0,
+    // V9 fields. Present only once the backend stores them; undefined until then,
+    // which the UI treats as "feature not available yet".
+    shortTitle: t.short_title || null,
+    category: t.category || null,
+    linkedTasks: 'linked_tasks' in t ? (t.linked_tasks || []) : undefined,
+    dependsOn: t.depends_on || null,
   }
 }
 
@@ -65,6 +71,10 @@ export function denormaliseTask(t) {
     completed_timestamp: t.completedTimestamp,
     entry_timestamp: t.entryTimestamp,
     aging_days: t.agingDays || 0,
+    short_title: t.shortTitle || null,
+    category: t.category || null,
+    linked_tasks: t.linkedTasks || [],
+    depends_on: t.dependsOn || null,
   }
 }
 
@@ -92,6 +102,9 @@ export const updateTask = (id, updates) => {
   if (updates.stateHistory !== undefined) payload.state_history = updates.stateHistory
   if (updates.transitionCount !== undefined) payload.transition_count = updates.transitionCount
   if (updates.agingDays !== undefined) payload.aging_days = updates.agingDays
+  if (updates.shortTitle !== undefined) payload.short_title = updates.shortTitle
+  if (updates.category !== undefined) payload.category = updates.category
+  if (updates.linkedTasks !== undefined) payload.linked_tasks = updates.linkedTasks
   return api.patch(`/tasks/${id}`, payload).then((r) => normaliseTask(r.data))
 }
 
