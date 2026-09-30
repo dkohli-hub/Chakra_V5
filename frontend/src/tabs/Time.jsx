@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useApp } from '../store/AppContext'
+import Footer from '../components/Footer'
 import TaskCard from '../components/TaskCard'
 import { TIME_GROUPS } from '../constants'
 
@@ -29,11 +30,7 @@ export default function Time() {
   return (
     <div className="wrap">
       {TIME_GROUPS.map(g => <ColGroup key={g.key} group={g} tasks={tasks} />)}
-      <div className="page-footer">
-        <div className="footer-disc">
-          These are signals, not certainties. The quality and accuracy of what Chakra reads depends entirely on what you have put in.
-        </div>
-      </div>
+      <Footer />
     </div>
   )
 }

@@ -32,7 +32,7 @@ export default function Header({ onExport, onImportFile }) {
           <div className="brand">Chakra</div>
           <div className="page-title">Karma Kshetra™</div>
           <div className="page-sub">
-            Version 5 &nbsp;·&nbsp; Your mind, structured. &nbsp;·&nbsp;
+            Version 9 &nbsp;·&nbsp; Your mind, structured. &nbsp;·&nbsp;
             <span style={{ fontSize: '9px', color: 'var(--teal2)' }}>{syncStatus}</span>
           </div>
         </div>
@@ -44,9 +44,6 @@ export default function Header({ onExport, onImportFile }) {
             <span className="stat-pill" style={{ color: 'var(--teal2)', borderColor: 'rgba(26,128,96,.3)', background: 'rgba(26,128,96,.06)' }}>
               {done} done
             </span>
-            <button className="user-logout-pill" onClick={doLogout}>
-              👤 {user?.displayName || user?.userId || 'DK'} · Log out
-            </button>
           </div>
         </div>
       </div>

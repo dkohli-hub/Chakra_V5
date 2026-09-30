@@ -167,7 +167,7 @@ export default function CalendarModal() {
             )
           })}
         </div>
-        <div className="cal-sub" style={{ marginTop: '8px' }}>Available slots — next 21 days</div>
+        <div className="cal-sub" style={{ marginTop: '8px' }}>Available slots — outside ITC hours weekdays, all day weekends</div>
         <div className="cal-slot-grid">
           {generateSlots(selCal).map((s, idx) => (
             <div

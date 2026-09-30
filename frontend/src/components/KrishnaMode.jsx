@@ -19,7 +19,7 @@ export default function KrishnaMode() {
   return (
     <>
       <button className={`km-badge${state.krishnaMode ? ' on' : ''}`} onClick={toggle}>
-        {state.krishnaMode ? '🕉 Krishna Mode' : '🕉 Krishna'}
+        🙏 KM
       </button>
       <div className={`krishna-verse${show ? ' show' : ''}`}>{verse}</div>
     </>

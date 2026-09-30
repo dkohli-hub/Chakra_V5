@@ -1,5 +1,6 @@
 import React from 'react'
 import { useApp } from '../store/AppContext'
+import Footer from '../components/Footer'
 
 export default function BrainTwin() {
   const { state } = useApp()
@@ -69,11 +70,7 @@ export default function BrainTwin() {
           ))}
         </div>
       </div>
-      <div className="page-footer">
-        <div className="footer-disc">
-          These are signals, not certainties. The quality and accuracy of what Chakra reads depends entirely on what you have put in.
-        </div>
-      </div>
+      <Footer />
     </div>
   )
 }

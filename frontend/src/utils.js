@@ -1,106 +1,161 @@
-import { W_MAP, W_LABEL } from './constants'
+import { W_MAP, W_LABEL, GITA } from './constants'
 
-export function timeScore(t) {
-  if (!t.timeHorizonType || t.timeHorizonType === 'parkingLot') return 999
-  const now = new Date()
-  const tod = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-  const yr = tod.getFullYear()
+// ─── V9 deadline / heat rule ────────────────────────────────────────────────
+// A horizon label is turned into a deadline anchored to the task's own entry
+// date. Heat: green = on/before deadline, amber = up to 30% of the task's own
+// window past due, red = beyond 30%.
+export function taskDeadline(t) {
+  if (!t.timeHorizonType || t.timeHorizonType === 'parkingLot') return null
+  const entry = t.entryTimestamp ? new Date(t.entryTimestamp) : new Date()
+  const entryDay = new Date(entry.getFullYear(), entry.getMonth(), entry.getDate())
+  const yr = entryDay.getFullYear()
   const dl = {
-    today: 0,
-    thisWeek: 7,
-    nextWeek: 14,
-    thisMonth: 30,
-    Q3: Math.round((new Date(yr, 8, 30) - tod) / 86400000),
-    Q4: Math.round((new Date(yr, 11, 31) - tod) / 86400000),
-    thisYear: Math.round((new Date(yr, 11, 31) - tod) / 86400000),
-    '1year': 365,
-    '2years': 730
-  }
-  const d = dl[t.timeHorizonType]
-  if (d === undefined) return 999
-  const win = (t.timeHorizonType === 'today' || t.timeHorizonType === 'thisWeek' || t.timeHorizonType === 'nextWeek') ? 7
-    : t.timeHorizonType === 'thisMonth' ? 14 : 30
-  if (win === 0) return d <= 0 ? 0 : 999
-  return Math.round(((d - win) / win) * 100)
-}
-
-export function isOD(t) {
-  if (t.completed || !t.timeHorizonType || t.timeHorizonType === 'parkingLot') return false
-  const now2 = new Date(); now2.setHours(0, 0, 0, 0)
-  const yr = now2.getFullYear()
-  const horizonDeadline = {
-    today: new Date(now2),
-    thisWeek: new Date(now2.getTime() + 7 * 86400000),
-    nextWeek: new Date(now2.getTime() + 14 * 86400000),
-    thisMonth: new Date(now2.getTime() + 30 * 86400000),
+    // End of the entry day, so a task added today is not overdue until tomorrow
+    // (matches the pre-V9 behaviour for 'today').
+    today: new Date(entryDay.getTime() + 86400000),
+    thisWeek: new Date(entryDay.getTime() + 7 * 86400000),
+    nextWeek: new Date(entryDay.getTime() + 14 * 86400000),
+    thisMonth: new Date(entryDay.getTime() + 30 * 86400000),
     Q3: new Date(yr, 8, 30),
     Q4: new Date(yr, 11, 31),
     thisYear: new Date(yr, 11, 31),
     '1year': new Date(yr + 1, 11, 31),
-    '2years': new Date(yr + 2, 11, 31)
+    '2years': new Date(yr + 2, 11, 31),
   }
-  const deadline = horizonDeadline[t.timeHorizonType]
-  if (!deadline) return false
-  const entry = t.entryTimestamp ? new Date(t.entryTimestamp) : null
-  if (!entry) return false
-  if (t.timeHorizonType === 'today') {
-    const entryDay = new Date(entry.getFullYear(), entry.getMonth(), entry.getDate())
-    return entryDay < now2
-  }
-  if (t.timeHorizonType === 'thisWeek') {
-    const entryDay = new Date(entry.getFullYear(), entry.getMonth(), entry.getDate())
-    return (now2 - entryDay) > 7 * 86400000
-  }
-  if (t.timeHorizonType === 'nextWeek') {
-    const entryDay = new Date(entry.getFullYear(), entry.getMonth(), entry.getDate())
-    return (now2 - entryDay) > 14 * 86400000
-  }
-  if (t.timeHorizonType === 'thisMonth') {
-    const entryDay = new Date(entry.getFullYear(), entry.getMonth(), entry.getDate())
-    return (now2 - entryDay) > 30 * 86400000
-  }
-  return now2 > deadline
+  return dl[t.timeHorizonType] || null
+}
+
+// Older records use completionDate; new completions write completedTimestamp.
+export function completedAt(t) {
+  return t.completedTimestamp || t.completionDate || null
+}
+
+export function heatPct(t) {
+  const dl = taskDeadline(t)
+  if (!dl) return null
+  const entry = t.entryTimestamp ? new Date(t.entryTimestamp) : new Date()
+  const winDays = Math.max(1, (dl - entry) / 86400000)
+  const pastDays = (Date.now() - dl.getTime()) / 86400000
+  if (pastDays <= 0) return 0
+  return Math.round(pastDays / winDays * 100)
+}
+
+// Rule 10: Manan, Manthan and Vishram enter Tamas after 3 months with no move
+// or completion. Only a move or completion resets the clock.
+export const TAMAS_BUCKETS = { Manan: 1, Manthan: 1, Vishram: 1 }
+
+export function lastMoveDate(t) {
+  const sh = t.stateHistory
+  if (!sh || !sh.length) return new Date(t.entryTimestamp || Date.now())
+  return new Date(sh[sh.length - 1].timestamp)
+}
+
+export function isTamas(t) {
+  if (t.completed || !TAMAS_BUCKETS[t.bucket]) return false
+  return (Date.now() - lastMoveDate(t).getTime()) / 86400000 >= 90
+}
+
+// Mutually exclusive with Tamas — a task is never double-counted.
+export function isOD(t) {
+  if (t.completed || isTamas(t)) return false
+  const p = heatPct(t)
+  return p !== null && p > 0
 }
 
 export function tcol(t) {
-  const s = timeScore(t)
-  if (isOD(t) || s <= 0) return 'var(--red)'
-  if (s > 400) return 'var(--ocean)'
-  if (s > 200) return 'var(--green)'
-  if (s > 100) return 'var(--amber)'
-  return 'var(--teal2)'
+  const p = heatPct(t)
+  if (p === null) return 'var(--text-faint)'
+  if (p <= 0) return 'var(--green)'
+  if (p <= 30) return 'var(--amber)'
+  return 'var(--red)'
 }
 
-export function computeCharge(tasks) {
+export function tborder(t) {
+  const p = heatPct(t)
+  if (p === null) return ''
+  if (p <= 0) return ' tc-g'
+  if (p <= 30) return ' tc-a'
+  return ' od'
+}
+
+export function heatText(t) {
+  const hp = heatPct(t)
+  return hp === null ? 'No deadline set'
+    : hp <= 0 ? 'On time'
+    : hp <= 30 ? 'Past due, within 30% grace'
+    : 'Past due, beyond 30% — red'
+}
+
+// ─── Battery ────────────────────────────────────────────────────────────────
+export function computeBattery(tasks) {
   const active = tasks.filter(t => !t.completed)
-  const odTasks = active.filter(isOD)
-  const odDrain = odTasks.reduce((s, t) => s + Math.min(10 + (t.agingDays || 1) * 2, 20), 0)
+  const tamasT = active.filter(isTamas)
+  const tamasIds = new Set(tamasT.map(t => t.id))
+  const rest = active.filter(t => !tamasIds.has(t.id))
+  const odT = rest.filter(isOD)
+  const odIds = new Set(odT.map(t => t.id))
+  const todayT = rest.filter(t => t.timeHorizonType === 'today' && !odIds.has(t.id))
+  const weekT = rest.filter(t => t.timeHorizonType === 'thisWeek' && !odIds.has(t.id))
+  const nwT = rest.filter(t => t.timeHorizonType === 'nextWeek' && !odIds.has(t.id))
+  const laterT = rest.filter(t => !odIds.has(t.id)
+    && t.timeHorizonType !== 'today'
+    && t.timeHorizonType !== 'thisWeek'
+    && t.timeHorizonType !== 'nextWeek')
+
+  const odDrain = odT.reduce((s, t) => s + Math.min(10 + (t.agingDays || 1) * 2, 20), 0)
   const heavy = active.filter(t => (t.weightage === 'W4' || t.weightage === 'W5') && (t.agingDays || 0) > 7).length
-  const drain = Math.min(odDrain + heavy * 8, 100)
+  const drain = Math.min(odDrain + heavy * 8 + tamasT.length * 4, 100)
   const charge = Math.max(0, 100 - drain)
   const chCol = charge > 70 ? '#2E7D32' : charge > 40 ? '#B87800' : charge > 20 ? '#8B5A00' : '#8B1A1A'
   const drainLabel = drain > 75 ? 'Critical drain' : drain > 50 ? 'High drain' : drain > 25 ? 'Moderate drain' : 'Low drain'
-  return { charge, drain, chCol, drainLabel }
+
+  return { active, tamasT, odT, todayT, weekT, nwT, laterT, charge, drain, chCol, drainLabel }
 }
 
-export function computeBatterySegments(tasks) {
-  const active = tasks.filter(t => !t.completed)
-  const odTasks = active.filter(isOD)
-  const odIds = new Set(odTasks.map(t => t.id))
-  const todayT  = active.filter(t => t.timeHorizonType === 'today'    && !odIds.has(t.id))
-  const weekT   = active.filter(t => t.timeHorizonType === 'thisWeek' && !odIds.has(t.id))
-  const nwT     = active.filter(t => t.timeHorizonType === 'nextWeek' && !odIds.has(t.id))
-  const laterT  = active.filter(t => !odIds.has(t.id) && t.timeHorizonType !== 'today' && t.timeHorizonType !== 'thisWeek' && t.timeHorizonType !== 'nextWeek')
-  return { odT: odTasks, todayT, weekT, nwT, laterT }
+// ─── Labels ─────────────────────────────────────────────────────────────────
+export const HORIZON_LABEL = {
+  today: 'Today', thisWeek: 'This week', nextWeek: 'Next week', thisMonth: 'Next month',
+  Q3: 'Q3 2026', Q4: 'Q4 2026', thisYear: 'This year', '1year': '1–2 years',
+  '2years': '2 years', parkingLot: 'Parking lot', later: 'Later',
 }
 
+export function horizonLabel(code) {
+  if (!code) return null
+  return HORIZON_LABEL[code] || code
+}
+
+export function arenaNameOf(ch) {
+  const g = GITA.find(x => x.ch === ch)
+  return g ? g.name : ''
+}
+
+// Rule 20-adjacent: short, self-explanatory title condensed from a long
+// dictated one — first clause up to the first filler phrase, capped at ~60 chars.
+export function shortTitleFrom(text) {
+  if (!text) return ''
+  let t = text.split(/\.\s|\bThis (activity|would|search|would take)\b/i)[0].trim()
+  if (t.length > 60) t = t.slice(0, 57).replace(/\s+\S*$/, '') + '…'
+  return t
+}
+
+// The title to show on a card: the short title stored when the task was
+// created, else the full title (as V9 does — existing tasks keep full titles).
+export function displayTitle(t) {
+  return t.shortTitle || t.title
+}
+
+// Rule 3: any conflict auto-assigns to Manthan, as a fast pre-check before AI.
+const CONFLICT_KEYWORDS = /\bconflict|clash|overlap|double.?book|two meetings|which one|torn between|can'?t decide|decide between\b/i
+export function isConflictTask(text) { return CONFLICT_KEYWORDS.test(text || '') }
+
+// ─── Keyword parsers (commentary → metadata, no API) ────────────────────────
 export function parseWeightage(text) {
   if (!text) return null
   const t = text.toLowerCase()
   if (/full.day|all.day|whole.day/.test(t)) return 'W5'
   if (/half.day|4.hour|four.hour/.test(t)) return 'W4'
-  if (/\b(2|two|3|three)\s*hour/.test(t)) return 'W4'
   if (/\b(1|one)\s*hour|\b60\s*min/.test(t)) return 'W3'
+  if (/\b(2|two|3|three)\s*hour/.test(t)) return 'W4'
   if (/30\s*min|half.hour|thirty\s*min/.test(t)) return 'W2'
   if (/\b(5|10|15)\s*min|quick|fast|brief/.test(t)) return 'W1'
   return null
@@ -109,8 +164,8 @@ export function parseWeightage(text) {
 export function parseMultitask(text) {
   if (!text) return null
   const t = text.toLowerCase()
-  if (/multi.task|multitask|driving|walking|can.do|while.driv|while.walk/.test(t)) return 'Yes'
-  if (/full.focus|no.multitask|focus.only|needs.focus/.test(t)) return 'No'
+  if (/multi.task|multitask|driving|walking|can.do|while.driv|while.walk/.test(t)) return true
+  if (/full.focus|no.multitask|focus.only|needs.focus/.test(t)) return false
   return null
 }
 

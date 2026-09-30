@@ -1,6 +1,9 @@
 import React from 'react'
 import { useApp } from '../store/AppContext'
+import Footer from '../components/Footer'
 import { isOD } from '../utils'
+
+const NUM = { fontFamily: "'Montserrat',sans-serif", fontWeight: 700, fontSize: '20px' }
 
 export default function Score() {
   const { state } = useApp()
@@ -17,31 +20,27 @@ export default function Score() {
   return (
     <div className="wrap">
       <div className="col" style={{ textAlign: 'center', padding: '20px 0' }}>
-        <div style={{ fontSize: '9px', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--text-faint)', marginBottom: '6px' }}>
+        <div style={{ fontSize: '9px', letterSpacing: '2px', textTransform: 'uppercase', color: 'var(--text-faint)', marginBottom: '6px' }} title="Percent of your Karya tasks (all-time) marked complete">
           Karmic Completion
         </div>
-        <div className="score-big" style={{ color: col }}>{pct}</div>
+        <div className="score-big" style={{ color: col }}>{pct}<span style={{ fontSize: '22px' }}>%</span></div>
         <div style={{ fontSize: '11px', color: 'var(--text-faint)', marginTop: '4px' }}>{lbl}</div>
         <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', marginTop: '14px' }}>
-          <div>
+          <div title="Every task ever entered, done or not">
             <div style={{ fontSize: '9px', color: 'var(--text-faint)' }}>Total</div>
-            <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '22px', color: 'var(--gold)' }}>{tasks.length}</div>
+            <div style={{ ...NUM, color: 'var(--gold)' }}>{tasks.length}</div>
           </div>
-          <div>
+          <div title="Tasks marked complete">
             <div style={{ fontSize: '9px', color: 'var(--text-faint)' }}>Done</div>
-            <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '22px', color: 'var(--green)' }}>{done.length}</div>
+            <div style={{ ...NUM, color: 'var(--green)' }}>{done.length}</div>
           </div>
-          <div>
+          <div title="Active tasks past their deadline, excluding anything already in Tamas">
             <div style={{ fontSize: '9px', color: 'var(--text-faint)' }}>Overdue</div>
-            <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: '22px', color: 'var(--red)' }}>{od}</div>
+            <div style={{ ...NUM, color: 'var(--red)' }}>{od}</div>
           </div>
         </div>
       </div>
-      <div className="page-footer">
-        <div className="footer-disc">
-          These are signals, not certainties. The quality and accuracy of what Chakra reads depends entirely on what you have put in.
-        </div>
-      </div>
+      <Footer />
     </div>
   )
 }
