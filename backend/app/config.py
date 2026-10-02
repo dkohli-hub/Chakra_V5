@@ -8,6 +8,10 @@ class Settings(BaseSettings):
     OPENROUTER_API_KEY: str = ""
     OPENROUTER_MODEL: str = "anthropic/claude-sonnet-4"
     OPENROUTER_VISION_MODEL: str = "google/gemini-flash-1.5"
+    # When GEMINI_API_KEY is set, AI sorting and photo reading use Google Gemini
+    # directly; otherwise they fall back to OpenRouter.
+    GEMINI_API_KEY: str = ""
+    GEMINI_MODEL: str = "gemini-3.5-flash"
     USER_ACCOUNTS: str = '[{"id":"dk","password":"CHANGE_ME_1","displayName":"DK"}]'
 
     def get_user_accounts(self):

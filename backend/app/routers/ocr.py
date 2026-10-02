@@ -4,10 +4,16 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import jwt, JWTError
 
 from ..config import settings
+from ..gemini import gemini_generate
 from ..schemas import OCRRequest, OCRResponse
 
 router = APIRouter(prefix="/ocr", tags=["ocr"])
 security = HTTPBearer()
+
+OCR_INSTRUCTION = (
+    "Extract all text from this image. Return only the raw extracted text, "
+    "preserving line breaks. No commentary, no formatting, just the text."
+)
 
 
 def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)) -> str:
@@ -23,6 +29,12 @@ async def scan_image(
     body: OCRRequest,
     user_id: str = Depends(get_current_user),
 ):
+    if settings.GEMINI_API_KEY:
+        text = await gemini_generate([
+            {"inline_data": {"mime_type": "image/jpeg", "data": body.image_base64}},
+            {"text": OCR_INSTRUCTION},
+        ])
+        return OCRResponse(text=text)
     if not settings.OPENROUTER_API_KEY:
         raise HTTPException(status_code=503, detail="OPENROUTER_API_KEY not configured")
 
@@ -40,7 +52,7 @@ async def scan_image(
                     },
                     {
                         "type": "text",
-                        "text": "Extract all text from this image. Return only the raw extracted text, preserving line breaks. No commentary, no formatting, just the text."
+                        "text": OCR_INSTRUCTION
                     }
                 ]
             }

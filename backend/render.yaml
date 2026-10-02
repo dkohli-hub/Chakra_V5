@@ -19,6 +19,10 @@ services:
         value: anthropic/claude-sonnet-4
       - key: OPENROUTER_VISION_MODEL
         value: google/gemini-flash-1.5
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-3.5-flash
       - key: PYTHON_VERSION
         value: "3.12.7"
       - key: USER_ACCOUNTS

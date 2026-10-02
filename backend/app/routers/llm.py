@@ -4,6 +4,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import jwt, JWTError
 
 from ..config import settings
+from ..gemini import gemini_generate
 from ..schemas import LLMRequest, LLMResponse
 
 router = APIRouter(prefix="/llm", tags=["llm"])
@@ -23,6 +24,8 @@ async def parse_tasks(
     body: LLMRequest,
     user_id: str = Depends(get_current_user),
 ):
+    if settings.GEMINI_API_KEY:
+        return LLMResponse(text=await gemini_generate([{"text": body.prompt}], timeout=30))
     if not settings.OPENROUTER_API_KEY:
         raise HTTPException(status_code=503, detail="LLM not configured — set OPENROUTER_API_KEY")
     async with httpx.AsyncClient(timeout=30) as client:
