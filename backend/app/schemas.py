@@ -26,6 +26,7 @@ class TaskCreate(BaseModel):
 
 
 class TaskUpdate(BaseModel):
+    num: Optional[int] = None
     title: Optional[str] = None
     bucket: Optional[str] = None
     weightage: Optional[str] = None
@@ -38,6 +39,7 @@ class TaskUpdate(BaseModel):
     state_history: Optional[List[Any]] = None
     transition_count: Optional[int] = None
     aging_days: Optional[int] = None
+    origin_bucket: Optional[str] = None
     short_title: Optional[str] = None
     category: Optional[str] = None
     linked_tasks: Optional[List[Any]] = None

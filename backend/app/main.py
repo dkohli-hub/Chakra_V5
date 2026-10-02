@@ -32,17 +32,3 @@ app.include_router(ocr.router)
 async def health():
     return {"status": "ok"}
 
-
-@app.get("/debug/accounts")
-async def debug_accounts():
-    from .config import settings
-    try:
-        accounts = settings.get_user_accounts()
-        return {
-            "count": len(accounts),
-            "ids": [u["id"] for u in accounts],
-            "dk_password_len": len(next((u["password"] for u in accounts if u["id"] == "dk"), "")),
-            "dk_password_preview": next((u["password"] for u in accounts if u["id"] == "dk"), "")[:3] + "***"
-        }
-    except Exception as e:
-        return {"error": str(e), "raw": settings.USER_ACCOUNTS[:100]}
