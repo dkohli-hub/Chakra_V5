@@ -31,3 +31,5 @@ class Task(Base):
     due_date = Column(String(10), nullable=True)    # YYYY-MM-DD
     due_time = Column(String(5), nullable=True)     # HH:MM, optional
     duration_min = Column(Integer, nullable=True)   # task length in minutes
+    # V15: when the date was last changed (ISO string). Restarts the overdue/Tamas clock.
+    deadline_set_at = Column(String(40), nullable=True)

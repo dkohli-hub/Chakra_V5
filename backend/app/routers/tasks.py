@@ -72,6 +72,7 @@ async def create_task(
         due_date=body.due_date,
         due_time=body.due_time,
         duration_min=body.duration_min,
+        deadline_set_at=body.deadline_set_at,
     )
     db.add(task)
     await db.commit()
@@ -188,6 +189,7 @@ async def bulk_import(
                 due_date=raw.get("due_date") or raw.get("dueDate"),
                 due_time=raw.get("due_time") or raw.get("dueTime"),
                 duration_min=raw.get("duration_min") or raw.get("durationMin"),
+                deadline_set_at=raw.get("deadline_set_at") or raw.get("deadlineSetAt"),
             )
             db.add(t)
             added += 1
