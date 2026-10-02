@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="Chakra">
 <meta name="theme-color" content="#F5F3EE">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Karma Kshetra™ — DK · Chakra V15</title>
+<title>Karma Kshetra™ — DK · Chakra V17</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -560,6 +560,56 @@ body.hdr-compact .km-badge{display:none;}
 /* action buttons on rows: tidy 2 x 2 grid */
 .sf-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
 .sf-act{text-align:center;}
+/* ===== v16 ===== */
+.iw.W6{background:rgba(90,15,15,.1);color:#5A0F0F;border:1px solid rgba(90,15,15,.3);}
+.od-badge.amber{color:#8A5A00;border-color:rgba(184,120,0,.55);background:rgba(242,169,0,.16);}
+.od-badge.soft{color:#1B5E20;border-color:rgba(46,125,50,.35);background:rgba(46,125,50,.08);font-weight:600;}
+.od-badge.note{color:var(--text-dim);border-color:var(--border);background:var(--surface3);font-weight:500;}
+.mt-badge.amberm{background:#B87800;border-color:#B87800;}
+.star-amber{color:#E08A00;font-size:15px;font-weight:900;line-height:1;vertical-align:middle;}
+.icard.amberc{border-left-color:#E0A000!important;background:rgba(242,169,0,.07);}
+/* standing AAA battery — count + icon inside, labels beside */
+.bat2{display:flex;align-items:flex-start;justify-content:center;gap:12px;margin:0 auto;}
+.bat2-col{display:flex;flex-direction:column;align-items:center;}
+.bat2-nub{width:22px;height:7px;border-radius:3px 3px 0 0;background:#8A7040;}
+.bat2-body{width:76px;border:3px solid #8A7040;border-radius:12px;overflow:hidden;background:var(--surface3);}
+.bat2-seg{box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:5px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.2);transition:filter .15s;}
+.bat2-seg:last-child{border-bottom:none;}
+.bat2-seg:hover{filter:brightness(1.08);}
+.bat2-ic{font-size:15px;line-height:1;}
+.bat2-n{font-family:'Montserrat',sans-serif;font-size:19px;font-weight:700;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6);}
+.bat2-labels{display:flex;flex-direction:column;padding-top:10px;}
+.bat2-lbl{box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;cursor:pointer;min-width:150px;max-width:190px;}
+.bat2-lbl b{font-size:13px;color:var(--text);font-weight:700;line-height:1.2;}
+.bat2-lbl i{font-size:11px;font-style:normal;color:var(--text-faint);line-height:1.25;}
+/* arena help bubble */
+.arena-tip{cursor:help;border-bottom:1px dotted rgba(90,86,76,.55);}
+.tip-bubble{position:fixed;z-index:99999;max-width:290px;background:#1F1B14;color:#F6F1E4;border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.45;box-shadow:0 6px 22px rgba(0,0,0,.35);}
+.tip-bubble b{display:block;font-size:12.5px;margin-bottom:3px;color:#E9C46A;}
+.tip-bubble i{display:block;margin-top:6px;opacity:.85;font-style:normal;}
+/* load distribution */
+.ld-toggle{display:flex;gap:14px;font-size:12px;color:var(--text-dim);align-items:center;}
+.ld-toggle label{display:flex;align-items:center;gap:4px;cursor:pointer;}
+
+/* ===== v17 — Gather questions: centred, impossible to miss ===== */
+.ask-backdrop{display:none;position:fixed;inset:0;background:rgba(20,16,8,.58);z-index:9490;}
+.ask-backdrop.show{display:block;}
+.cal-ask-toast{left:50%!important;right:auto!important;top:50%!important;bottom:auto!important;transform:translate(-50%,-50%);
+  width:min(92vw,380px);max-height:86vh;overflow:auto;box-sizing:border-box;padding:20px 18px 16px;border-radius:18px;
+  border:2px solid var(--teal2);box-shadow:0 18px 60px rgba(0,0,0,.45);z-index:9500;}
+.cal-ask-toast.show{display:block;animation:askIn .16s ease-out;}
+.cal-ask-toast.nudge{animation:askNudge .32s ease-in-out;}
+@keyframes askIn{from{opacity:0;transform:translate(-50%,-47%) scale(.97);}to{opacity:1;transform:translate(-50%,-50%) scale(1);}}
+@keyframes askNudge{0%,100%{transform:translate(-50%,-50%);}25%{transform:translate(calc(-50% - 7px),-50%);}75%{transform:translate(calc(-50% + 7px),-50%);}}
+.ask-head{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-faint);margin-bottom:8px;}
+.ask-task{font-size:13px;line-height:1.45;color:var(--text);background:var(--surface3);border-left:3px solid var(--gold);border-radius:6px;padding:8px 10px;margin-bottom:12px;word-break:break-word;}
+.ask-task:empty{display:none;}
+.cal-ask-toast .cal-ask-txt{font-size:16px;line-height:1.4;font-weight:700;margin-bottom:14px;}
+.cal-ask-toast .cal-ask-btns{flex-direction:column;gap:10px;}
+.cal-ask-toast .cal-btn{flex:none;width:100%;min-height:48px;padding:13px 12px;font-size:14px;border-radius:12px;}
+.cal-ask-toast .cal-btn.go{box-shadow:0 3px 10px rgba(26,107,90,.35);}
+.cal-ask-toast.warn{border-color:#5A5A7A;}
+.cal-ask-toast.warn .cal-ask-txt{color:#4A4A68;}
 </style>
 </head>
 <body>
@@ -581,7 +631,10 @@ body.hdr-compact .km-badge{display:none;}
     </div>
   </div>
 </div>
-<div class="cal-ask-toast" id="calAskToast">
+<div class="ask-backdrop" id="askBackdrop" onclick="askBackdropTap()"></div>
+<div class="cal-ask-toast" id="calAskToast" role="dialog" aria-modal="true" aria-label="Add to calendar?">
+  <div class="ask-head">📅 Quick question</div>
+  <div class="ask-task" id="askTask-calAskToast"></div>
   <div class="cal-ask-txt">✓ Saved — Add to Calendar?</div>
   <div class="cal-ask-btns">
     <button class="cal-btn go" onclick="calAskYes()">Yes — Schedule It</button>
@@ -589,7 +642,9 @@ body.hdr-compact .km-badge{display:none;}
   </div>
 </div>
 <!-- v11 MULTITASK PROMPT — mandatory Yes/No when not chosen and not in the words -->
-<div class="cal-ask-toast" id="mtAskToast">
+<div class="cal-ask-toast" id="mtAskToast" role="dialog" aria-modal="true" aria-label="Multitask?">
+  <div class="ask-head">🔀 Quick question</div>
+  <div class="ask-task" id="askTask-mtAskToast"></div>
   <div class="cal-ask-txt">🔀 Can you do this while multitasking (walking, driving, meal, call)?</div>
   <div class="cal-ask-btns">
     <button class="cal-btn go" onclick="mtAnswer(true)">Yes — can multitask</button>
@@ -597,14 +652,18 @@ body.hdr-compact .km-badge{display:none;}
   </div>
 </div>
 <!-- DEADLINE-OR-LEISURE PROMPT — Rule 4/7: shown whenever no horizon was given -->
-<div class="cal-ask-toast" id="leisureAskToast">
+<div class="cal-ask-toast" id="leisureAskToast" role="dialog" aria-modal="true" aria-label="Deadline or leisure?">
+  <div class="ask-head">⏱ One quick question before I save</div>
+  <div class="ask-task" id="askTask-leisureAskToast"></div>
   <div class="cal-ask-txt">Does this have a deadline, or can it be done at leisure?</div>
   <div class="cal-ask-btns">
     <button class="cal-btn go" onclick="leisureAskDeadline()">Deadline — pick date &amp; time</button>
     <button class="cal-btn cancel" onclick="leisureAskLeisure()">Leisure — no rush</button>
   </div>
 </div>
-<div class="cal-ask-toast" id="leisureWarnToast" style="background:#5A5A7A;">
+<div class="cal-ask-toast warn" id="leisureWarnToast" role="dialog" aria-modal="true" aria-label="Confirm Vishram">
+  <div class="ask-head">🌙 Please confirm</div>
+  <div class="ask-task" id="askTask-leisureWarnToast"></div>
   <div class="cal-ask-txt">This goes into Vishram — conscious rest, no deadline. You'll pick it up when you have spare time.</div>
   <div class="cal-ask-btns">
     <button class="cal-btn go" onclick="leisureConfirm()">OK — send to Vishram</button>
@@ -712,7 +771,7 @@ body.hdr-compact .km-badge{display:none;}
 
 <script>
 // v14: the ONE place the app version lives. Title, header, login footer and the backup file all read it.
-var APP_VERSION = 15;
+var APP_VERSION = 17;
 (function(){ function stamp(){ document.title='Karma Kshetra™ — DK · Chakra V'+APP_VERSION; document.querySelectorAll('.app-ver').forEach(function(e){ e.textContent=APP_VERSION; }); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',stamp); else stamp(); })();
 // ======================================================
@@ -1122,57 +1181,101 @@ function updateHeader(){
 // ═══════════════════════════════════════════════════════
 // HELPERS
 // ═══════════════════════════════════════════════════════
-var wMap={W1:1,W2:2,W3:3,W4:4,W5:5};
-function wLabel(w){return {W1:'5 min',W2:'30 min',W3:'1 hr',W4:'½ day',W5:'full day'}[w]||'';}
+// wMap now lives in the v16 time engine below (adds W6).
+function wLabel(w){return {W1:'5 min',W2:'30 min',W3:'1 hr',W4:'½ day',W5:'full day',W6:'30 days'}[w]||'';}
+// Short form for reports / tight columns (v16): '30d' instead of '30 days'.
+function wLabelShort(w){return {W1:'5m',W2:'30m',W3:'1h',W4:'½d',W5:'Day',W6:'30d'}[w]||'';}
 
-// Fixes a bug found 29 Sep 2026: the first version measured every horizon's
-// deadline from TODAY, which meant "this week" etc. was always N days in the
-// future no matter how old the task was — nothing could ever go overdue.
-// Deadline must be anchored to the task's own entry date, matching the
-// original (pre-30%-rule) logic this replaces.
-// DK's locked heat rule, 29 Sep 2026: green = on/before deadline, amber = up to
-// 30% past the task's own window (entry→deadline) overdue, red = beyond 30%.
-function taskDeadline(t){
-  if(!t.timeHorizonType||t.timeHorizonType==='parkingLot') return null;
-  var entry=anchorDate(t);
-  var entryDay=new Date(entry.getFullYear(),entry.getMonth(),entry.getDate());
-  var yr=entryDay.getFullYear();
-  var dl={today:new Date(entryDay),
-    thisWeek:new Date(entryDay.getTime()+7*86400000),
-    nextWeek:new Date(entryDay.getTime()+14*86400000),
-    thisMonth:new Date(entryDay.getTime()+30*86400000),
-    Q3:new Date(yr,8,30), Q4:new Date(yr,11,31), thisYear:new Date(yr,11,31),
-    '1year':new Date(yr+1,11,31), '2years':new Date(yr+2,11,31)};
-  return dl[t.timeHorizonType]||null;
+// ═══════════════════════════════════════════════════════
+// v16 TIME ENGINE — DK's locked clock, 2 Oct 2026 (America/Chicago)
+// One clock for every task. Colour follows DAYS OF DELAY past the due moment:
+//   seed    🌱 not yet started — start-by date is more than 7 days away   (dark green)
+//   leaves  🌿 about to start — start-by date within the next 7 days      (light green)
+//   sun     ☀️ due today — still doable                                   (bright green)
+//   amber   ⏳ (a) past the due moment, through 11:59 PM of the next day  ("from yesterday")
+//              (b) a big task whose start-by date has arrived             ("deadline coming soon")
+//   overdue 🚨 after that, up to 7 days past the due moment               (red)
+//   tamas   🔥 more than 7 days past the due moment                       (maroon)
+// Due moment = the clock time DK stated (e.g. "by 9 am"), else 11:59 PM that day.
+// "This week" = Saturday 11:59 PM (Sunday is the catch-up day). Undated = the same Saturday.
+// Start-by = due moment − effort. Only W6 (30 days) has an effort long enough to matter.
+// This REPLACES the v15 "30% grace" heat rule.
+// ═══════════════════════════════════════════════════════
+var CLOCK_TZ='America/Chicago';
+var _chiFmt=null, _nowCache={at:0,v:null};
+function chiWall(d){
+  // A Date whose local fields equal the America/Chicago wall clock of instant d.
+  try{
+    if(!_chiFmt) _chiFmt=new Intl.DateTimeFormat('en-US',{timeZone:CLOCK_TZ,hour12:false,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    var o={}; _chiFmt.formatToParts(d).forEach(function(x){o[x.type]=x.value;});
+    var h=+o.hour; if(h===24) h=0;
+    return new Date(+o.year,+o.month-1,+o.day,h,+o.minute,+o.second);
+  }catch(e){ return new Date(d); }
 }
-// Sample data (and the export/import path) uses completionDate on older
-// records; new completions write completedTimestamp. Read both, everywhere.
+function nowWall(){
+  var ms=Date.now();
+  if(window.__CLOCK_OVERRIDE) return new Date(window.__CLOCK_OVERRIDE);   // test hook only
+  if(ms-_nowCache.at<1000 && _nowCache.v) return _nowCache.v;
+  _nowCache={at:ms,v:chiWall(new Date(ms))}; return _nowCache.v;
+}
+function startOfDay(d){ return new Date(d.getFullYear(),d.getMonth(),d.getDate()); }
+function endOfDay(d){ return new Date(d.getFullYear(),d.getMonth(),d.getDate(),23,59,59); }
+function addDays(d,n){ return new Date(d.getFullYear(),d.getMonth(),d.getDate()+n,d.getHours(),d.getMinutes(),d.getSeconds()); }
+function sameDay(a,b){ return a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate(); }
+function saturdayOfWeek(d){ return addDays(startOfDay(d), 6-d.getDay()); }   // Sunday→coming Saturday, Saturday→itself
+function fmtClock(d){ var h=d.getHours(), m=d.getMinutes(), ap=h>=12?'PM':'AM'; h=h%12||12; return h+':'+(m<10?'0':'')+m+' '+ap; }
+
+var wMap={W1:1,W2:2,W3:3,W4:4,W5:5,W6:6};
+var W_DAYS={W6:30};   // effort in days for the spread-over-time weight (DK, 2 Oct 2026: flat 30 days)
+function effortDays(t){ return W_DAYS[t.weightage]||0; }
+
+// Fixes a bug found 29 Sep 2026 (kept): the deadline is anchored to the task's OWN entry date
+// (or the date DK last changed its deadline), never to "today".
+function dueMoment(t){
+  if(t.timeHorizonType==='parkingLot') return null;                       // explicit parking lot: no clock
+  if(!t.timeHorizonType && t.bucket==='Vishram') return null;              // leisure by choice: no clock
+  // exact date picked in the Set Deadline picker (ignored once the horizon has been edited since)
+  if(t.dueDate && !t.deadlineSetAt){
+    var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(t.dueDate);
+    if(m){
+      var hh=23, mm=59, ss=59, tm=/^(\d{1,2}):(\d{2})/.exec(t.dueTime||'');
+      if(tm){ hh=+tm[1]; mm=+tm[2]; ss=0; }
+      return new Date(+m[1],+m[2]-1,+m[3],hh,mm,ss);
+    }
+  }
+  var aDay=startOfDay(chiWall(anchorDate(t))), yr=aDay.getFullYear();
+  switch(t.timeHorizonType){
+    case 'today':     return endOfDay(aDay);
+    case 'thisWeek':  return endOfDay(saturdayOfWeek(aDay));
+    case 'nextWeek':  return endOfDay(addDays(saturdayOfWeek(aDay),7));
+    case 'thisMonth': return endOfDay(addDays(aDay,30));
+    case 'Q3':        return endOfDay(new Date(yr,8,30));
+    case 'Q4':        return endOfDay(new Date(yr,11,31));
+    case 'thisYear':  return endOfDay(new Date(yr,11,31));
+    case '1year':     return endOfDay(new Date(yr+1,11,31));
+    case '2years':    return endOfDay(new Date(yr+2,11,31));
+  }
+  // no horizon at all → DK's default for undated tasks: Saturday 11:59 PM of the entry week
+  return endOfDay(saturdayOfWeek(aDay));
+}
+function isUndated(t){ return !t.timeHorizonType && t.bucket!=='Vishram'; }
+// kept for older callers
+function taskDeadline(t){ return dueMoment(t); }
 function completedAt(t){ return t.completedTimestamp||t.completionDate||null; }
-function heatPct(t){
-  var dl=taskDeadline(t); if(!dl) return null;
-  var entry=anchorDate(t);
-  var winDays=Math.max(1,(dl-entry)/86400000);
-  var pastDays=(Date.now()-dl.getTime())/86400000;
-  if(pastDays<=0) return 0; // on/before deadline
-  return Math.round(pastDays/winDays*100);
-}
-// Mutually exclusive with Tamas: once a task has crossed into Tamas, it's
-// counted there, not double-counted as plain "overdue" elsewhere in the app
-// (battery, Score tab, card badges all share this one function).
-function isOD(t){ if(t.completed||isTamas(t)) return false; var p=heatPct(t); return p!==null && p>0; }
-function tcol(t){
-  var p=heatPct(t); if(p===null) return 'var(--text-faint)';
-  if(p<=0) return 'var(--green)'; if(p<=30) return 'var(--amber)'; return 'var(--red)';
-}
-function tborder(t){
-  var p=heatPct(t); if(p===null) return '';
-  if(p<=0) return ' tc-g'; if(p<=30) return ' tc-a'; return ' od';
-}
 
-// Rule 10: Tamas — already in Tamas, not "turning." Manan, Manthan, and Vishram
-// enter it after 3 months with no move or completion. Only a move or completion
-// resets the clock — opening/viewing does not. This is the ONLY alarm concept
-// DK wants here; Brahma Muhurta is a different project and stays out of Chakra.
+function clockInfo(t){
+  var now=nowWall(), D=dueMoment(t);
+  if(!D) return {state:'seed',reason:'none'};
+  var ed=effortDays(t), S=ed>0?addDays(D,-ed):D;
+  if(now.getTime()>D.getTime()+7*86400000) return {state:'tamas',reason:'late'};
+  if(now.getTime()>endOfDay(addDays(startOfDay(D),1)).getTime()) return {state:'overdue',reason:'late'};
+  if(now.getTime()>D.getTime()) return {state:'amber',reason:'late'};
+  if(ed>0 && now.getTime()>=S.getTime()) return {state:'amber',reason:'start'};
+  if(sameDay(now,D)) return {state:'sun',reason:'today'};
+  if(startOfDay(S).getTime()-startOfDay(now).getTime()<=7*86400000) return {state:'leaves',reason:'soon'};
+  return {state:'seed',reason:'far'};
+}
+// v15 Rule 10 (kept): Manan / Manthan / Vishram untouched for 3 months are Tamas whatever their date says.
 var TAMAS_BUCKETS = {Manan:1, Manthan:1, Vishram:1};
 function lastMoveDate(t){
   var last = (!t.stateHistory || !t.stateHistory.length) ? new Date(t.entryTimestamp||Date.now()) : new Date(t.stateHistory[t.stateHistory.length-1].timestamp);
@@ -1180,29 +1283,93 @@ function lastMoveDate(t){
   if(t.deadlineSetAt){ var d=new Date(t.deadlineSetAt); if(d>last) last=d; }
   return last;
 }
-function isTamas(t){
-  if(t.completed || !TAMAS_BUCKETS[t.bucket]) return false;
-  var last = lastMoveDate(t);
-  var days = (Date.now()-last.getTime())/86400000;
-  return days >= 90;
+function bucketTamas(t){
+  if(!TAMAS_BUCKETS[t.bucket]) return false;
+  return (Date.now()-lastMoveDate(t).getTime())/86400000 >= 90;
+}
+function taskState(t){
+  var c=clockInfo(t);
+  if(c.state==='tamas') return c;
+  if(bucketTamas(t)) return {state:'tamas',reason:'bucket'};
+  return c;
+}
+// Mutually exclusive with Tamas (battery, Score tab, card badges all share these).
+function isTamas(t){ return !t.completed && taskState(t).state==='tamas'; }
+function isLateAmber(t){ var s=taskState(t); return s.state==='amber' && s.reason==='late'; }
+function isOD(t){ if(t.completed) return false; var s=taskState(t); return s.state==='overdue' || (s.state==='amber' && s.reason==='late'); }
+function tcol(t){
+  var s=taskState(t).state;
+  return {seed:'#1B5E20',leaves:'#5B8C1A',sun:'#2E7D32',amber:'#B87800',overdue:'#C62828',tamas:'#5A0F0F'}[s]||'var(--text-faint)';
+}
+function tborder(t){
+  var s=taskState(t).state; if(s==='amber') return ' tc-a'; if(s==='overdue'||s==='tamas') return ' od'; return ' tc-g';
+}
+function cardStateCls(t){ var s=taskState(t).state; return s==='amber'?' amberc':(s==='overdue'||s==='tamas')?' od':''; }
+function clockText(t){
+  var s=taskState(t), D=dueMoment(t);
+  if(s.reason==='bucket') return 'Tamas — untouched 3+ months';
+  if(!D) return 'No deadline — not on the clock';
+  var dn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var when=dn[D.getDay()]+' '+(D.getMonth()+1)+'/'+D.getDate()+' '+(t.dueTime?fmtClock(D):'11:59 PM');
+  if(s.state==='tamas')   return 'Tamas — more than 7 days past due ('+when+')';
+  if(s.state==='overdue') return 'Overdue — '+Math.floor((nowWall()-D)/86400000)+' days past due ('+when+')';
+  if(s.state==='amber')   return s.reason==='start' ? 'Deadline coming soon — time to start (due '+when+')' : (sameDay(nowWall(),D)?'Past its due time today ('+when+')':'From yesterday — one day late ('+when+')');
+  if(s.state==='sun')     return 'Due today ('+when+')';
+  if(s.state==='leaves')  return 'About to start — due '+when;
+  return 'Not yet started — due '+when;
+}
+// "from yesterday" never means overdue (DK, 2 Oct 2026). If the due time passed earlier TODAY it says so instead.
+function lateLabel(t){ var D=dueMoment(t); return (D && sameDay(nowWall(),D)) ? 'PAST DUE TIME' : 'FROM YESTERDAY'; }
+// A parent is "in progress" once any child task has started or been completed. (Child tasks carry parentId.)
+function isInProgress(t){
+  return state.tasks.some(function(c){ return c.parentId===t.id && (c.completed || c.started===true); });
+}
+
+// ── IMPORTANCE (DK, 2 Oct 2026): hard clock time, his own emphasis words, consequence type;
+//    quick tasks win ties. Used only to break ties INSIDE each clock group.
+function importance(t){
+  var txt=((t.title||'')+' '+(t.shortTitle||'')).toLowerCase(), s=0;
+  if(t.dueTime || /\b(by|before|at)\s+\d{1,2}(:\d{2})?\s*(am|pm|a\.m\.|p\.m\.)/.test(txt)) s+=40;                                // hard clock time
+  if(/\b(critical|urgent|must|has to|have to|no exceptions|very important|important|asap|absolutely)\b/.test(txt)) s+=30;       // DK's own emphasis
+  if(/\b(dr\.?|doctor|appointment|consult|hospital|medicine|medication|prescription|clinic|neurolog\w*|infusion|pharmacy)\b/.test(txt)) s+=45;   // health
+  if(/\b(pay|payment|invoice|advance|reconcil\w*|refund|insurance|tax)\b/.test(txt)) s+=15;                                    // money
+  if(/\b(remind|follow.?up|send|text|call|ask)\b/.test(txt)) s+=5;                                                              // someone is waiting
+  s += 7-(wMap[t.weightage]||3);                                                                                                // quick tasks first on ties
+  return s;
+}
+// ── ONE ORDER, EVERYWHERE (DK, 2 Oct 2026): from yesterday → due today → older pile → future.
+var STATE_RANK={amberLate:0,sun:1,amberStart:1,overdue:2,tamas:3,leaves:4,seed:5};
+function stateKey(t){ var s=taskState(t); if(s.state==='amber') return s.reason==='start'?'amberStart':'amberLate'; return s.state; }
+function sortTasks(list){
+  var rows=list.map(function(t){ return {t:t, r:STATE_RANK[stateKey(t)], i:importance(t), e:new Date(t.entryTimestamp||0).getTime()}; });
+  rows.sort(function(a,b){ return (a.r-b.r) || (b.i-a.i) || (a.e-b.e); });
+  return rows.map(function(x){return x.t;});
 }
 
 function renderCard(t){
-  var od=isOD(t); var tc=tcol(t); var tam=isTamas(t); var hp=heatPct(t);
+  var st=taskState(t); var od=isOD(t); var tc=tcol(t); var tam=isTamas(t);
   var meta='<span class="iw '+(t.weightage||'')+'" title="Weight — how much time this takes">'+( t.weightage||'-')+'<span style="font-size:11px;opacity:.85;margin-left:5px;">'+wLabel(t.weightage)+'</span></span>';
   if(t.timeHorizon){
-    var heatTxt = hp===null?'No deadline set':hp<=0?'On time':hp<=30?'Past due, within 30% grace':'Past due, beyond 30% — red';
+    var heatTxt = clockText(t);
     meta+='<span class="ith" style="color:'+tc+';" title="'+esc(heatTxt)+'">'+t.timeHorizon+'</span>';
   }
   // v15: category badge — tap for the menu: Picturizze / Personal / ITC
   meta+='<span class="cat-badge" data-catid="'+t.id+'" onclick="openCatMenu(event,\''+t.id+'\')" title="Tap to change category">'+TOP_ICON[topArea(t)]+' '+areaLabel(t)+'</span>';
   if(t.multitask===true){
-    var _due = od || tam;
+    var _due = (st.state==='overdue') || tam;   // v16: red badge only for Overdue/Tamas
+    var _amb = (st.state==='amber' && st.reason==='late');
     var _age = Math.max(0, Math.floor((Date.now() - new Date(t.entryTimestamp).getTime()) / 86400000));
-    meta+='<span class="mt-badge'+(_due?' late':'')+'" title="'+(_due?'Due and still open — easy to knock off while walking, driving, eating or on a call':'Can be done while multitasking')+'">🔀 multitask'+(_due?' · '+_age+'d pending':'')+'</span>';
+    meta+='<span class="mt-badge'+(_due?' late':(_amb?' amberm':''))+'" title="'+(_due?'Due and still open — easy to knock off while walking, driving, eating or on a call':'Can be done while multitasking')+'">🔀 multitask'+((_due||_amb)?' · '+_age+'d pending':'')+'</span>';
   }
-  if(od) meta+='<span style="color:var(--red);font-size:15px;font-weight:900;line-height:1;vertical-align:middle;">★</span><span class="od-badge">OVERDUE</span>';
-  if(tam) meta+='<span class="od-badge" style="background:var(--red);color:#fff;" title="'+t.bucket+' — untouched 3+ months">🔥 TAMAS</span>';
+  // v16 badges — amber for one day late ("from yesterday", never "overdue"), red only after that
+  if(st.state==='amber' && st.reason==='late') meta+='<span class="star-amber">★</span><span class="od-badge amber" title="'+esc(clockText(t))+'">'+lateLabel(t)+'</span>';
+  if(st.state==='amber' && st.reason==='start') meta+='<span class="od-badge amber" title="'+esc(clockText(t))+'">⏳ DEADLINE COMING SOON</span>';
+  if(st.state==='overdue') meta+='<span style="color:var(--red);font-size:15px;font-weight:900;line-height:1;vertical-align:middle;">★</span><span class="od-badge" title="'+esc(clockText(t))+'">OVERDUE</span>';
+  if(st.state==='sun' && t.dueTime) meta+='<span class="od-badge soft" title="'+esc(clockText(t))+'">☀️ by '+fmtClock(dueMoment(t))+'</span>';
+  else if(st.state==='amber' && t.dueTime) meta+='<span class="od-badge note" title="'+esc(clockText(t))+'">was by '+fmtClock(dueMoment(t))+'</span>';
+  if(isUndated(t) && t.noDateGiven) meta+='<span class="od-badge note" title="No date was given — defaulted to Saturday 11:59 PM. Tap the task to set a real date.">no date given</span>';
+  if(isInProgress(t)) meta+='<span class="od-badge soft" title="A child task has started">▶ in progress</span>';
+  if(tam) meta+='<span class="od-badge" style="background:#5A0F0F;color:#fff;" title="'+esc(clockText(t))+'">🔥 TAMAS</span>';
   if(t.bucket==='Dhairya') meta+='<span class="cat-badge" onclick="openDhairyaMenu(event,\''+t.id+'\')" title="Waiting on someone — tap for options">⏳ waiting</span>';
   if(t.linkedTasks && t.linkedTasks.length){
     t.linkedTasks.forEach(function(lid){
@@ -1213,7 +1380,7 @@ function renderCard(t){
     });
   }
   var titleLine = t.shortTitle ? esc(t.shortTitle) : esc(t.title);
-  return '<div class="icard'+(t.completed?' done':'')+'" id="ic-'+t.id+'">'
+  return '<div class="icard'+(t.completed?' done':'')+cardStateCls(t)+'" id="ic-'+t.id+'">'
     +'<input type="checkbox" class="icheck"'+(t.completed?' checked':'')+' onchange="toggle(\''+t.id+'\')">'
     +'<div class="ibody" onclick="openTaskDetail(\''+t.id+'\')"><div class="ititle">'+titleLine+'</div><div class="imeta">'+meta+'</div></div>'
     +'<span style="color:var(--text-faint);font-size:14px;padding:2px 4px;cursor:pointer;" onclick="openTaskDetail(\''+t.id+'\')">⋯</span></div>';
@@ -1247,7 +1414,7 @@ function openTaskDetail(id){
     +'<div class="tag-lbl">Category</div><select id="tdCat" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);margin-bottom:8px;">'
     +TOP_AREAS.map(function(a){return '<option value="'+a+'"'+(topArea(t)===a?' selected':'')+'>'+TOP_ICON[a]+' '+a+'</option>';}).join('')+'</select>'
     +'<div class="tag-lbl">Weight</div><select id="tdWeight" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);margin-bottom:8px;">'
-    +['W1','W2','W3','W4','W5'].map(function(w){return '<option value="'+w+'"'+(t.weightage===w?' selected':'')+'>'+w+' — '+wLabel(w)+'</option>';}).join('')+'</select>'
+    +['W1','W2','W3','W4','W5','W6'].map(function(w){return '<option value="'+w+'"'+(t.weightage===w?' selected':'')+'>'+w+' — '+wLabel(w)+'</option>';}).join('')+'</select>'
     +'<div class="tag-lbl">Deadline</div><select id="tdHorizon" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);margin-bottom:8px;">'
     +thOpts.map(function(o){return '<option value="'+o[0]+'"'+((t.timeHorizonType||'')===o[0]?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select>'
     +'<div class="fab-panel-actions"><div class="fab-panel-save" onclick="saveTaskDetail(\''+id+'\')">Save</div></div>';
@@ -1266,7 +1433,7 @@ function saveTaskDetail(id){
   if(newBucket!==t.bucket){ t.stateHistory.push({bucket:newBucket,timestamp:new Date().toISOString()}); t.transitionCount++; t.bucket=newBucket; }
   t.weightage=newWeight;
   t.timeHorizonType=newHorizon||null; t.timeHorizon=newHorizon?document.getElementById('tdHorizon').selectedOptions[0].text:null;
-  if(newHorizon!==oldH) t.deadlineSetAt=new Date().toISOString();   // v15: new date = clock restarts
+  if(newHorizon!==oldH){ t.deadlineSetAt=new Date().toISOString(); t.dueDate=null; t.dueTime=null; t.noDateGiven=false; }   // v15: new date = clock restarts
   var _cs=document.getElementById('tdCat'); if(_cs && _cs.value!==topArea(t)) applyCategory(t,_cs.value);
   saveState(); closeTaskDetail(); renderTab(state.activeTab); updateHeader();
   toast('✓ Task updated','ok',1600);
@@ -1325,97 +1492,81 @@ var drillKey = null;
 function renderToday(){
   var p=document.getElementById('pane-today');
   var tasks=state.tasks.filter(function(t){return !t.completed;});
-  // ── BATTERY SEGMENTATION — single source of truth ──────────────────
-  // Uses the same taskDeadline()/isOD() the whole app now shares (fixed
-  // 29 Sep 2026: deadlines are anchored to each task's own entry date, not
-  // to "today," so overdue actually accumulates instead of staying empty).
-  // Tamas (Rule 10) is pulled out FIRST and shown as its own bottom segment,
-  // so a task is never double-counted as both overdue and Tamas — DK's
-  // "the 106 overdue count will become less because items move into Tamas."
+  // ── v16 BATTERY — standing AAA, heat bar bottom→top: calm → urgent ──
+  // Every active task lands in exactly ONE segment, using the same taskState() the whole app shares.
+  var B={seed:[],leaves:[],sun:[],amber:[],overdue:[],tamas:[]};
+  tasks.forEach(function(t){ var k=taskState(t).state; (B[k]||B.seed).push(t); });
+  var tamasT=B.tamas;
+  var odT=tasks.filter(isOD);                       // 1+ days late (amber "from yesterday" + red overdue), never Tamas
+  var total=tasks.length;
 
-  var tamasT = tasks.filter(isTamas);
-  var tamasIds = {}; tamasT.forEach(function(t){ tamasIds[t.id]=true; });
-  var rest = tasks.filter(function(t){ return !tamasIds[t.id]; });
+  var odAll=odT.length;
+  var odDrain=odT.reduce(function(s,t){return s+Math.min(10+(t.agingDays||1)*2,20);},0);
+  var heavy=tasks.filter(function(t){return (t.weightage==='W4'||t.weightage==='W5')&&(t.agingDays||0)>7;}).length;
+  var drain=Math.min(odDrain+heavy*8+tamasT.length*4,100);
+  var charge=Math.max(0,100-drain);
+  var chCol=charge>70?'#2E7D32':charge>40?'#B87800':charge>20?'#8B5A00':'#8B1A1A';
 
-  var odT    = rest.filter(isOD);
-  var odIds  = {}; odT.forEach(function(t){ odIds[t.id]=true; });
-  var todayT = rest.filter(function(t){ return t.timeHorizonType==='today'    && !odIds[t.id]; });
-  var weekT  = rest.filter(function(t){ return t.timeHorizonType==='thisWeek' && !odIds[t.id]; });
-  var nwT    = rest.filter(function(t){ return t.timeHorizonType==='nextWeek' && !odIds[t.id]; });
-  var laterT = rest.filter(function(t){
-    return !odIds[t.id]
-      && t.timeHorizonType!=='today'
-      && t.timeHorizonType!=='thisWeek'
-      && t.timeHorizonType!=='nextWeek';
-  });
-  var total = tasks.length;
-
-  var odAll = odT.length;
-  var odDrain = odT.reduce(function(s,t){return s+Math.min(10+(t.agingDays||1)*2,20);},0);
-  var heavy = tasks.filter(function(t){return (t.weightage==='W4'||t.weightage==='W5')&&(t.agingDays||0)>7;}).length;
-  var drain = Math.min(odDrain+heavy*8+tamasT.length*4,100);
-  var charge = Math.max(0,100-drain);
-  var chCol = charge>70?'#2E7D32':charge>40?'#B87800':charge>20?'#8B5A00':'#8B1A1A';
-
-  // Date
   var dn=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   var mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  var now=new Date();
+  var now=nowWall();
   var dateStr=dn[now.getDay()].toUpperCase()+', '+mn[now.getMonth()]+' '+now.getDate()+' '+now.getFullYear();
 
-  var msg = (odAll===0 && tamasT.length===0) ? 'Clean field, DK. Nothing draining your battery today.'
-    : odAll+tamasT.length===1 ? 'One item needs you. Clear it and your battery recovers.'
-    : (odAll+tamasT.length)+' items have crossed their time. Each one is a quiet drain. Clear one today.';
+  var lateAmber=B.amber.filter(isLateAmber).length;
+  var msg = (odAll===0 && tamasT.length===0) ? 'Clean field, DK. Nothing is behind.'
+    : (odAll===lateAmber && tamasT.length===0) ? lateAmber+' from yesterday — knock these off first, then today.'
+    : (odAll+tamasT.length)+' item'+((odAll+tamasT.length)===1?'':'s')+' past their time. Decide each one: do it, move it, or drop it.';
 
-  // Battery segments — proportional height. HTML order = visual top→bottom.
-  // Tamas is deliberately last, at the very bottom, per DK's layout.
-  var batH = 320;
-  function seg(count,label,bg,key,titleTxt,onclickFn){
-    if(count===0) return '';
-    var h = Math.max(84, Math.round((count/Math.max(total,1))*batH));
-    return '<div class="bat-seg" style="height:'+h+'px;background:'+bg+';" title="'+esc(titleTxt)+'" onclick="'+(onclickFn||("batDrill('"+key+"')"))+'">'
-      +'<div class="bat-seg-inner"><div class="bat-seg-count">'+count+'</div><div class="bat-seg-label">'+label+'</div></div></div>';
-  }
-
-  var segs=''
-    +seg(laterT.length, 'Later',     '#2A5F8A', 'later', 'Due later than 2 weeks out')
-    +seg(nwT.length,    'Next week', '#1A5F52', 'nextweek', 'Due within the next 2 weeks')
-    +seg(weekT.length,  'This week', '#7A5200', 'week', 'Due within 7 days')
-    +seg(todayT.length, 'Today',     '#1A6B20', 'today', 'Due today')
-    +seg(odT.length,    '★ Overdue', '#8B1A1A', 'overdue', 'Past deadline, within 30% grace')
-    +seg(tamasT.length, '🔥 Tamas',  '#5A0F0F', 'tamas', 'Already in Tamas — 3+ months untouched', "openTamasPanel()");
-
+  // Segments, TOP → BOTTOM (HTML order). Bottom = calm, top = urgent.
+  var SEGS=[
+    {key:'tamas',  ic:'🔥', nm:'Tamas',          sub:'more than 7 days past due',        col:'#5A0F0F', list:B.tamas,   fn:'openTamasPanel()'},
+    {key:'overdue',ic:'🚨', nm:'Overdue',        sub:'2 to 7 days past due',             col:'#C62828', list:B.overdue},
+    {key:'amber',  ic:'⏳', nm:'Timer ticking',  sub:'one day late, or time to start',   col:'#F2A900', list:B.amber},
+    {key:'sun',    ic:'☀️', nm:'Due today',      sub:'still doable',                     col:'#00B84A', list:B.sun},
+    {key:'leaves', ic:'🌿', nm:'About to start', sub:'starts within 7 days',             col:'#7CB342', list:B.leaves},
+    {key:'seed',   ic:'🌱', nm:'Not yet started',sub:'further out',                      col:'#1B5E20', list:B.seed}
+  ];
+  var segHtml='', lblHtml='';
+  SEGS.forEach(function(s){
+    var n=s.list.length;
+    var h=n>0 ? Math.max(46,Math.round(n/Math.max(total,1)*300)) : 30;   // empty segments stay visible as a thin band
+    var fn=s.fn||("batDrill('"+s.key+"')");
+    segHtml+='<div class="bat2-seg" style="height:'+h+'px;background:'+s.col+';'+(n===0?'opacity:.45;':'')+'" title="'+esc(s.nm+' — '+s.sub)+'" onclick="'+fn+'">'
+      +'<span class="bat2-ic">'+s.ic+'</span><span class="bat2-n">'+n+'</span></div>';
+    lblHtml+='<div class="bat2-lbl" style="height:'+h+'px;'+(n===0?'opacity:.55;':'')+'" onclick="'+fn+'"><b>'+s.nm+'</b><i>'+s.sub+'</i></div>';
+  });
   var empty=total===0?'<div class="bat-empty">Empty field — add tasks in Gather</div>':'';
 
-  // Drill panel
   function drillHtml(){
     if(!drillKey) return '';
-    var map={today:todayT,week:weekT,nextweek:nwT,later:laterT,overdue:odT,all:tasks};
-    var lblMap={today:'Today',week:'This week',nextweek:'Next week',later:'Later','overdue':'★ Overdue',all:'All active'};
+    var map={seed:B.seed,leaves:B.leaves,sun:B.sun,amber:B.amber,overdue:B.overdue,tamas:B.tamas,all:tasks};
+    var lblMap={seed:'🌱 Not yet started',leaves:'🌿 About to start',sun:'☀️ Due today',amber:'⏳ Timer ticking',overdue:'🚨 Overdue',tamas:'🔥 Tamas',all:'All active'};
     var list=map[drillKey]||[];
     if(!list.length) return '';
     return '<div class="bat-drill open" id="drillPanel">'
       +'<div class="bat-drill-hdr"><div class="bat-drill-title">'+lblMap[drillKey]+' ('+list.length+')</div>'
       +'<button class="bat-drill-close" onclick="batDrill(null)">×</button></div>'
-      +list.map(renderCard).join('')
+      +sortTasks(list).map(renderCard).join('')
       +'</div>';
   }
 
   var html='<div class="bat-wrap">'
     +'<div class="bat-date">'+dateStr+'</div>'
     +'<div class="bat-msg">'+msg+'</div>'
-    +'<div class="bat-nub"></div>'
-    +'<div class="bat-outer">'+segs+empty+'</div>'
+    +'<div class="bat2">'
+    +'<div class="bat2-col"><div class="bat2-nub"></div><div class="bat2-body">'+segHtml+'</div></div>'
+    +'<div class="bat2-labels">'+lblHtml+'</div>'
+    +'</div>'+empty
     +'<div class="bat-charge-wrap">'
-    +'<div class="bat-charge-row"><span title="How much of your day is unclaimed by overdue and Tamas drain">Charge</span><span style="font-weight:700;color:'+chCol+';">'+charge+'%</span></div>'
+    +'<div class="bat-charge-row"><span title="How much of your day is unclaimed by late and Tamas drain">Charge</span><span style="font-weight:700;color:'+chCol+';">'+charge+'%</span></div>'
     +'<div class="bat-charge-bar"><div class="bat-charge-fill" style="width:'+charge+'%;background:'+chCol+';"></div></div>'
     +'<div class="bat-charge-lbl" style="color:'+(drain>25?'var(--red)':'var(--text-faint)')+';">'+(drain>75?'Critical drain':drain>50?'High drain':drain>25?'Moderate drain':'Low drain')+'</div>'
     +'</div>'
     +'<div class="bat-total" onclick="batDrill(\'all\')" title="Every active, incomplete task">'
     +'<div class="bat-total-num">'+total+'</div><div class="bat-total-sub">active</div></div>'
     +'<div class="bat-pills">'
-    +(todayT.length>0?'<button class="bat-pill" style="background:#1A6B20;" onclick="batDrill(\'today\')">Today '+todayT.length+'</button>':'')
-    +(weekT.length>0?'<button class="bat-pill" style="background:#7A5200;" onclick="batDrill(\'week\')">This week '+weekT.length+'</button>':'')
+    +(B.amber.length>0?'<button class="bat-pill" style="background:#B87800;" onclick="batDrill(\'amber\')">⏳ '+B.amber.length+' ticking</button>':'')
+    +(B.sun.length>0?'<button class="bat-pill" style="background:#1A6B20;" onclick="batDrill(\'sun\')">☀️ Due today '+B.sun.length+'</button>':'')
     +(function(){ var n=state.tasks.filter(function(t){return !t.completed && t.multitask===true;}).length; return n>0?'<button class="bat-pill mtpill" onclick="openMtPanel()">🔀 '+n+' can multitask</button>':''; })()
     +'</div>'
     +'<button class="bat-add-btn" onclick="switchTab(\'gather\')">＋ Add Tasks</button>'
@@ -1433,7 +1584,7 @@ function openMtPanel(){
   var items=state.tasks.filter(function(t){return !t.completed && t.multitask===true;});
   var html='<div class="fab-panel-hdr"><div class="fab-panel-title">🔀 Can be done while multitasking</div><div class="fab-panel-close" onclick="closeTaskDetail()">✕</div></div>'
     +'<div style="font-size:11px;color:var(--text-faint);margin-bottom:10px;">Walking, driving on Bluetooth, meals, quiet moments — knock these off alongside something else.</div>'
-    +(items.length?items.map(renderCard).join(''):'<div style="font-size:12px;color:var(--text-faint);">None right now.</div>');
+    +(items.length?sortTasks(items).map(renderCard).join(''):'<div style="font-size:12px;color:var(--text-faint);">None right now.</div>');
   document.getElementById('taskDetailBox').innerHTML=html;
   document.getElementById('taskDetailModal').style.display='flex';
 }
@@ -1461,8 +1612,8 @@ function renderGather(){
 
   var tagsHtml=''
     +'<div class="tag-group"><div class="tag-lbl">Weightage</div><div class="tag-opts">'
-    +['W1','W2','W3','W4','W5'].map(function(w,i){
-      return '<label><input type="radio" name="gw" value="'+w+'"><span class="tag-chip">'+w+' · '+['5m','30m','1h','½d','Day'][i]+'</span></label>';
+    +['W1','W2','W3','W4','W5','W6'].map(function(w,i){
+      return '<label><input type="radio" name="gw" value="'+w+'"><span class="tag-chip">'+w+' · '+['5m','30m','1h','½d','Day','30d'][i]+'</span></label>';
     }).join('')+'</div></div>'
     +'<div class="tag-group"><div class="tag-lbl">Time Horizon</div><div class="tag-opts">'
     +[['today','Today'],['thisWeek','This week'],['nextWeek','Next week'],['thisMonth','Next month'],['Q3','Q3 2026'],['Q4','Q4 2026'],['thisYear','This year'],['1year','1–2 years'],['2years','2+ years'],['parkingLot','Parking lot']].map(function(o){
@@ -1488,7 +1639,7 @@ function renderGather(){
     +'</div>'
     +'<textarea id="imgNote" class="img-commentary" placeholder="Context (optional): duration, multitask, urgency..." rows="2"></textarea>'
     +'</div>'
-    +'<div class="mt-req"><div class="mt-req-lbl">🔀 CAN I DO THIS WHILE MULTITASKING? <span>*required</span></div><div class="tag-opts">'
+    +'<div class="mt-req"><div class="mt-req-lbl">🔀 CAN I DO THIS WHILE MULTITASKING? <span>default: No</span></div><div class="tag-opts">'
     +'<label><input type="radio" name="gmt" value="yes"><span class="tag-chip">Yes — walk, drive, meal, call</span></label>'
     +'<label><input type="radio" name="gmt" value="no"><span class="tag-chip">No — needs full focus</span></label>'
     +'</div></div>'
@@ -1651,6 +1802,7 @@ function apiCall(content, onSuccess, onError){
 function parseWeightage(text){
   if(!text) return null;
   var t = text.toLowerCase();
+  if(/30.?day.{0,12}effort|multiple hours over|spread over (a|the) (month|period)|month.?long effort/.test(t)) return 'W6';   // v16
   if(/full.day|all.day|whole.day/.test(t)) return 'W5';
   if(/half.day|4.hour|four.hour/.test(t)) return 'W4';
   if(/\b(1|one)\s*hour|\b60\s*min/.test(t)) return 'W3';
@@ -1715,11 +1867,8 @@ function gatherSave(){
 // v11: shared by the Gather tab and the floating icon.
 var _mtPending = null;
 function _gatherContinue(c){
-  if(c.useMT !== true && c.useMT !== false){
-    _mtPending = c;
-    var m = document.getElementById('mtAskToast'); if(m) m.className = 'cal-ask-toast show';
-    return;
-  }
+  // v16 (DK, 2 Oct 2026): if multitask is not stated, the default is NOT multitaskable — no question asked.
+  if(c.useMT !== true && c.useMT !== false){ c.useMT = false; }
   // Rule 1/4/7: no horizon given -> ask deadline-or-leisure before committing.
   if(!c.useTH){
     _pendingGather = {lines:c.lines, useW:c.useW, useMT:c.useMT, useLA:c.useLA};
@@ -1750,7 +1899,7 @@ function leisureAskDeadline(){
 
 // ── v10 SET DEADLINE PICKER ─────────────────────────────
 var _ddQueue = [], _ddCtx = null;
-var W_MIN = {W1:5, W2:30, W3:60, W4:240, W5:480};   // minutes per weightage (W4/W5 assumed: half day 4h, full day 8h)
+var W_MIN = {W1:5, W2:30, W3:60, W4:240, W5:480, W6:480};   // W6 = 30 days of effort spread over time; a calendar block for it is a full working session (8h)   // minutes per weightage (W4/W5 assumed: half day 4h, full day 8h)
 var DD_LABEL = {today:'Today', thisWeek:'This week', nextWeek:'Next week', thisMonth:'Next month', Q3:'Q3', Q4:'Q4', thisYear:'This year', '1year':'1–2 years', '2years':'2+ years'};
 function horizonFromDate(dt){
   var now = new Date(); var t0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -1791,7 +1940,7 @@ function openDeadlinePicker(){
   var now = new Date();
   var minD = now.getFullYear()+'-'+_ddPad(now.getMonth()+1)+'-'+_ddPad(now.getDate());
   var w = _ddCtx.useW || 'W2';
-  var wOpts = ['W1','W2','W3','W4','W5'].map(function(x){
+  var wOpts = ['W1','W2','W3','W4','W5','W6'].map(function(x){
     return '<option value="'+x+'"'+(x===w?' selected':'')+'>'+x+' — '+wLabel(x)+'</option>';
   }).join('');
   var m = document.createElement('div'); m.className='dd-modal'; m.id='ddModal';
@@ -1877,6 +2026,8 @@ function commitTasks(tasks,useW,useMT,useTH,useLA,isLeisure,opts){
       transitionCount:0,originBucket:placeholderBucket,completed:false,
       entryTimestamp:new Date().toISOString(),agingDays:0,num:state.tasks.length+1
     };
+    // v16 (DK, 2 Oct 2026): a task that arrives with no date and is not leisure defaults to Saturday 11:59 PM, tagged "no date given".
+    if(!isLeisure && !useTH){ rec.timeHorizonType='thisWeek'; rec.timeHorizon='This week'; rec.noDateGiven=true; }
     state.tasks.push(rec);
     // Rule 2/17/3: classify bucket + arena + life area by context (Gita rule book).
     // Runs after the task is already visible, so entry is never blocked by the API.
@@ -1944,7 +2095,7 @@ function renderTime(){
       +'<div><div class="col-name">'+g.label+' <span style="font-size:14px;">('+items.length+')</span></div>'
       +'<div class="col-sub">'+g.sub+'</div></div>'
       +'<span class="chevron">&#9654;</span></div>'
-      +'<div class="col-body">'+items.map(renderCard).join('')+'</div></div>';
+      +'<div class="col-body">'+sortTasks(items).map(renderCard).join('')+'</div></div>';
   });
   html+=footer()+'</div>';
   p.innerHTML=html;
@@ -1993,7 +2144,7 @@ function renderKarma(){
       +'<button class="back-btn" onclick="state.karmaOpenBucket=null;renderKarma();"><span class="back-arrow">←</span>Back</button>'
       +'<div><div style="font-family:\'Cormorant Garamond\',serif;font-size:20px;font-weight:600;color:'+bk.col+';">'+bk.name+'</div>'
       +'<div style="font-size:11px;color:var(--text-faint);">'+bk.sub+'</div></div></div>'
-      +'<div class="wrap">'+(items.length?items.map(renderCard).join(''):'<div style="font-size:12px;color:var(--text-faint);padding:10px 0;">Nothing here right now.</div>')+'</div>'
+      +'<div class="wrap">'+(items.length?sortTasks(items).map(renderCard).join(''):'<div style="font-size:12px;color:var(--text-faint);padding:10px 0;">Nothing here right now.</div>')+'</div>'
       +footer();
     p.innerHTML=html;
     return;
@@ -2100,7 +2251,7 @@ function renderEffortBars(){
     var redPct=Math.round(Math.max(0,r.addedW-r.completedW)/maxDemand*100);
     var isEmpty = r.demand===0;
     html+='<div onclick="explainEffortBar('+r.ch+','+win+')" title="'+esc(hoverTxt)+'" style="display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;">'
-      +'<div style="width:156px;font-size:12.5px;font-weight:'+(isEmpty?'400':'600')+';color:'+(isEmpty?'#5A564C':'#1A1A1A')+';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+esc(r.name)+'</div>'
+      +'<div class="arena-tip" title="" onclick="showArenaTip(event,'+r.ch+')" onmouseenter="showArenaTip(event,'+r.ch+',true)" onmouseleave="hideArenaTip()" style="width:156px;font-size:12.5px;font-weight:'+(isEmpty?'400':'600')+';color:'+(isEmpty?'#5A564C':'#1A1A1A')+';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+esc(r.name)+'</div>'
       +'<div style="flex:1;background:var(--surface3);border:1px solid '+(isEmpty?'var(--border)':'transparent')+';border-radius:6px;height:14px;overflow:hidden;display:flex;opacity:'+(isEmpty?'.45':'1')+';">'
       +(greenPct>0?'<div style="width:'+greenPct+'%;height:100%;background:#2E7D32;box-shadow:inset -2px 0 0 rgba(255,255,255,.55);"></div>':'')
       +(redPct>0?'<div style="width:'+redPct+'%;height:100%;background:#8B1A1A;"></div>':'')
@@ -2110,6 +2261,31 @@ function renderEffortBars(){
   html+='</div>';
   return html;
 }
+
+// v16 — arena help bubble (DK, 2 Oct 2026). Hover on desktop, tap on phone. The wording is the app's own
+// GITA essence + teaching text for that chapter; nothing is written here that is not already in GITA.
+var _tipEl=null, _tipCh=null;
+function hideArenaTip(){ if(_tipEl){ _tipEl.remove(); _tipEl=null; _tipCh=null; } }
+function showArenaTip(ev,ch,fromHover){
+  if(ev && ev.stopPropagation) ev.stopPropagation();
+  var canHover = window.matchMedia && window.matchMedia('(hover: hover)').matches;
+  if(fromHover && !canHover) return;
+  if(!fromHover && _tipCh===ch){ hideArenaTip(); return; }
+  hideArenaTip();
+  var g=GITA.find(function(x){return x.ch===ch;}); if(!g) return;
+  var el=document.createElement('div'); el.className='tip-bubble';
+  el.innerHTML='<b>Chapter '+g.ch+' · '+esc(g.name)+'</b>'+esc(g.essence)+'<i>'+esc(g.teaching)+'</i>';
+  document.body.appendChild(el);
+  var src=(ev && (ev.currentTarget||ev.target)); var r=src&&src.getBoundingClientRect?src.getBoundingClientRect():{left:20,bottom:60,top:40};
+  var vw=window.innerWidth||360, vh=window.innerHeight||640, bw=el.offsetWidth, bh=el.offsetHeight;
+  var left=Math.max(8,Math.min(r.left,vw-bw-8));
+  var top=r.bottom+6; if(top+bh>vh-8) top=Math.max(8,r.top-bh-6);
+  el.style.left=left+'px'; el.style.top=top+'px';
+  _tipEl=el; _tipCh=fromHover?null:ch;
+}
+document.addEventListener('click',function(e){ if(_tipEl && !(e.target.closest && e.target.closest('.arena-tip'))) hideArenaTip(); });
+document.addEventListener('scroll',function(){ hideArenaTip(); },true);
+
 function setEffortWindow(w){ state.effortWindow=w; renderGita(); }
 function explainEffortBar(ch,win){
   var g=GITA.find(function(x){return x.ch===ch;});
@@ -2136,7 +2312,7 @@ function renderGita(){
       +'<div class="gita-count">'+cnt+' task'+(cnt!==1?'s':'')+'</div>'
       +'<div class="gita-expanded">'
       +'<div class="gita-teaching">'+ch.teaching+'</div>'
-      +(cnt>0?'<div style="margin-top:8px;">'+tasks.filter(function(t){return t.ch===ch.ch;}).map(renderCard).join('')+'</div>':'')
+      +(cnt>0?'<div style="margin-top:8px;">'+sortTasks(tasks.filter(function(t){return t.ch===ch.ch;})).map(renderCard).join('')+'</div>':'')
       +'</div></div>';
   });
   html+='</div>'+footer();
@@ -2203,7 +2379,7 @@ function openAQList(){
   var items=state.tasks.filter(function(t){return !t.completed && hold.indexOf(t.bucket)>=0;});
   var html='<div class="fab-panel-hdr"><div class="fab-panel-title">Not in your hands</div><div class="fab-panel-close" onclick="closeTaskDetail()">✕</div></div>'
     +'<div style="font-size:11px;color:var(--text-faint);margin-bottom:10px;">Every task currently waiting, resting, or being released — the complement of your Adversity Quotient.</div>'
-    +(items.length?items.map(renderCard).join(''):'<div style="font-size:12px;color:var(--text-faint);">Everything active is in your hands right now.</div>');
+    +(items.length?sortTasks(items).map(renderCard).join(''):'<div style="font-size:12px;color:var(--text-faint);">Everything active is in your hands right now.</div>');
   document.getElementById('taskDetailBox').innerHTML=html;
   document.getElementById('taskDetailModal').style.display='flex';
 }
@@ -2258,16 +2434,52 @@ function renderBT(){
   var small=tasks.filter(function(t){return t.weightage==='W1'||t.weightage==='W2';}).length;
   var large=tasks.filter(function(t){return t.weightage==='W3'||t.weightage==='W4';}).length;
   var huge =tasks.filter(function(t){return t.weightage==='W5';}).length;
-  html+='<div class="col"><div class="col-hdr"><div class="col-name" style="color:var(--gold);">Load Distribution</div></div>'
-    +'<div class="col-body">'
-    +[['Small (W1–W2)',small,'#2E7D32'],['Large (W3–W4)',large,'#B87800'],['Full day (W5)',huge,'#8B1A1A']].map(function(r){
-      return '<div class="bar-row"><div class="bar-lbl">'+r[0]+'</div>'
-        +'<div class="bar-track"><div class="bar-fill" style="width:'+Math.round(r[1]/tot*100)+'%;background:'+r[2]+';"></div></div>'
-        +'<div class="bar-val" style="color:'+r[2]+';">'+r[1]+'</div></div>';
-    }).join('')+'</div></div>'
+  // v16 (DK, 2 Oct 2026): one row per weight, W1–W6, EVERY weight shown even at 0, plus a Bars | Pie radio.
+  state.loadView = state.loadView || 'bars';
+  var LD_W=['W1','W2','W3','W4','W5','W6'];
+  var LD_COL={W1:'#2E7D32',W2:'#7CA82F',W3:'#C9A227',W4:'#E08A1E',W5:'#C0392B',W6:'#5A0F0F'};
+  var ldRows=LD_W.map(function(w){ return {w:w, n:tasks.filter(function(t){return t.weightage===w;}).length, col:LD_COL[w], lab:w+' · '+wLabel(w)}; });
+  var ldSum=ldRows.reduce(function(s,r){return s+r.n;},0);
+  function ldBars(){
+    return ldRows.map(function(r){
+      return '<div class="bar-row"><div class="bar-lbl">'+r.lab+'</div>'
+        +'<div class="bar-track"><div class="bar-fill" style="width:'+Math.round(r.n/tot*100)+'%;background:'+r.col+';"></div></div>'
+        +'<div class="bar-val" style="color:'+r.col+';">'+r.n+'</div></div>';
+    }).join('');
+  }
+  function ldPie(){
+    var cx=60,cy=60,R=52,svg='<svg viewBox="0 0 120 120" width="132" height="132" style="flex-shrink:0;" role="img" aria-label="Load distribution pie chart">';
+    var nz=ldRows.filter(function(r){return r.n>0;});
+    if(!nz.length) svg+='<circle cx="60" cy="60" r="52" fill="#E8E5DE"/>';
+    else if(nz.length===1) svg+='<circle cx="60" cy="60" r="52" fill="'+nz[0].col+'"/>';
+    else{
+      var a=-Math.PI/2;
+      nz.forEach(function(r){
+        var ang=r.n/ldSum*2*Math.PI, a2=a+ang, lg=ang>Math.PI?1:0;
+        var x0=cx+R*Math.cos(a), y0=cy+R*Math.sin(a), x1=cx+R*Math.cos(a2), y1=cy+R*Math.sin(a2);
+        svg+='<path d="M'+cx+' '+cy+' L'+x0.toFixed(2)+' '+y0.toFixed(2)+' A'+R+' '+R+' 0 '+lg+' 1 '+x1.toFixed(2)+' '+y1.toFixed(2)+' Z" fill="'+r.col+'" stroke="#fff" stroke-width="1.5"/>';
+        a=a2;
+      });
+    }
+    svg+='</svg>';
+    // the legend lists EVERY weight, so a weight with no tasks is still visible (as 0)
+    var legend=ldRows.map(function(r){
+      return '<div style="display:flex;align-items:center;gap:6px;font-size:12px;margin-bottom:4px;'+(r.n===0?'opacity:.6;':'')+'">'
+        +'<span style="width:10px;height:10px;border-radius:2px;background:'+r.col+';display:inline-block;"></span>'
+        +'<span style="flex:1;color:var(--text-dim);">'+r.lab+'</span><b style="color:'+r.col+';">'+r.n+'</b></div>';
+    }).join('');
+    return '<div style="display:flex;gap:14px;align-items:center;padding:6px 0 4px;">'+svg+'<div style="flex:1;">'+legend+'</div></div>';
+  }
+  var ldBarsOn=(state.loadView!=='pie');
+  html+='<div class="col"><div class="col-hdr" style="display:flex;justify-content:space-between;align-items:center;"><div class="col-name" style="color:var(--gold);">Load Distribution</div>'
+    +'<div class="ld-toggle" role="radiogroup" aria-label="Chart type">'
+    +'<label><input type="radio" name="ldView" value="bars"'+(ldBarsOn?' checked':'')+' onchange="setLoadView(\'bars\')"> Bars</label>'
+    +'<label><input type="radio" name="ldView" value="pie"'+(ldBarsOn?'':' checked')+' onchange="setLoadView(\'pie\')"> Pie</label></div></div>'
+    +'<div class="col-body">'+(ldBarsOn?ldBars():ldPie())+'</div></div>'
     +footer()+'</div>';
   p.innerHTML=html;
 }
+function setLoadView(v){ state.loadView=v; renderBT(); }
 
 // ═══════════════════════════════════════════════════════
 // DATA TAB
@@ -2278,7 +2490,7 @@ function renderData(){
   var tot=tasks.length||1;
   var bkCounts={};
   var laCounts={};
-  var wCounts={};
+  var wCounts={}; ['W1','W2','W3','W4','W5','W6'].forEach(function(k){ wCounts[k]=0; });   // v16: every weight shown, even at 0
   var mtCounts={};
   tasks.forEach(function(t){
     bkCounts[t.bucket]=(bkCounts[t.bucket]||0)+1;
@@ -2342,7 +2554,7 @@ function renderData(){
   }
   var lacol={'Personal/Family':'#1A6B5A','Picturizze':'#A07828','Work/Employment':'#3A6B8A','Other':'#6A3A8A'};
   var bcol={Karya:'#A07828',Dhairya:'#B87800',Vishram:'#5A5A7A',Manan:'#8B6914',Manthan:'#3A6B8A',Tyaga:'#2E7D32',Prarabdha:'#6A3A8A'};
-  var wcol={W1:'#2E7D32',W2:'#A07828',W3:'#3A6B8A',W4:'#B87800',W5:'#8B1A1A'};
+  var wcol={W1:'#2E7D32',W2:'#A07828',W3:'#3A6B8A',W4:'#B87800',W5:'#8B1A1A',W6:'#5A0F0F'};
   var isPie = state.dataChartType==='pie';
   var toggleBtn = '<button class="cal-btn'+(isPie?' cancel':' go')+'" style="padding:2px 8px;font-size:11px;margin-right:4px;" onclick="setDataChart(\'bar\')">bars</button>'
     +'<button class="cal-btn'+(isPie?' go':' cancel')+'" style="padding:2px 8px;font-size:11px;" onclick="setDataChart(\'pie\')">pie</button>';
@@ -2851,6 +3063,56 @@ function calAskYes(){
 function calAskNo(){
   var el = document.getElementById('calAskToast'); if(el) el.className='cal-ask-toast';
 }
+
+// ═══════════════════════════════════════════════════════
+// v17 — GATHER QUESTIONS (DK, 2 Oct 2026): the four prompts now open as centred cards over a dimmed
+// screen, name the task they are asking about, and show one at a time.
+//   Blocking (deadline-or-leisure, Vishram confirm, multitask): tapping outside does NOT dismiss —
+//   the card nudges instead, so a task can never be left half-saved.
+//   Optional (add to calendar): tapping outside = "Not now".
+// ═══════════════════════════════════════════════════════
+var ASK_IDS=['calAskToast','mtAskToast','leisureAskToast','leisureWarnToast'];
+function _askTaskText(id){
+  var lines=[];
+  if(id==='calAskToast'){ if(window._lastSavedTitle) lines=[window._lastSavedTitle]; }
+  else if(id==='mtAskToast'){ if(typeof _mtPending!=='undefined' && _mtPending && _mtPending.lines) lines=_mtPending.lines; }
+  else { if(typeof _pendingGather!=='undefined' && _pendingGather && _pendingGather.lines) lines=_pendingGather.lines; }
+  if(!lines.length) return '';
+  var first=String(lines[0]||''); if(first.length>150) first=first.slice(0,147)+'…';
+  return first+(lines.length>1?'  (+'+(lines.length-1)+' more)':'');
+}
+function askShown(){ for(var i=0;i<ASK_IDS.length;i++){ var e=document.getElementById(ASK_IDS[i]); if(e && e.classList.contains('show')) return ASK_IDS[i]; } return null; }
+function askBackdropTap(){
+  var id=askShown(); if(!id) return;
+  if(id==='calAskToast'){ calAskNo(); return; }
+  var e=document.getElementById(id); if(!e) return;
+  e.classList.remove('nudge'); void e.offsetWidth; e.classList.add('nudge');
+}
+(function(){
+  var busy=false;
+  function sync(changed){
+    if(busy) return; busy=true;
+    try{
+      var shownId=null;
+      if(changed && changed.classList.contains('show')) shownId=changed.id;
+      if(shownId){                                   // one question at a time
+        ASK_IDS.forEach(function(id){ var e=document.getElementById(id); if(e && id!==shownId && e.classList.contains('show')) e.classList.remove('show'); });
+        var t=document.getElementById('askTask-'+shownId); if(t) t.textContent=_askTaskText(shownId);
+        try{ if(document.activeElement && document.activeElement.blur) document.activeElement.blur(); }catch(e){}   // drop the phone keyboard
+      }
+      var bd=document.getElementById('askBackdrop'); if(bd) bd.classList.toggle('show', !!askShown());
+    } finally { busy=false; }
+  }
+  function boot(){
+    var mo=new MutationObserver(function(muts){
+      muts.forEach(function(m){ if(m.attributeName==='class') sync(m.target); });
+    });
+    ASK_IDS.forEach(function(id){ var e=document.getElementById(id); if(e) mo.observe(e,{attributes:true,attributeFilter:['class']}); });
+    document.addEventListener('keydown',function(ev){ if(ev.key==='Escape' && askShown()==='calAskToast') calAskNo(); });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
+})();
+
 // ── SMART FETCH ─────────────────────────────────────────
 function openSmartFetch(){
   var modal = document.getElementById('smartFetchModal');
@@ -2881,30 +3143,76 @@ function runSmartFetch(){
   var q = (document.getElementById('sfInput').value || '').trim().toLowerCase();
   var out = document.getElementById('sfResults');
   if(!q && !_sfMT){ out.innerHTML = '<div class="sf-hint">Type a word or phrase to search.</div>'; _sfLastHits=[]; return; }
-  var hits = (state.tasks || []).filter(function(t){
-    if(t.completed) return false;
-    if(_sfMT && t.multitask!==true) return false;
-    if(!q) return true;
-    var haystack = [t.title, t.shortTitle, t.bucket, arenaNameOf(t.ch), t.lifeArea].join(' ').toLowerCase();
-    return haystack.indexOf(q) !== -1;
+  var qTokens = q ? q.split(/\s+/).filter(Boolean) : [];
+  var exactHits=[], closeHits=[];
+  (state.tasks || []).forEach(function(t){
+    if(t.completed) return;
+    if(_sfMT && t.multitask!==true) return;
+    if(!q){ exactHits.push(t); return; }
+    var hay=[t.title, t.shortTitle, t.bucket, arenaNameOf(t.ch), t.lifeArea].join(' ').toLowerCase();
+    if(hay.indexOf(q)!==-1){ exactHits.push(t); return; }          // exact phrase, as before
+    var words=_sfNorm(hay).split(/\s+/).filter(Boolean), best=2;
+    var ok=qTokens.every(function(qt){
+      var m=0;
+      for(var i=0;i<words.length;i++){ var r=_sfWordMatch(_sfNorm(qt).trim(),words[i]); if(r===1){ m=1; break; } if(r===2) m=2; }
+      if(m===0) return false; if(m===1 && best>1) best=1; return true;
+    });
+    if(!ok) return;
+    // every token matched: all-exact words = exact hit, any near-miss = "did you mean"
+    var allExact=qTokens.every(function(qt){ return words.some(function(w){ return w.indexOf(_sfNorm(qt).trim())!==-1; }); });
+    (allExact?exactHits:closeHits).push(t);
   });
+  exactHits=sortTasks(exactHits); closeHits=sortTasks(closeHits);
+  var hits=exactHits.concat(closeHits);
   _sfLastHits = hits;
   if(!hits.length){
     out.innerHTML = '<div class="sf-hint">No active tasks found'+(q?' matching <strong>' + esc(q) + '</strong>':'')+(_sfMT?' that can be multitasked':'')+'.</div>';
     return;
   }
-  out.innerHTML = '<div class="sf-count">' + hits.length + ' task' + (hits.length > 1 ? 's' : '') + ' found:</div>' +
-    hits.map(function(t){
-      return '<div class="sf-item" id="sfi-'+t.id+'"><div class="sf-item-title">' + esc(t.shortTitle||t.title) + '</div>' +
-        '<div class="sf-item-meta">' + (t.bucket||'') + (t.ch ? ' · ' + arenaNameOf(t.ch) : '') + (t.timeHorizon?' · '+t.timeHorizon:'') + (t.multitask===true?' · 🔀 multitask':'') + '</div>' +
-        '<div class="sf-actions">'
-        +'<button class="sf-act done" onclick="sfClose(\''+t.id+'\')">✓ Close</button>'
-        +'<button class="sf-act" onclick="sfEdit(\''+t.id+'\')">✎ Modify</button>'
-        +'<button class="sf-act" onclick="sfReassign(\''+t.id+'\')">⇄ Reassign</button>'
-        +'<button class="sf-act" onclick="openCatMenu(event,\''+t.id+'\',function(){runSmartFetch();})">🏷 '+areaLabel(t)+'</button></div>'
-        +'<div class="sf-panel" id="sfp-'+t.id+'"></div></div>';
-    }).join('')
+  function itemHtml(t){
+    return '<div class="sf-item" id="sfi-'+t.id+'"><div class="sf-item-title">' + esc(t.shortTitle||t.title) + '</div>' +
+      '<div class="sf-item-meta">' + (t.bucket||'') + (t.ch ? ' · ' + arenaNameOf(t.ch) : '') + (t.timeHorizon?' · '+t.timeHorizon:'') + (t.multitask===true?' · 🔀 multitask':'') + '</div>' +
+      '<div class="sf-actions">'
+      +'<button class="sf-act done" onclick="sfClose(\''+t.id+'\')">✓ Close</button>'
+      +'<button class="sf-act" onclick="sfEdit(\''+t.id+'\')">✎ Modify</button>'
+      +'<button class="sf-act" onclick="sfReassign(\''+t.id+'\')">⇄ Reassign</button>'
+      +'<button class="sf-act" onclick="openCatMenu(event,\''+t.id+'\',function(){runSmartFetch();})">🏷 '+areaLabel(t)+'</button></div>'
+      +'<div class="sf-panel" id="sfp-'+t.id+'"></div></div>';
+  }
+  out.innerHTML = (exactHits.length?'<div class="sf-count">' + exactHits.length + ' task' + (exactHits.length > 1 ? 's' : '') + ' found:</div>' + exactHits.map(itemHtml).join(''):'')
+    + (closeHits.length?'<div class="sf-count" style="margin-top:10px;">Did you mean… ('+closeHits.length+' close match'+(closeHits.length>1?'es':'')+'):</div>' + closeHits.map(itemHtml).join(''):'')
     +'<button class="ocr-btn-add" style="margin-top:10px;width:100%;" onclick="copySmartFetchResults()">📋 Copy these '+hits.length+' task'+(hits.length>1?'s':'')+'</button>';
+}
+// v16 — spelling-tolerant search. A word counts as a close match when it is one or two letters off
+// (Bhavya / Bhagya) or SOUNDS alike (Mahender / Mahinder). Exact matches are always listed first.
+function _sfNorm(s){ return (s||'').toLowerCase().replace(/[^a-z0-9\s]/g,' '); }
+function _sfKey(w){
+  w=(w||'').toLowerCase().replace(/[^a-z]/g,'');
+  w=w.replace(/ph/g,'f').replace(/([bcdgjkpstv])h/g,'$1').replace(/w/g,'v').replace(/q/g,'k').replace(/x/g,'ks').replace(/z/g,'j').replace(/c(?=[eiy])/g,'s').replace(/c/g,'k');
+  w=w.charAt(0)+w.slice(1).replace(/[aeiouy]+/g,'');          // consonant skeleton: Mahender / Mahinder / Mahindra -> mhndr
+  return w.replace(/(.)\1+/g,'$1');
+}
+function _sfLev(a,b,max){
+  if(Math.abs(a.length-b.length)>max) return max+1;
+  var prev=[],cur=[],i,j;
+  for(j=0;j<=b.length;j++) prev[j]=j;
+  for(i=1;i<=a.length;i++){
+    cur=[i]; var rowMin=cur[0];
+    for(j=1;j<=b.length;j++){ cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a.charAt(i-1)===b.charAt(j-1)?0:1)); if(cur[j]<rowMin) rowMin=cur[j]; }
+    if(rowMin>max) return max+1;
+    prev=cur;
+  }
+  return prev[b.length];
+}
+function _sfWordMatch(qw,hw){
+  if(!qw||!hw) return 0;
+  if(hw.indexOf(qw)!==-1) return 1;
+  if(qw.length>=4 && hw.length>=3){
+    var max=qw.length>=7?2:1;
+    if(_sfLev(qw,hw,max)<=max) return 2;
+    if(qw.length>=5 && hw.length>=5 && Math.abs(qw.length-hw.length)<=3 && _sfKey(qw)===_sfKey(hw)) return 2;
+  }
+  return 0;
 }
 
 // ── v9 SMART FETCH ROW ACTIONS — close / modify / reassign right on the row.
@@ -2939,7 +3247,7 @@ function sfMove(id,bucket){
 function sfEdit(id){
   var t=sfTask(id); if(!t) return;
   sfShowPanel(id,'<input class="sf-field" id="sfe-title-'+id+'" value="'+esc(t.title).replace(/"/g,'&quot;')+'">'
-    +'<select class="sf-field" id="sfe-w-'+id+'">'+['W1','W2','W3','W4','W5'].map(function(w){return '<option value="'+w+'"'+(t.weightage===w?' selected':'')+'>'+w+' — '+wLabel(w)+'</option>';}).join('')+'</select>'
+    +'<select class="sf-field" id="sfe-w-'+id+'">'+['W1','W2','W3','W4','W5','W6'].map(function(w){return '<option value="'+w+'"'+(t.weightage===w?' selected':'')+'>'+w+' — '+wLabel(w)+'</option>';}).join('')+'</select>'
     +'<select class="sf-field" id="sfe-mt-'+id+'"><option value="no"'+(t.multitask!==true?' selected':'')+'>🔀 Multitask: No — needs focus</option><option value="yes"'+(t.multitask===true?' selected':'')+'>🔀 Multitask: Yes — can multitask</option></select>'
     +'<select class="sf-field" id="sfe-h-'+id+'">'+SF_TH.map(function(o){return '<option value="'+o[0]+'"'+((t.timeHorizonType||'')===o[0]?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select>'
     +'<div class="sf-actions"><button class="sf-act done" onclick="sfSave(\''+id+'\')">Save</button><button class="sf-act" onclick="sfShowPanel(\''+id+'\',\'\')">Cancel</button></div>');
@@ -2954,7 +3262,7 @@ function sfSave(id){
   var mtSel=document.getElementById('sfe-mt-'+id); t.multitask = !!(mtSel && mtSel.value==='yes');
   var _oldH=t.timeHorizonType||'';
   t.timeHorizonType=h.value||null; t.timeHorizon=h.value?h.selectedOptions[0].text:null;
-  if((h.value||'')!==_oldH) t.deadlineSetAt=new Date().toISOString();
+  if((h.value||'')!==_oldH){ t.deadlineSetAt=new Date().toISOString(); t.dueDate=null; t.dueTime=null; t.noDateGiven=false; }
   sfAfter('✓ Task updated');
 }
 // DK, 29 Sep 2026: "I should be able to copy the Dallas-related tasks and
@@ -3183,7 +3491,7 @@ function thLabel(type){
 }
 function setDeadlineType(t,type){
   t.timeHorizonType=type||null; t.timeHorizon=type?thLabel(type):null;
-  t.deadlineSetAt=new Date().toISOString();
+  t.deadlineSetAt=new Date().toISOString(); t.dueDate=null; t.dueTime=null; t.noDateGiven=false;
 }
 var TH_CHOICES=['today','thisWeek','nextWeek','thisMonth','Q4','1year','2years','parkingLot'];
 
@@ -3198,9 +3506,9 @@ function bucketRows(t,fn){
 function openTamasPanel(){
   var box=document.getElementById('taskDetailBox'); var keep=box?box.scrollTop:0;
   var items=state.tasks.filter(function(t){return !t.completed;}).filter(isTamas);
-  var html='<div class="fab-panel-hdr"><div class="fab-panel-title">🔥 In Tamas — 3+ months untouched</div><div class="fab-panel-close" onclick="closeTaskDetail()">✕</div></div>'
-    +'<div style="font-size:11px;color:var(--text-dim);margin-bottom:10px;line-height:1.5;">Manan, Manthan and Vishram tasks with no move or completion for 3 months. Complete it, move its bucket, or change its date — each one resets the clock.</div>'
-    +(items.length?items.map(tmRow).join(''):'<div style="font-size:13px;color:var(--text-dim);padding:14px 0;">Nothing in Tamas right now. 🙏</div>');
+  var html='<div class="fab-panel-hdr"><div class="fab-panel-title">🔥 In Tamas</div><div class="fab-panel-close" onclick="closeTaskDetail()">✕</div></div>'
+    +'<div style="font-size:11px;color:var(--text-dim);margin-bottom:10px;line-height:1.5;">More than 7 days past due — plus Manan, Manthan and Vishram tasks untouched for 3 months. Complete it, move its bucket, or change its date — each one resets the clock.</div>'
+    +(items.length?sortTasks(items).map(tmRow).join(''):'<div style="font-size:13px;color:var(--text-dim);padding:14px 0;">Nothing in Tamas right now. 🙏</div>');
   box.innerHTML=html;
   document.getElementById('taskDetailModal').style.display='flex';
   box.scrollTop=keep;

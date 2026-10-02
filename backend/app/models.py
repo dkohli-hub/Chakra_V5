@@ -33,3 +33,5 @@ class Task(Base):
     duration_min = Column(Integer, nullable=True)   # task length in minutes
     # V15: when the date was last changed (ISO string). Restarts the overdue/Tamas clock.
     deadline_set_at = Column(String(40), nullable=True)
+    # V17: task arrived with no date and was defaulted to Saturday 11:59 PM.
+    no_date_given = Column(Boolean, nullable=True)

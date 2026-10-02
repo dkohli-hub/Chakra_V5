@@ -27,6 +27,7 @@ class TaskCreate(BaseModel):
     due_time: Optional[str] = None
     duration_min: Optional[int] = None
     deadline_set_at: Optional[str] = None
+    no_date_given: Optional[bool] = None
 
 
 class TaskUpdate(BaseModel):
@@ -52,6 +53,7 @@ class TaskUpdate(BaseModel):
     due_time: Optional[str] = None
     duration_min: Optional[int] = None
     deadline_set_at: Optional[str] = None
+    no_date_given: Optional[bool] = None
 
 
 class TaskOut(BaseModel):
@@ -80,6 +82,7 @@ class TaskOut(BaseModel):
     due_time: Optional[str] = None
     duration_min: Optional[int] = None
     deadline_set_at: Optional[str] = None
+    no_date_given: Optional[bool] = None
 
     class Config:
         from_attributes = True

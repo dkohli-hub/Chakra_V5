@@ -2,7 +2,7 @@
 
 DK's prototype HTML, served as a static site and connected to the Chakra backend.
 
-- `index.html` — DK's prototype (currently V15), unchanged except for two edits:
+- `index.html` — DK's prototype (currently V17), unchanged except for two edits:
   `USER_ACCOUNTS` is emptied (logins are checked by the backend), and
   `<script src="chakra-api.js"></script>` is added just before `</body>`.
 - `chakra-api.js` — replaces only the functions that touch data or keys:
@@ -14,7 +14,7 @@ DK's prototype HTML, served as a static site and connected to the Chakra backend
 2. Replace the `USER_ACCOUNTS = [ ... ]` entries with `var USER_ACCOUNTS = [];`.
 3. Add `<script src="chakra-api.js"></script>` just before `</body>`.
 4. Check the new version for new task fields or new functions that save data.
-   New fields need a backend column (see `chakra-mcp/add_v15_columns.py`) and a
+   New fields need a backend column (see `chakra-mcp/add_v17_columns.py`) and a
    line in `fromApi` / `toApi` in `chakra-api.js`.
 
 ## Data safety
