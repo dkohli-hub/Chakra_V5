@@ -23,6 +23,9 @@ class TaskCreate(BaseModel):
     category: Optional[str] = None
     linked_tasks: Optional[List[Any]] = []
     depends_on: Optional[str] = None
+    due_date: Optional[str] = None
+    due_time: Optional[str] = None
+    duration_min: Optional[int] = None
 
 
 class TaskUpdate(BaseModel):
@@ -44,6 +47,9 @@ class TaskUpdate(BaseModel):
     category: Optional[str] = None
     linked_tasks: Optional[List[Any]] = None
     depends_on: Optional[str] = None
+    due_date: Optional[str] = None
+    due_time: Optional[str] = None
+    duration_min: Optional[int] = None
 
 
 class TaskOut(BaseModel):
@@ -68,6 +74,9 @@ class TaskOut(BaseModel):
     category: Optional[str] = None
     linked_tasks: Optional[List[Any]] = None
     depends_on: Optional[str] = None
+    due_date: Optional[str] = None
+    due_time: Optional[str] = None
+    duration_min: Optional[int] = None
 
     class Config:
         from_attributes = True

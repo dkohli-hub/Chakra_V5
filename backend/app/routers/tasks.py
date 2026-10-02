@@ -69,6 +69,9 @@ async def create_task(
         category=body.category,
         linked_tasks=body.linked_tasks or [],
         depends_on=body.depends_on,
+        due_date=body.due_date,
+        due_time=body.due_time,
+        duration_min=body.duration_min,
     )
     db.add(task)
     await db.commit()
@@ -182,6 +185,9 @@ async def bulk_import(
                 category=raw.get("category"),
                 linked_tasks=raw.get("linked_tasks") or raw.get("linkedTasks") or [],
                 depends_on=raw.get("depends_on") or raw.get("dependsOn"),
+                due_date=raw.get("due_date") or raw.get("dueDate"),
+                due_time=raw.get("due_time") or raw.get("dueTime"),
+                duration_min=raw.get("duration_min") or raw.get("durationMin"),
             )
             db.add(t)
             added += 1

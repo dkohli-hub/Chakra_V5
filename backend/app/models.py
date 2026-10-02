@@ -27,3 +27,7 @@ class Task(Base):
     category = Column(String(100), nullable=True)
     linked_tasks = Column(JSON, nullable=True)
     depends_on = Column(String, nullable=True)
+    # V14 Set Deadline picker. Columns must exist in Postgres first (add_v14_columns.py).
+    due_date = Column(String(10), nullable=True)    # YYYY-MM-DD
+    due_time = Column(String(5), nullable=True)     # HH:MM, optional
+    duration_min = Column(Integer, nullable=True)   # task length in minutes
