@@ -39,3 +39,6 @@ class Task(Base):
     due_date_at = Column(String(40), nullable=True)
     # V18: AI could not tell Picturizze / ITC / Personal - the card asks DK to pick.
     needs_area = Column(Boolean, nullable=True)
+    # V20: what Claude read from a photo (details text) and the people in it (contact list).
+    details = Column(Text, nullable=True)
+    contacts = Column(JSON, nullable=True)

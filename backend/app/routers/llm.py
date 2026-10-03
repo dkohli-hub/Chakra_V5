@@ -25,10 +25,16 @@ async def parse_tasks(
     body: LLMRequest,
     user_id: str = Depends(get_current_user),
 ):
+    image = body.image.model_dump() if body.image else None
     if settings.ANTHROPIC_API_KEY:
-        return LLMResponse(text=await claude_generate(body.prompt))
+        return LLMResponse(text=await claude_generate(body.prompt, body.max_tokens, image))
     if settings.GEMINI_API_KEY:
-        return LLMResponse(text=await gemini_generate([{"text": body.prompt}], timeout=30))
+        parts = [{"text": body.prompt}]
+        if image:
+            parts.insert(0, {"inline_data": {"mime_type": image["media_type"], "data": image["data"]}})
+        return LLMResponse(text=await gemini_generate(parts, timeout=30))
+    if image:
+        raise HTTPException(status_code=503, detail="Reading photos needs ANTHROPIC_API_KEY or GEMINI_API_KEY")
     if not settings.OPENROUTER_API_KEY:
         raise HTTPException(status_code=503, detail="LLM not configured — set OPENROUTER_API_KEY")
     async with httpx.AsyncClient(timeout=30) as client:

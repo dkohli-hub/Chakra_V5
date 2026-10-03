@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="Chakra">
 <meta name="theme-color" content="#F5F3EE">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Karma Kshetra™ — DK · Chakra V18</title>
+<title>Karma Kshetra™ — DK · Chakra V20</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -644,6 +644,33 @@ html,body{font-weight:500;}
 .od-badge.amber{color:#6B4500;}
 .bar-val{color:#1A1A1A;}
 .bat-add-btn{background:#13634A!important;color:#fff!important;}
+/* ===== v19 — details, contacts, calendar check ===== */
+.ct-block{border:1px solid var(--border);border-radius:10px;padding:10px;margin:8px 0;background:#fff;}
+.ct-head{font-weight:700;color:#111;font-size:13.5px;margin-bottom:6px;line-height:1.35;}
+.ct-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:6px 0;}
+.ct-num{font-weight:600;color:#111;font-size:13.5px;word-break:break-all;}
+.ct-btn{display:inline-block;padding:9px 12px;border-radius:10px;border:1.5px solid #13634A;background:#fff;color:#13634A;font-weight:700;font-size:13px;text-decoration:none;min-height:40px;box-sizing:border-box;cursor:pointer;font-family:inherit;}
+.ct-btn.wa{border-color:#1A7F3C;color:#1A6B34;}
+.ct-btn.vc{background:#13634A;color:#fff;}
+.ct-x{background:none;border:none;color:#7A1212;font-weight:600;font-size:12.5px;text-decoration:underline;cursor:pointer;padding:8px;}
+.ct-hint{font-size:12px;color:#3D3A33;line-height:1.4;}
+.ct-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:8px;}
+.ct-saved{font-size:12.5px;color:#111;display:flex;align-items:center;gap:6px;}
+.ct-add{margin:10px 0;}
+.td-in,.td-details{width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);margin-bottom:8px;font-family:inherit;font-size:13px;box-sizing:border-box;color:#111;background:#fff;}
+.img-read-info{font-size:12.5px;color:#13634A;font-weight:700;margin:6px 0;line-height:1.45;}
+.cc-row{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:10px;margin:8px 0;border:1px solid var(--border);background:#fff;}
+.cc-row.ok{border-color:#2E7D32;} .cc-row.bad{border-color:#B3261E;background:#FFF6F4;}
+.cc-mark{font-weight:900;font-size:16px;width:20px;text-align:center;} .cc-row.ok .cc-mark{color:#1B5E20;} .cc-row.bad .cc-mark{color:#B3261E;}
+.cc-t{font-weight:700;color:#111;font-size:13.5px;} .cc-d{font-size:12.5px;color:#262626;line-height:1.45;margin-top:2px;}
+.badge-ct{cursor:pointer;}
+/* ===== v20 — several images ===== */
+.img-thumbs{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 2px;}
+.img-thumb{position:relative;width:64px;height:64px;border-radius:8px;overflow:visible;}
+.img-thumb img{width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid var(--border);display:block;}
+.img-thumb-st{position:absolute;left:3px;bottom:3px;min-width:18px;height:18px;border-radius:9px;background:#13634A;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 4px;box-sizing:border-box;}
+.img-thumb-st.reading{background:#7A4F00;} .img-thumb-st.fail{background:#B3261E;} .img-thumb-st.ocr{background:#1F4E79;}
+.img-thumb-x{position:absolute;right:-7px;top:-7px;width:26px;height:26px;border-radius:13px;border:1.5px solid #fff;background:#33302A;color:#fff;font-size:12px;font-weight:800;cursor:pointer;line-height:1;padding:0;}
 </style>
 </head>
 <body>
@@ -805,7 +832,7 @@ html,body{font-weight:500;}
 
 <script>
 // v14: the ONE place the app version lives. Title, header, login footer and the backup file all read it.
-var APP_VERSION = 18;
+var APP_VERSION = 20;
 (function(){ function stamp(){ document.title='Karma Kshetra™ — DK · Chakra V'+APP_VERSION; document.querySelectorAll('.app-ver').forEach(function(e){ e.textContent=APP_VERSION; }); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',stamp); else stamp(); })();
 // ======================================================
@@ -847,6 +874,34 @@ function _calendarLive(){
   return GOOGLE_CALENDAR_CONFIG.clientId && GOOGLE_CALENDAR_CONFIG.clientId.indexOf('PASTE_') !== 0;
 }
 
+// ═══════════════════════════════════════════════════════
+// v19 — GOOGLE CALENDAR: never fail silently (DK, 3 Oct 2026)
+// The booking code was already real. What was missing: a blocked or closed sign-in popup said nothing,
+// Google's refusal showed for 4 seconds, and nothing told DK WHO has to fix it. Now every failure says what
+// happened and whose job it is, and Utilities has "Check calendar connection".
+// ═══════════════════════════════════════════════════════
+var _calCheckPending=false;
+function explainCalError(status, msg, reason, calName){
+  var m=String(msg||''), r=String(reason||'');
+  if(status===401) return 'Your Google sign-in expired. Tap the time slot again to sign in.';
+  if(status===403 && (/accessNotConfigured/i.test(r) || /has not been used|is disabled|not been enabled/i.test(m)))
+    return 'Google Calendar is not switched on for Chakra’s Google project. This one is for Mayur: enable the Google Calendar API in Google Cloud.';
+  if(status===403 && /insufficient|forbidden|permission|writer|owner/i.test(r+' '+m))
+    return 'The Google account you signed in with cannot add events to '+(calName||'that calendar')+'. In Google Calendar, share it with that account using “Make changes to events”.';
+  if(status===403) return 'Google refused: '+m+' — this may be the Google sign-in app’s test-user list (Mayur) or calendar sharing (you).';
+  if(status===404) return 'Google cannot find '+(calName||'that calendar')+' for the account you signed in with. Check the calendar address or its sharing.';
+  return 'Google said: '+(m||('error '+status));
+}
+function _calSignInError(err){
+  var t=(err&&err.type)||'', msg;
+  if(t==='popup_failed_to_open') msg='The Google sign-in window was blocked. Allow pop-ups for this app and try again.';
+  else if(t==='popup_closed') msg='The Google sign-in window was closed before finishing. Try again and complete the sign-in.';
+  else msg='Google sign-in did not complete'+(t?' ('+t+')':'')+'. If it keeps happening, tell Mayur: the sign-in app may need your account added as a test user.';
+  toast(msg,'warn',9000);
+  if(_pendingBooking && _pendingBooking.detailEl) _pendingBooking.detailEl.textContent=msg;
+  _pendingBooking=null; clearTimeout(_bookTimer);
+  if(_calCheckPending){ _calCheckPending=false; calCheckShow([['Google sign-in',false,msg]]); }
+}
 function _initGIS(){
   if(_gisTokenClient || !window.google || !google.accounts || !google.accounts.oauth2) return;
   _gisTokenClient = google.accounts.oauth2.initTokenClient({
@@ -855,40 +910,88 @@ function _initGIS(){
     callback: function(resp){
       if(resp && resp.access_token){
         _googleAccessToken = resp.access_token;
+        if(_calCheckPending){ _calCheckPending=false; runCalCheck(); return; }
         _completePendingBooking();
       } else {
-        toast('Google sign-in did not complete. Try again.', 'warn', 3000);
+        _calSignInError(resp && resp.error ? {type:resp.error} : null);
       }
-    }
+    },
+    error_callback: function(err){ _calSignInError(err); }
   });
 }
-
-// Slot dates come from _generatedSlots[idx].isoStart/isoEnd directly.
-
-function _createGoogleCalendarEvent(calendarId,title,isoStart,isoEnd){
+function _calDescription(title){
+  var t=null; for(var i=state.tasks.length-1;i>=0;i--){ if(state.tasks[i].title===title){ t=state.tasks[i]; break; } }
+  if(!t) return '';
+  var L=[]; if(t.details) L.push(t.details);
+  (t.contacts||[]).forEach(function(c){ var n=[c.name,c.org].filter(Boolean).join(' · '); (c.phones||[]).forEach(function(p){ L.push((n?n+': ':'Phone: ')+p); }); });
+  return L.join('\n').slice(0,1500);
+}
+function _createGoogleCalendarEvent(calendarId,title,isoStart,isoEnd,description){
+  var body={summary:title,start:{dateTime:isoStart,timeZone:'America/Chicago'},end:{dateTime:isoEnd,timeZone:'America/Chicago'}};
+  if(description) body.description=description;
   return fetch('https://www.googleapis.com/calendar/v3/calendars/'+encodeURIComponent(calendarId)+'/events',{
     method:'POST',
     headers:{'Authorization':'Bearer '+_googleAccessToken,'Content-Type':'application/json'},
-    body:JSON.stringify({summary:title,start:{dateTime:isoStart},end:{dateTime:isoEnd}})
-  }).then(function(resp){return resp.json();});
+    body:JSON.stringify(body)
+  }).then(function(resp){ return resp.json().then(function(j){ j=j||{}; j._status=resp.status; return j; }, function(){ return {_status:resp.status}; }); });
 }
-
 function _completePendingBooking(){
   if(!_pendingBooking) return;
   var pb = _pendingBooking;
-  _pendingBooking = null;
-  _createGoogleCalendarEvent(pb.calendarId,pb.title,pb.isoStart,pb.isoEnd).then(function(result){
+  _pendingBooking = null; clearTimeout(_bookTimer);
+  _createGoogleCalendarEvent(pb.calendarId,pb.title,pb.isoStart,pb.isoEnd,pb.description).then(function(result){
     if(result && result.htmlLink){
-      if(pb.detailEl) pb.detailEl.innerHTML = pb.title + ' &middot; ' + pb.slotLabel + ' &middot; ' + pb.calName + '<br><a href="'+result.htmlLink+'" target="_blank" rel="noopener">Open in Google Calendar</a>';
+      if(pb.detailEl) pb.detailEl.innerHTML = esc(pb.title) + ' &middot; ' + pb.slotLabel + ' &middot; ' + pb.calName + '<br><a href="'+result.htmlLink+'" target="_blank" rel="noopener">Open in Google Calendar</a>';
       toast('✓ Added to ' + pb.calName + ' — ' + pb.slotLabel, 'ok', 3500);
     } else {
-      var errMsg = (result && result.error && result.error.message) ? result.error.message : 'Unknown error';
-      toast('Calendar write failed: ' + errMsg, 'warn', 4000);
-      if(pb.detailEl) pb.detailEl.textContent = 'Could not write to calendar — ' + errMsg;
+      var e=(result&&result.error)||{}, reason=(e.errors&&e.errors[0]&&e.errors[0].reason)||e.status||'';
+      var why=explainCalError(result?result._status:0, e.message, reason, pb.calName);
+      toast('Calendar did not save: '+why,'warn',10000);
+      if(pb.detailEl) pb.detailEl.textContent='Not saved — '+why;
     }
   }).catch(function(){
-    toast('Calendar write failed — check your connection.', 'warn', 4000);
+    toast('Calendar did not save — check your internet connection and try again.', 'warn', 6000);
+    if(pb.detailEl) pb.detailEl.textContent='Not saved — no connection to Google.';
   });
+}
+function calCheckShow(rows){
+  var h='<div class="fab-panel-hdr"><div class="fab-panel-title">Calendar connection</div><div class="fab-panel-close" onclick="closeTaskDetail()">✕</div></div>';
+  rows.forEach(function(r){
+    h+='<div class="cc-row '+(r[1]?'ok':'bad')+'"><div class="cc-mark">'+(r[1]?'✓':'✕')+'</div><div><div class="cc-t">'+esc(r[0])+'</div><div class="cc-d">'+esc(r[2]||'')+'</div></div></div>';
+  });
+  h+='<div class="ct-hint" style="margin-top:8px;">Run this again after any fix. Nothing is added to your calendars by this check.</div>';
+  document.getElementById('taskDetailBox').innerHTML=h;
+  document.getElementById('taskDetailModal').style.display='flex';
+}
+function calCheck(){
+  if(!_calendarLive()){ calCheckShow([['Google sign-in app',false,'No Google client ID is set in this copy of Chakra. Mayur must set it.']]); return; }
+  _initGIS();
+  if(!_gisTokenClient){ calCheckShow([['Google sign-in',false,'Google’s sign-in script has not loaded. Check your internet and try again in a few seconds.']]); return; }
+  _calCheckPending=true;
+  _gisTokenClient.requestAccessToken();
+}
+function runCalCheck(){
+  var rows=[['Google sign-in',true,'Signed in.']];
+  fetch('https://www.googleapis.com/calendar/v3/users/me/calendarList',{headers:{'Authorization':'Bearer '+_googleAccessToken}})
+  .then(function(r){ return r.json().then(function(j){ return {s:r.status,j:j||{}}; }, function(){ return {s:r.status,j:{}}; }); })
+  .then(function(res){
+    if(res.s!==200){
+      var e=res.j.error||{}, reason=(e.errors&&e.errors[0]&&e.errors[0].reason)||e.status||'';
+      rows.push(['Google Calendar access',false,explainCalError(res.s,e.message,reason,'your calendars')]);
+      calCheckShow(rows); return;
+    }
+    var items=res.j.items||[], me=null, byId={};
+    items.forEach(function(it){ byId[String(it.id).toLowerCase()]=it; if(it.primary) me=it.id; });
+    rows[0][2]='Signed in as '+(me||'your Google account')+'.';
+    rows.push(['Google Calendar access',true,'Google Calendar is switched on and Chakra can read your calendars.']);
+    ['personal','picturizze'].forEach(function(k){
+      var cfg=GOOGLE_CALENDAR_CONFIG.calendars[k], it=byId[String(cfg.id).toLowerCase()];
+      if(!it) rows.push([cfg.label+' ('+cfg.id+')',false,'This Google account cannot see that calendar. Share it with '+(me||'this account')+' using “Make changes to events”.']);
+      else if(it.accessRole==='owner'||it.accessRole==='writer') rows.push([cfg.label+' ('+cfg.id+')',true,'Can add events ('+it.accessRole+').']);
+      else rows.push([cfg.label+' ('+cfg.id+')',false,'View only ('+(it.accessRole||'reader')+'). Chakra cannot add events until it is shared with “Make changes to events”.']);
+    });
+    calCheckShow(rows);
+  }).catch(function(){ rows.push(['Google Calendar access',false,'Could not reach Google. Check your internet connection.']); calCheckShow(rows); });
 }
 
 // --- LOGIN LOGIC (uses USER_ACCOUNTS above) ---
@@ -1403,6 +1506,9 @@ function renderCard(t){
   else if(st.state==='amber' && t.dueTime) meta+='<span class="od-badge note" title="'+esc(clockText(t))+'">was by '+fmtClock(dueMoment(t))+'</span>';
   if(isUndated(t) && t.noDateGiven) meta+='<span class="od-badge note" title="No date was given — defaulted to Saturday 11:59 PM. Tap the task to set a real date.">no date given</span>';
   if(t.needsArea) meta+='<span class="od-badge amber" onclick="openCatMenu(event,\''+t.id+'\')" title="Chakra could not tell Picturizze, ITC or Personal — tap to choose">⚠ pick category</span>';
+  var _c0=(t.contacts&&t.contacts[0])||null, _p0=_c0&&_c0.phones&&_c0.phones[0];
+  if(_p0){ var _w0=waLink(_p0); meta+='<a class="od-badge soft" href="'+telLink(_p0)+'" onclick="event.stopPropagation()" title="Call">📞 '+esc(_p0)+'</a>'+(_w0?'<a class="od-badge soft" href="'+_w0+'" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="WhatsApp">💬</a>':''); }
+  if(t.details || (t.contacts&&t.contacts.length)) meta+='<span class="od-badge note badge-ct" onclick="event.stopPropagation();openTaskDetail(\''+t.id+'\')" title="Open details">📝 details'+((t.contacts&&t.contacts.length)?' · '+t.contacts.length+' contact'+(t.contacts.length>1?'s':''):'')+'</span>';
   if(isInProgress(t)) meta+='<span class="od-badge soft" title="A child task has started">▶ in progress</span>';
   if(tam) meta+='<span class="od-badge" style="background:#5A0F0F;color:#fff;" title="'+esc(clockText(t))+'">🔥 TAMAS</span>';
   if(t.bucket==='Dhairya') meta+='<span class="cat-badge" onclick="openDhairyaMenu(event,\''+t.id+'\')" title="Waiting on someone — tap for options">⏳ waiting</span>';
@@ -1443,6 +1549,168 @@ function exactDueInfo(t){
   if(t.dueDate && (!t.deadlineSetAt || (t.dueDateAt && t.dueDateAt>=t.deadlineSetAt))) return {date:t.dueDate, time:t.dueTime||''};
   return {date:'', time:''};
 }
+// ═══════════════════════════════════════════════════════
+// v19 — DETAILS + CONTACTS on a task (DK, 3 Oct 2026)
+// A task can now carry the details read from a photo (prices, what is included…) and one or more contacts
+// (name, phone, email…). Phone numbers become Call / WhatsApp buttons, and any contact can be saved to the
+// iPhone as a vCard. The picture itself is NOT stored — only the details.
+// ═══════════════════════════════════════════════════════
+function extractPhones(text){
+  var out=[], seen={}, re=/(?:\+|00)?\d[\d\s().\-]{6,}\d/g, m;
+  while((m=re.exec(text||''))){
+    var raw=m[0].trim(), d=raw.replace(/\D/g,'');
+    if(d.length<8 || d.length>15) continue;
+    if(/^\d{4}[-\/]\d{1,2}[-\/]\d{1,2}$/.test(raw) || /^\d{1,2}[-\/]\d{1,2}[-\/]\d{2,4}$/.test(raw)) continue;   // dates
+    if(seen[d]) continue; seen[d]=1; out.push(raw);
+  }
+  return out;
+}
+function waDigits(p){
+  var s=String(p||'').trim(), d=s.replace(/\D/g,'');
+  if(/^\+/.test(s)) return d.length>=8 ? d : null;
+  if(/^00/.test(s)) return d.length>=10 ? d.replace(/^00/,'') : null;
+  return null;                                     // no country code shown → never guess one
+}
+function waLink(p){ var d=waDigits(p); return d ? 'https://wa.me/'+d : null; }
+function telLink(p){ return 'tel:'+String(p||'').replace(/[^\d+]/g,''); }
+function _vEsc(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n'); }
+function buildVCard(c, noteText){
+  var name=(c.name||'').trim(), org=(c.org||'').trim(), fn=name||org||'Chakra contact', given='', fam='';
+  if(name){ var parts=name.split(/\s+/); if(parts.length>1){ fam=parts.pop(); given=parts.join(' '); } else given=parts[0]; }
+  var L=['BEGIN:VCARD','VERSION:3.0'];
+  L.push('N:'+(name? _vEsc(fam)+';'+_vEsc(given)+';;;' : _vEsc(org||fn)+';;;;'));
+  L.push('FN:'+_vEsc(fn));
+  if(org) L.push('ORG:'+_vEsc(org));
+  if(c.title) L.push('TITLE:'+_vEsc(c.title));
+  (c.phones||[]).forEach(function(p){ L.push('TEL;TYPE=CELL:'+String(p).replace(/[^\d+]/g,'')); });
+  (c.emails||[]).forEach(function(e){ L.push('EMAIL;TYPE=INTERNET:'+_vEsc(e)); });
+  if(c.website) L.push('URL:'+String(c.website).replace(/[\r\n]/g,''));
+  if(c.address) L.push('ADR;TYPE=WORK:;;'+_vEsc(c.address)+';;;;');
+  var note=(noteText||c.note||'').trim(); if(note) L.push('NOTE:'+_vEsc(note.slice(0,600)));
+  if(!name && org) L.push('X-ABShowAs:COMPANY');
+  L.push('END:VCARD');
+  return L.join('\r\n')+'\r\n';
+}
+function _vcfName(c){ return ((c.name||c.org||'contact').replace(/[^A-Za-z0-9 _.-]/g,'').trim().replace(/\s+/g,'_')||'contact')+'.vcf'; }
+function _vcfDownload(vcf,fname){
+  var blob=new Blob([vcf],{type:'text/vcard'}), url=URL.createObjectURL(blob), a=document.createElement('a');
+  a.href=url; a.download=fname; a.style.display='none'; document.body.appendChild(a); a.click();
+  setTimeout(function(){ try{ document.body.removeChild(a); URL.revokeObjectURL(url); }catch(e){} },4000);
+}
+function saveContactVCard(taskId, idx){
+  var t=state.tasks.find(function(x){return x.id===taskId;}); if(!t||!t.contacts||!t.contacts[idx]) return;
+  var c=t.contacts[idx], vcf=buildVCard(c, 'Added from Chakra: '+t.title), fname=_vcfName(c);
+  try{
+    var file=new File([vcf],fname,{type:'text/vcard'});
+    if(navigator.canShare && navigator.canShare({files:[file]}) && navigator.share){
+      navigator.share({files:[file],title:c.name||c.org||'Contact'}).catch(function(e){ if(!e || e.name!=='AbortError') _vcfDownload(vcf,fname); });
+      toast('Choose Contacts, or open the file and tap Create New Contact','ok',4500); return;
+    }
+  }catch(e){}
+  _vcfDownload(vcf,fname);
+  toast('Contact file ready — open it and tap Create New Contact','ok',4500);
+}
+function contactsFromRead(r){
+  return ((r&&r.contacts)||[]).map(function(c){ return {name:c.name||null,org:c.org||null,title:c.title||null,phones:(c.phones||[]).slice(),emails:(c.emails||[]).slice(),website:c.website||null,address:c.address||null,saved:false}; })
+    .filter(function(c){ return c.name||c.org||(c.phones&&c.phones.length)||(c.emails&&c.emails.length); });
+}
+function detailsFromRead(r){
+  var L=[]; if(!r) return '';
+  if(r.title) L.push(r.title);
+  if(r.summary && r.summary!==r.title) L.push(r.summary);
+  (r.facts||[]).forEach(function(f){ L.push('• '+f); });
+  (r.contacts||[]).forEach(function(c){
+    var line=[c.name,c.org,c.title].filter(Boolean).join(' · '); if(line) L.push('Contact: '+line);
+    (c.phones||[]).forEach(function(p){ L.push('Phone: '+p); });
+    (c.emails||[]).forEach(function(e){ L.push('Email: '+e); });
+    if(c.website) L.push('Web: '+c.website);
+    if(c.address) L.push('Address: '+c.address);
+  });
+  return L.join('\n');
+}
+function autoTitleFromRead(r){
+  var c=(r&&r.contacts&&r.contacts[0])||null, who=c?(c.name||c.org):null;
+  if(r && r.kind==='contact' && who) return 'Save contact: '+who;
+  if(who) return 'Follow up: '+who;
+  return (r&&r.title) ? 'Review: '+r.title : 'Review the image details';
+}
+function _ctSnapDetails(id){
+  var t=state.tasks.find(function(x){return x.id===id;}); var el=document.getElementById('tdDetails');
+  if(t && el) t.details=el.value.trim();
+}
+function _ctRefresh(id){ if(_ctPanelMode) openContactsPanel(); else openTaskDetail(id); }
+var _ctPanelMode=false;
+function markContactSaved(id,idx,on){ var t=state.tasks.find(function(x){return x.id===id;}); if(!t||!t.contacts[idx]) return; t.contacts[idx].saved=!!on; saveState(); if(_ctPanelMode) openContactsPanel(); }
+function addContactManual(id){
+  _ctSnapDetails(id);
+  var t=state.tasks.find(function(x){return x.id===id;}); if(!t) return;
+  var nm=((document.getElementById('ctName')||{}).value||'').trim(), ph=((document.getElementById('ctPhone')||{}).value||'').trim();
+  if(!nm && !ph){ toast('Type a name or a phone number first','warn',2400); return; }
+  t.contacts=t.contacts||[]; t.contacts.push({name:nm||null,org:null,title:null,phones:ph?[ph]:[],emails:[],website:null,address:null,saved:false});
+  saveState(); _ctRefresh(id);
+}
+function addContactFromNumber(id,phone){
+  _ctSnapDetails(id);
+  var t=state.tasks.find(function(x){return x.id===id;}); if(!t) return;
+  t.contacts=t.contacts||[]; t.contacts.push({name:null,org:null,title:null,phones:[phone],emails:[],website:null,address:null,saved:false});
+  saveState(); _ctRefresh(id);
+}
+function removeContact(id,idx){
+  _ctSnapDetails(id);
+  var t=state.tasks.find(function(x){return x.id===id;}); if(!t||!t.contacts) return;
+  t.contacts.splice(idx,1); saveState(); _ctRefresh(id);
+}
+function contactBlockHtml(t,c,i,showTask){
+  var head=esc([c.name,c.org,c.title].filter(Boolean).join(' · ')||'Contact');
+  var rows=(c.phones||[]).map(function(p){
+    var wa=waLink(p);
+    return '<div class="ct-row"><span class="ct-num">'+esc(p)+'</span><a class="ct-btn" href="'+telLink(p)+'">📞 Call</a>'
+      +(wa?'<a class="ct-btn wa" href="'+wa+'" target="_blank" rel="noopener">💬 WhatsApp</a>':'<span class="ct-hint">WhatsApp needs a country code (+91…)</span>')+'</div>';
+  }).join('');
+  (c.emails||[]).forEach(function(e){ rows+='<div class="ct-row"><span class="ct-num">'+esc(e)+'</span><a class="ct-btn" href="mailto:'+esc(e)+'">✉ Email</a></div>'; });
+  if(c.website) rows+='<div class="ct-row"><span class="ct-num">'+esc(c.website)+'</span></div>';
+  if(c.address) rows+='<div class="ct-row"><span class="ct-hint">📍 '+esc(c.address)+'</span></div>';
+  return '<div class="ct-block"><div class="ct-head">'+head+'</div>'
+    +(showTask?'<div class="ct-hint" style="margin-bottom:6px;">From task: '+esc(t.shortTitle||t.title)+'</div>':'')
+    +rows
+    +'<div class="ct-actions"><button class="ct-btn vc" onclick="saveContactVCard(\''+t.id+'\','+i+')">👤 Save to Contacts</button>'
+    +'<label class="ct-saved"><input type="checkbox"'+(c.saved?' checked':'')+' onchange="markContactSaved(\''+t.id+'\','+i+',this.checked)"> Saved on my phone</label>'
+    +(showTask?'':'<button class="ct-x" onclick="removeContact(\''+t.id+'\','+i+')">Remove</button>')+'</div></div>';
+}
+function detailsEditorHtml(t){
+  var h='<div class="tag-lbl">Details (notes, prices, phone numbers)</div>'
+    +'<textarea id="tdDetails" class="td-details" rows="5" placeholder="Anything worth keeping — it stays with this task">'+esc(t.details||'')+'</textarea>';
+  (t.contacts||[]).forEach(function(c,i){ h+=contactBlockHtml(t,c,i,false); });
+  var have={}; (t.contacts||[]).forEach(function(c){ (c.phones||[]).forEach(function(p){ have[String(p).replace(/\D/g,'')]=1; }); });
+  extractPhones(t.details||'').forEach(function(p){
+    if(have[p.replace(/\D/g,'')]) return;
+    var wa=waLink(p);
+    h+='<div class="ct-block"><div class="ct-head">Number in your notes</div><div class="ct-row"><span class="ct-num">'+esc(p)+'</span>'
+      +'<a class="ct-btn" href="'+telLink(p)+'">📞 Call</a>'+(wa?'<a class="ct-btn wa" href="'+wa+'" target="_blank" rel="noopener">💬 WhatsApp</a>':'')
+      +'<button class="ct-btn" onclick="addContactFromNumber(\''+t.id+'\',\''+String(p).replace(/'/g,'')+'\')">＋ Make contact</button></div></div>';
+  });
+  h+='<div class="ct-add"><div class="tag-lbl">Add a contact</div>'
+    +'<input id="ctName" class="td-in" placeholder="Name (optional)"><input id="ctPhone" class="td-in" type="tel" placeholder="Phone, with country code e.g. +1 214…">'
+    +'<button class="ct-btn" onclick="addContactManual(\''+t.id+'\')">＋ Add contact</button></div>';
+  return h;
+}
+function allContacts(){
+  var out=[]; state.tasks.forEach(function(t){ (t.contacts||[]).forEach(function(c,i){ out.push({t:t,c:c,i:i}); }); });
+  out.sort(function(a,b){ return (a.c.saved?1:0)-(b.c.saved?1:0); });
+  return out;
+}
+function contactsToSaveCount(){ return allContacts().filter(function(x){return !x.c.saved;}).length; }
+function openContactsPanel(){
+  _ctPanelMode=true;
+  var list=allContacts(), todo=list.filter(function(x){return !x.c.saved;}).length;
+  var h='<div class="fab-panel-hdr"><div class="fab-panel-title">Contacts to save</div><div class="fab-panel-close" onclick="closeContactsPanel()">✕</div></div>'
+    +'<div style="font-size:13px;color:#262626;margin-bottom:8px;line-height:1.45;">'+(list.length?(todo+' of '+list.length+' not yet saved to your phone. Tap <b>Save to Contacts</b>, then <b>Create New Contact</b>.'):'No contacts yet. Upload a business card or a screenshot in Gather and they will collect here.')+'</div>';
+  list.forEach(function(x){ h+=contactBlockHtml(x.t,x.c,x.i,true); });
+  document.getElementById('taskDetailBox').innerHTML=h;
+  document.getElementById('taskDetailModal').style.display='flex';
+}
+function closeContactsPanel(){ _ctPanelMode=false; closeTaskDetail(); if(state.activeTab==='util') renderUtilities(); }
+
 function openTaskDetail(id){
   var t=state.tasks.find(function(x){return x.id===id;}); if(!t) return;
   var thOpts=[['today','Today'],['thisWeek','This week'],['nextWeek','Next week'],['thisMonth','Next month'],['Q3','Q3 2026'],['Q4','Q4 2026'],['thisYear','This year'],['1year','1–2 years'],['2years','2+ years'],['parkingLot','Parking lot'],['','No date (Vishram-style)']];
@@ -1461,6 +1729,7 @@ function openTaskDetail(id){
     +'<div class="tag-lbl">Exact date (optional)</div><input type="date" id="tdDate" value="'+_ex.date+'" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);margin-bottom:8px;">'
     +'<div class="tag-lbl">Time (optional)</div><input type="time" id="tdTime" value="'+_ex.time+'" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);margin-bottom:6px;">'
     +'<div style="font-size:12px;color:var(--text-dim);margin-bottom:10px;line-height:1.4;">'+esc(clockText(t))+'. Leave date and time blank to use the Deadline above (due 11:59 PM).</div>'
+    +detailsEditorHtml(t)
     +'<div class="fab-panel-actions"><div class="fab-panel-save" onclick="saveTaskDetail(\''+id+'\')">Save</div></div>';
   document.getElementById('taskDetailBox').innerHTML=html;
   document.getElementById('taskDetailModal').style.display='flex';
@@ -1476,6 +1745,7 @@ function saveTaskDetail(id){
   if(t.completed && !wasComplete){ t.completedTimestamp=new Date().toISOString(); }
   if(newBucket!==t.bucket){ t.stateHistory.push({bucket:newBucket,timestamp:new Date().toISOString()}); t.transitionCount++; t.bucket=newBucket; }
   t.weightage=newWeight||null;
+  t.details=((document.getElementById('tdDetails')||{value:(t.details||'')}).value||'').trim();
   var _nd=(document.getElementById('tdDate')||{}).value||'', _nt=(document.getElementById('tdTime')||{}).value||null, _old=exactDueInfo(t), _dateTouched=(_nd!==_old.date)||((_nt||'')!==(_old.time||''));
   if(_nt && !_nd){ toast('Add a date to go with that time','warn',2600); return; }
   t.timeHorizonType=newHorizon||null; t.timeHorizon=newHorizon?document.getElementById('tdHorizon').selectedOptions[0].text:null;
@@ -1682,13 +1952,14 @@ function renderGather(){
     +'<div class="gather-prompt">What is the task?</div>'
     +'<textarea class="gather-textarea" id="gatherText" placeholder="One task per line — type or paste from photo" rows="3" oninput="updateFab()"></textarea>'
     +'<div class="img-section">'
-    +'<div class="img-section-lbl">📷 Upload photo or screenshot</div>'
-    +'<label class="img-upload-btn"><input type="file" id="imgInput" accept="image/*" onchange="handleImg(this)">📷 Choose image</label>'
+    +'<div class="img-section-lbl">📷 Upload photos or screenshots (up to 6)</div>'
+    +'<label class="img-upload-btn"><input type="file" id="imgInput" accept="image/*" multiple onchange="handleImg(this)">📷 Choose images</label>'
     +'<div class="img-preview-row">'
-    +'<img id="imgPrev" class="img-preview" alt="">'
-    +'<div><div id="imgScan" class="img-scanning">⟳ Reading image...</div>'
-    +'<button id="imgClear" class="img-clear" onclick="clearImg()">✕ Clear image</button></div>'
+    +'<div id="imgThumbs" class="img-thumbs"></div>'
+    +'<div><div id="imgScan" class="img-scanning">⟳ Reading images...</div>'
+    +'<button id="imgClear" class="img-clear" onclick="clearImg()">✕ Clear all images</button></div>'
     +'</div>'
+    +'<div id="imgReadInfo" class="img-read-info"></div>'
     +'<textarea id="imgNote" class="img-commentary" placeholder="Context (optional): duration, multitask, urgency..." rows="2"></textarea>'
     +'</div>'
     +'<div class="mt-req"><div class="mt-req-lbl">🔀 CAN I DO THIS WHILE MULTITASKING? <span>default: No</span></div><div class="tag-opts">'
@@ -1717,82 +1988,42 @@ function toggleTags(){
 }
 
 // ── IMAGE HANDLING ──────────────────────────────────────
-function handleImg(input){
-  var file = input.files && input.files[0];
-  if(!file){ return; }
-  var prev = document.getElementById('imgPrev');
-  var scan = document.getElementById('imgScan');
-  var clr  = document.getElementById('imgClear');
-  if(scan) scan.className = 'img-scanning show';
-
-  var reader = new FileReader();
-  reader.onload = function(e){
-    var fullDataUrl = e.target.result;
-    var image = new Image();
-    image.onload = function(){
-      try{
-        var mW = 1200;
-        var scale = image.width > mW ? mW / image.width : 1;
-        var w = Math.round(image.width * scale);
-        var h = Math.round(image.height * scale);
-        var cv = document.createElement('canvas');
-        cv.width = w; cv.height = h;
-        cv.getContext('2d').drawImage(image, 0, 0, w, h);
-        var compressed = cv.toDataURL('image/jpeg', 0.85);
-        var b64 = compressed.split(',')[1];
-
-        if(prev){ prev.src = compressed; prev.className = 'img-preview show'; }
-        if(clr)  clr.className = 'img-clear show';
-
-        // Real OCR via Google Cloud Vision API
-        var vKey = GOOGLE_CALENDAR_CONFIG.visionApiKey;
-        if(vKey && vKey.indexOf('PASTE_') !== 0){
-          if(scan){ scan.className = 'img-scanning show'; scan.textContent = 'Reading your handwriting…'; }
-          fetch('https://vision.googleapis.com/v1/images:annotate?key=' + vKey, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              requests: [{
-                image: { content: b64 },
-                features: [{ type: 'DOCUMENT_TEXT_DETECTION' }]
-              }]
-            })
-          })
-          .then(function(r){ return r.json(); })
-          .then(function(d){
-            if(scan) scan.className = 'img-scanning';
-            var text = '';
-            try{ text = d.responses[0].fullTextAnnotation.text || ''; } catch(e){}
-            if(text.trim()){
-              showOcrResult(text.trim());
-            } else {
-              toast('No text found in image — try a clearer photo.', 'warn', 3500);
-            }
-          })
-          .catch(function(){
-            if(scan) scan.className = 'img-scanning';
-            toast('Vision OCR failed — check your API key and connection.', 'warn', 3500);
-          });
-        } else {
-          // No Vision key — guide user to type manually
-          if(scan) scan.className = 'img-scanning';
-          var ta = document.getElementById('gatherText');
-          if(ta && !ta.value){
-            ta.placeholder = 'Add your Vision API key to enable auto-reading. Or type what you see above — one task per line.';
-            ta.focus();
-          }
-        }
-      } catch(err){
-        if(scan) scan.className = 'img-scanning';
-      }
-    };
-    image.onerror = function(){ if(scan) scan.className = 'img-scanning'; };
-    image.src = fullDataUrl;
-  };
-  reader.onerror = function(){ if(scan) scan.className = 'img-scanning'; };
-  reader.readAsDataURL(file);
+// ═══════════════════════════════════════════════════════
+// v19 — READING AN IMAGE (DK, 3 Oct 2026)
+// Claude reads the picture (Hindi + English). What it finds is saved as DETAILS and CONTACTS on the task;
+// the picture itself is not stored. A handwritten to-do list still opens the "Scanned Text" list as before.
+// ═══════════════════════════════════════════════════════
+function _sArr(a,max,fn){ return (Array.isArray(a)?a:[]).slice(0,max).map(fn||function(x){return x;}).filter(function(x){return x!==null && x!=='';}); }
+function _sStr(s,n){ return (typeof s==='string' && s.trim()) ? s.trim().slice(0,n||300) : null; }
+function aiReadImage(b64, cb){
+  if(_aiOff()){ cb(null); return; }
+  var prompt='DK uploaded this image to his task app. It may be a screenshot of a social-media post or ad, a business card, a handwritten note, or a to-do list. The text may be Hindi, English or mixed.\n'
+    +'Answer with ONLY raw JSON, no markdown, no explanation:\n'
+    +'{"kind":"tasklist" or "contact" or "info","title":"what this is, max 8 words","summary":"one or two plain sentences in English","lines":["only for a to-do list: one task per entry"],'
+    +'"contacts":[{"name":null,"org":null,"title":null,"phones":[],"emails":[],"website":null,"address":null}],"facts":["short factual lines: prices, rates, dates, what is included"]}\n'
+    +'Rules:\n'
+    +'- Copy phone numbers EXACTLY as printed, digit for digit, with the country code if it is shown. Never guess or complete a number.\n'
+    +'- Use null or [] for anything that is not visible. Never invent anything.\n'
+    +'- kind = "tasklist" only for a list of things to do. "contact" for a business card or contact details. "info" for everything else (ads, posters, screenshots).\n'
+    +'- Keep names of people, places and businesses as written. Write summary and facts in English.\n';
+  apiCall(prompt, function(txt){
+    try{
+      var j=JSON.parse(txt.replace(/```json|```/g,'').trim()), r={kind:'info',title:null,summary:null,lines:[],contacts:[],facts:[]};
+      if(j.kind==='tasklist'||j.kind==='contact'||j.kind==='info') r.kind=j.kind;
+      r.title=_sStr(j.title,120); r.summary=_sStr(j.summary,400);
+      r.lines=_sArr(j.lines,40,function(x){return _sStr(x,300);});
+      r.facts=_sArr(j.facts,25,function(x){return _sStr(x,200);});
+      r.contacts=_sArr(j.contacts,6,function(c){
+        if(!c||typeof c!=='object') return null;
+        return {name:_sStr(c.name,80),org:_sStr(c.org,120),title:_sStr(c.title,80),
+          phones:_sArr(c.phones,4,function(p){ p=_sStr(p,30); return (p && p.replace(/\D/g,'').length>=7) ? p : null; }),
+          emails:_sArr(c.emails,3,function(e){ e=_sStr(e,100); return (e && /@/.test(e)) ? e : null; }),
+          website:_sStr(c.website,160), address:_sStr(c.address,240)};
+      });
+      cb(r);
+    }catch(e){ _aiFailed(); cb(null); }
+  }, function(){ cb(null); }, {media_type:'image/jpeg', data:b64});
 }
-
 // OCR result modal — confirm and add to Chakra
 function showOcrResult(rawText){
   var lines = rawText.split('\n').map(function(l){ return l.trim(); }).filter(Boolean);
@@ -1819,17 +2050,9 @@ function addOcrTasks(){
   if(!checked.length){ closeOcrModal(); return; }
   closeOcrModal();
   // v15: scanned lines ask multitask and Deadline-or-Leisure, exactly like Gather.
-  _gatherContinue({lines:checked, useW:null, useMT:null, useTH:null, useLA:null});
+  gatherFlow(checked,{w:null,mt:null,th:null,la:null},'');
 }
 
-function clearImg(){
-  imgData=null;
-  var inp=document.getElementById('imgInput'); if(inp) inp.value='';
-  var prev=document.getElementById('imgPrev'); if(prev){prev.src='';prev.className='img-preview';}
-  var scan=document.getElementById('imgScan'); if(scan) scan.className='img-scanning';
-  var clr=document.getElementById('imgClear'); if(clr) clr.className='img-clear';
-  var note=document.getElementById('imgNote'); if(note) note.value='';
-}
 
 
 // ── KEYWORD PARSERS — extract metadata from commentary without API ──
@@ -1956,13 +2179,13 @@ function _aiFailed(){
   _aiDownUntil = Date.now() + 5*60000;          // stop trying for 5 minutes so saving stays fast
   if(!_aiWarned){ _aiWarned = true; toast('AI could not be reached — I read your words with the keyword list. Please check the date and category.','warn',6000); }
 }
-function apiCall(content, onSuccess, onError){
+function apiCall(content, onSuccess, onError, image){
   if(_aiOff()){ if(onError) onError('ai-off'); return; }
   var ctl = (typeof AbortController!=='undefined') ? new AbortController() : null;
-  var to = setTimeout(function(){ try{ if(ctl) ctl.abort(); }catch(e){} }, 9000);
+  var to = setTimeout(function(){ try{ if(ctl) ctl.abort(); }catch(e){} }, image?28000:9000);
   fetch(AI_PROXY_URL,{
     method:'POST', headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({content:content, max_tokens:700}), signal: ctl?ctl.signal:undefined
+    body:JSON.stringify(image?{content:content, max_tokens:1500, image:image}:{content:content, max_tokens:700}), signal: ctl?ctl.signal:undefined
   })
   .then(function(r){ if(!r.ok) throw new Error('http '+r.status); return r.json(); })
   .then(function(d){
@@ -2068,6 +2291,135 @@ function gatherFlow(lines, chips, note){
 }
 
 // ── SAVE ────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════
+// v20 — SEVERAL IMAGES IN ONE GATHER (DK, 3 Oct 2026)
+// Up to 6 images. Each is read on its own; the pictures are never stored, only the details and contacts.
+//  • With words typed:  ONE task (your words) carrying everything read from all the images.
+//  • No words typed:    one task per image ("Save contact: …" for a card), each carrying its own details.
+//  • A handwritten to-do list in any image opens the Scanned Text list, with the lines from all such images.
+// ═══════════════════════════════════════════════════════
+var MAX_IMGS=6, imgItems=[], imgData=false, _imgSeq=0;
+function _imgScanMsg(){
+  var scan=document.getElementById('imgScan'); if(!scan) return;
+  var busy=imgItems.filter(function(x){return x.status==='reading';}).length;
+  if(busy){ scan.className='img-scanning show'; scan.textContent='Reading '+busy+' image'+(busy>1?'s':'')+'…'; } else scan.className='img-scanning';
+}
+function renderImgThumbs(){
+  var box=document.getElementById('imgThumbs'), clr=document.getElementById('imgClear'), info=document.getElementById('imgReadInfo');
+  imgData=imgItems.length>0;
+  if(clr) clr.className='img-clear'+(imgData?' show':'');
+  if(box){
+    box.innerHTML=imgItems.map(function(it){
+      var mark=it.status==='reading'?'⟳':(it.status==='done'?'✓':(it.status==='ocr'?'T':'⚠'));
+      return '<div class="img-thumb"><img src="'+it.thumb+'" alt="image"><span class="img-thumb-st '+it.status+'">'+mark+'</span><button class="img-thumb-x" aria-label="Remove this image" onclick="removeImg('+it.id+')">✕</button></div>';
+    }).join('');
+  }
+  if(info){
+    var reads=imgItems.filter(function(x){return x.read;});
+    if(!reads.length){ info.innerHTML=''; return; }
+    var nC=0,nF=0,nL=0; reads.forEach(function(x){ nC+=x.read.contacts.length; nF+=x.read.facts.length; if(x.read.kind==='tasklist') nL+=x.read.lines.length; });
+    var parts=[]; if(nL) parts.push(nL+' to-do lines'); if(nC) parts.push(nC+' contact'+(nC>1?'s':'')); if(nF) parts.push(nF+' detail'+(nF>1?'s':''));
+    var names=reads.map(function(x){return esc(x.read.title||'image');}).slice(0,3).join(', ');
+    info.innerHTML='✓ Read '+(imgItems.length>1?imgItems.length+' images':'<b>'+names+'</b>')+(parts.length?' — '+parts.join(', '):'')
+      +'<br><span style="font-weight:500;color:#262626;">'+(imgItems.length>1?'Type what you want to do and press Add — one task gets everything. Or press Add with no words — one task per image.':'Type what you want to do, then press Add. The details will be saved with the task.')+'</span>';
+  }
+  _imgScanMsg();
+}
+function removeImg(id){ imgItems=imgItems.filter(function(x){return x.id!==id;}); renderImgThumbs(); }
+function clearImg(){
+  imgItems=[]; imgData=false;
+  var inp=document.getElementById('imgInput'); if(inp) inp.value='';
+  var note=document.getElementById('imgNote'); if(note) note.value='';
+  renderImgThumbs();
+}
+function _afterEachRead(){
+  renderImgThumbs();
+  if(imgItems.some(function(x){return x.status==='reading';})) return;
+  // every image has been read: to-do-list images open the Scanned Text list (lines from all of them together)
+  var lines=[]; imgItems.forEach(function(x){ if(x.read && x.read.kind==='tasklist' && !x.listShown){ x.listShown=true; lines=lines.concat(x.read.lines); } });
+  if(lines.length) showOcrResult(lines.join('\n'));
+}
+function visionFallback(it){
+  var vKey=GOOGLE_CALENDAR_CONFIG.visionApiKey;
+  if(!(vKey && vKey.indexOf('PASTE_')!==0)){
+    it.status='fail'; renderImgThumbs();
+    var ta=document.getElementById('gatherText');
+    if(ta && !ta.value){ ta.placeholder='I could not read the image automatically. Type what you see — one task per line.'; }
+    _afterEachRead(); return;
+  }
+  fetch('https://vision.googleapis.com/v1/images:annotate?key='+vKey,{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({requests:[{image:{content:it.b64},features:[{type:'DOCUMENT_TEXT_DETECTION'}]}]})
+  }).then(function(r){ return r.json(); }).then(function(d){
+    var text=''; try{ text=d.responses[0].fullTextAnnotation.text||''; }catch(e){}
+    if(!text.trim()){ it.status='fail'; toast('No text found in one image — try a clearer photo.','warn',3500); }
+    else{
+      it.ocr=text.trim(); it.status='ocr';
+      var typed=((document.getElementById('gatherText')||{}).value||'').trim();
+      if(!typed && imgItems.length===1) showOcrResult(it.ocr);
+      else toast('Image read — its text will be saved as details','ok',2800);
+    }
+    _afterEachRead();
+  }).catch(function(){ it.status='fail'; toast('Image reading failed — check your connection.','warn',3500); _afterEachRead(); });
+}
+function _readOne(it){
+  it.status='reading'; renderImgThumbs();
+  if(_aiOff()){ visionFallback(it); return; }
+  aiReadImage(it.b64,function(r){
+    if(r){ it.read=r; it.status='done'; _afterEachRead(); } else visionFallback(it);
+  });
+}
+function handleImg(input){
+  var files=Array.prototype.slice.call(input.files||[]); if(!files.length) return;
+  var room=MAX_IMGS-imgItems.length;
+  if(room<=0){ toast('Up to '+MAX_IMGS+' images at a time — remove one first','warn',3200); input.value=''; return; }
+  if(files.length>room){ toast('Up to '+MAX_IMGS+' images at a time — added the first '+room,'warn',3200); files=files.slice(0,room); }
+  files.forEach(function(file){
+    var reader=new FileReader();
+    reader.onload=function(e){
+      var image=new Image();
+      image.onload=function(){
+        try{
+          var mW=1400, scale=image.width>mW?mW/image.width:1, w=Math.round(image.width*scale), h=Math.round(image.height*scale);
+          var cv=document.createElement('canvas'); cv.width=w; cv.height=h; cv.getContext('2d').drawImage(image,0,0,w,h);
+          var full=cv.toDataURL('image/jpeg',0.85), tw=Math.min(96,w), th=Math.max(1,Math.round(h*tw/w));
+          var tc=document.createElement('canvas'); tc.width=tw; tc.height=th; tc.getContext('2d').drawImage(image,0,0,tw,th);
+          var it={id:++_imgSeq, b64:full.split(',')[1], thumb:tc.toDataURL('image/jpeg',0.7), read:null, ocr:'', status:'reading'};
+          imgItems.push(it); _readOne(it);
+        }catch(err){}
+      };
+      image.src=e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+  setTimeout(function(){ try{ input.value=''; }catch(e){} },0);     // so the same photo can be picked again
+}
+// ── combine what several images told us ──
+function _phoneKey(p){ return String(p||'').replace(/\D/g,''); }
+function mergeContacts(list){
+  var out=[];
+  list.forEach(function(c){
+    var keys=(c.phones||[]).map(_phoneKey).filter(Boolean), dup=null;
+    out.forEach(function(o){
+      var ok=(o.phones||[]).map(_phoneKey);
+      if(keys.some(function(k){return ok.indexOf(k)>=0;}) || (!keys.length && c.name && c.name===o.name && c.org===o.org)) dup=o;
+    });
+    if(dup){
+      ['name','org','title','website','address'].forEach(function(f){ if(!dup[f] && c[f]) dup[f]=c[f]; });
+      (c.phones||[]).forEach(function(p){ if(dup.phones.map(_phoneKey).indexOf(_phoneKey(p))<0) dup.phones.push(p); });
+      (c.emails||[]).forEach(function(e){ if(dup.emails.indexOf(e)<0) dup.emails.push(e); });
+    } else out.push({name:c.name||null,org:c.org||null,title:c.title||null,phones:(c.phones||[]).slice(),emails:(c.emails||[]).slice(),website:c.website||null,address:c.address||null,saved:false});
+  });
+  return out;
+}
+function attachFromItems(items){
+  var reads=items.filter(function(x){return x.read && x.read.kind!=='tasklist';}), ocrs=items.filter(function(x){return !x.read && x.ocr;});
+  if(!reads.length && !ocrs.length) return null;
+  var parts=[], contacts=[];
+  reads.forEach(function(x,i){ var d=detailsFromRead(x.read); if(reads.length+ocrs.length>1) d='Image '+(i+1)+(x.read.title?' — '+x.read.title:'')+'\n'+d; parts.push(d); contacts=contacts.concat(contactsFromRead(x.read)); });
+  ocrs.forEach(function(x,i){ parts.push((reads.length+ocrs.length>1?'Image '+(reads.length+i+1)+'\n':'')+x.ocr); extractPhones(x.ocr).forEach(function(p){ contacts.push({name:null,org:null,title:null,phones:[p],emails:[],website:null,address:null,saved:false}); }); });
+  return {details:parts.join('\n\n'), contacts:mergeContacts(contacts)};
+}
 function gatherSave(){
   var rawText=(document.getElementById('gatherText').value||'').trim();
   var note=((document.getElementById('imgNote')||{}).value||'').trim();
@@ -2076,24 +2428,31 @@ function gatherSave(){
   var la=document.querySelector('input[name="gla"]:checked');
   var mt=document.querySelector('input[name="gmt"]:checked');
   var btn=document.getElementById('gatherFab');
-
-  // Case 1: image uploaded, task box empty
-  // Image preview is visible — guide DK to type tasks. API blocked in this context.
-  if(!rawText && imgData){
-        var ta2 = document.getElementById('gatherText');
-    if(ta2){ ta2.placeholder = 'You can see the image above — type the tasks here, one per line'; ta2.focus(); }
-    toast('📷 Image ready — type the tasks you see above, then press Add','ok');
-    return;
+  if(imgItems.some(function(x){return x.status==='reading';})){ toast('Still reading the image'+(imgItems.length>1?'s':'')+'… one moment','ok',2200); return; }
+  var lines = rawText ? rawText.split('\n').map(function(s){return s.trim();}).filter(Boolean) : [];
+  window._attachByLine=window._attachByLine||{};
+  if(lines.length){
+    var all=attachFromItems(imgItems); if(all) window._attachByLine[lines[0]]=all;          // one task carries everything
+  } else {
+    var made=0, used={};
+    imgItems.forEach(function(it){                                                           // one task per image
+      var a=attachFromItems([it]); if(!a) return;
+      var t=it.read ? autoTitleFromRead(it.read) : 'Review the image details'; var base=t, n=2; while(used[t]){ t=base+' ('+(n++)+')'; } used[t]=1;
+      lines.push(t); window._attachByLine[t]=a; made++;
+    });
+    if(!made){
+      if(imgData){
+        var ta2=document.getElementById('gatherText');
+        if(ta2){ ta2.placeholder='You can see the image above — type the tasks here, one per line'; ta2.focus(); }
+        toast('📷 Image ready — type what you want to do, then press Add','ok');
+      }
+      return;
+    }
   }
-
-  // Case 2: text in task box — split by newline directly, apply tag selections
-  // No API needed — task box contains only tasks, commentary box is separate metadata
-  if(!rawText){ return; }
-  var lines = rawText.split('\n').map(function(s){return s.trim();}).filter(Boolean);
-  // Extract metadata from commentary using simple keyword matching (no API)
   if(btn){btn.textContent='Add to Chakra ＋';btn.disabled=false;}
-  // v18: AI reads the sentence first (keywords are the backup). Chips you tapped always win.
-  gatherFlow(lines, {w: w?w.value:null, mt: mt?(mt.value==='yes'):null, th: th?th.value:null, la: la?la.value:null}, note);
+  var chips={w: w?w.value:null, mt: mt?(mt.value==='yes'):null, th: th?th.value:null, la: la?la.value:null};
+  clearImg();
+  gatherFlow(lines, chips, note);
 }
 
 // v11: shared by the Gather tab and the floating icon.
@@ -2133,12 +2492,15 @@ function leisureAskDeadline(){
 var _ddQueue = [], _ddCtx = null;
 var W_MIN = {W1:5, W2:30, W3:60, W4:240, W5:480, W6:480};   // W6 = 30 days of effort spread over time; a calendar block for it is a full working session (8h)   // minutes per weightage (W4/W5 assumed: half day 4h, full day 8h)
 var DD_LABEL = {today:'Today', thisWeek:'This week', nextWeek:'Next week', thisMonth:'Next month', Q3:'Q3', Q4:'Q4', thisYear:'This year', '1year':'1–2 years', '2years':'2+ years'};
+// v19 (DK, 3 Oct 2026): "this week" ends Saturday 11:59 PM everywhere (Sunday starts next week).
+// Next week = the following Sunday–Saturday. Same rule the clock engine already uses.
 function horizonFromDate(dt){
   var now = nowWall(); var t0 = startOfDay(now);
   var diff = Math.round((dt - t0) / 86400000);
   if(diff <= 0) return 'today';
-  if(diff <= 7) return 'thisWeek';
-  if(diff <= 14) return 'nextWeek';
+  var toSat = Math.round((saturdayOfWeek(t0) - t0) / 86400000);
+  if(diff <= toSat) return 'thisWeek';
+  if(diff <= toSat + 7) return 'nextWeek';
   if(diff <= 30) return 'thisMonth';
   if(dt.getFullYear() === now.getFullYear()){
     var m = dt.getMonth();           // 0-based
@@ -2149,6 +2511,7 @@ function horizonFromDate(dt){
   var yd = dt.getFullYear() - now.getFullYear();
   return yd === 1 ? '1year' : (yd >= 2 ? '2years' : 'thisYear');
 }
+
 function horizonLabel(type, dt){
   if(type==='Q3' || type==='Q4') return type + ' ' + dt.getFullYear();
   return DD_LABEL[type] || type;
@@ -2264,6 +2627,7 @@ function commitTasks(tasks,useW,useMT,useTH,useLA,isLeisure,opts){
     };
     // v16 (DK, 2 Oct 2026): a task that arrives with no date and is not leisure defaults to Saturday 11:59 PM, tagged "no date given".
     if(!isLeisure && !useTH){ rec.timeHorizonType='thisWeek'; rec.timeHorizon='This week'; rec.noDateGiven=true; }
+    var _at=(window._attachByLine||{})[clean]; if(_at){ rec.details=_at.details; rec.contacts=_at.contacts; delete window._attachByLine[clean]; }   // v19: details read from a photo
     state.tasks.push(rec);
     // Rule 2/17/3: classify bucket + arena + life area by context (Gita rule book).
     // Runs after the task is already visible, so entry is never blocked by the API.
@@ -2316,8 +2680,8 @@ function renderTime(){
   var tasks=state.tasks.filter(function(t){return !t.completed;});
   var groups=[
     {key:'today',label:'Today',sub:'Due now',cls:'time-today',types:['today']},
-    {key:'week',label:'This Week',sub:'Next 7 days',cls:'time-week',types:['thisWeek']},
-    {key:'next',label:'Next Week',sub:'Days 8–14',cls:'time-next',types:['nextWeek']},
+    {key:'week',label:'This Week',sub:'Through Saturday',cls:'time-week',types:['thisWeek']},
+    {key:'next',label:'Next Week',sub:'The following Sunday–Saturday',cls:'time-next',types:['nextWeek']},
     {key:'month',label:'Next Month',sub:'Within 30 days',cls:'time-month',types:['thisMonth']},
     {key:'q',label:'Q3 / Q4 2026',sub:'July–December',cls:'time-q',types:['Q3','Q4']},
     {key:'year',label:'This Year / Beyond',sub:'Annual and multi-year',cls:'time-year',types:['thisYear','1year','2years']},
@@ -3248,12 +3612,28 @@ var CAL_KEYWORDS = {
 var KW_STORE='chakra_cal_keywords_v1';
 function saveKW(){ try{ localStorage.setItem(KW_STORE,JSON.stringify(CAL_KEYWORDS)); }catch(e){} }
 (function(){ try{ var k=JSON.parse(localStorage.getItem(KW_STORE)||'null'); if(k) ['itc','picturizze','personal'].forEach(function(c){ if(Array.isArray(k[c])) CAL_KEYWORDS[c]=k[c]; }); }catch(e){} })();
+// v20 (DK, 3 Oct 2026 — Mayur's finding): the calendar comes from the TASK'S OWN CATEGORY, not from a keyword list.
+// Personal → Personal calendar, Picturizze → Picturizze, ITC → ITC. A task with no category goes to Personal, never to
+// the view-only ITC calendar. DK can still switch it by hand in the Schedule screen.
+var CAL_OF_AREA={Picturizze:'picturizze', Personal:'personal', ITC:'itc'};
 function suggestCalendar(title){
-  var t = (title||'').toLowerCase();
+  var task=null;
+  if(title && typeof title==='object') task=title;
+  else { for(var i=state.tasks.length-1;i>=0;i--){ if(state.tasks[i].title===title){ task=state.tasks[i]; break; } } }
+  if(task) return CAL_OF_AREA[topArea(task)] || 'personal';
+  var t=(typeof title==='string'?title:'').toLowerCase();                     // task not found: backup words, and never ITC
   if(CAL_KEYWORDS.picturizze.some(function(k){ return t.indexOf(k)>=0; })) return 'picturizze';
-  if(CAL_KEYWORDS.personal.some(function(k){ return t.indexOf(k)>=0; })) return 'personal';
-  if(CAL_KEYWORDS.itc.some(function(k){ return t.indexOf(k)>=0; })) return 'itc';
-  return 'itc'; // default
+  return 'personal';
+}
+var _bookTimer=null;
+function _bookStartTimer(){
+  clearTimeout(_bookTimer);
+  _bookTimer=setTimeout(function(){
+    if(!_pendingBooking) return;
+    var msg='Google did not answer. Nothing was added. Tap the time slot to try again, and allow the Google sign-in window if it appears.';
+    if(_pendingBooking.detailEl) _pendingBooking.detailEl.textContent=msg;
+    toast(msg,'warn',9000); _pendingBooking=null;
+  }, window._BOOK_TIMEOUT_MS||45000);
 }
 
 var CAL_INFO = {
@@ -3389,7 +3769,7 @@ function runSmartFetch(){
     if(t.completed) return;
     if(_sfMT && t.multitask!==true) return;
     if(!q){ exactHits.push(t); return; }
-    var hay=[t.title, t.shortTitle, t.bucket, arenaNameOf(t.ch), t.lifeArea].join(' ').toLowerCase();
+    var hay=[t.title, t.shortTitle, t.bucket, arenaNameOf(t.ch), t.lifeArea, t.details||'', (t.contacts||[]).map(function(c){return [c.name,c.org,c.title,(c.phones||[]).join(' '),(c.phones||[]).map(function(p){return String(p).replace(/\D/g,'');}).join(' '),(c.emails||[]).join(' ')].join(' ');}).join(' ')].join(' ').toLowerCase();
     if(hay.indexOf(q)!==-1){ exactHits.push(t); return; }          // exact phrase, as before
     var words=_sfNorm(hay).split(/\s+/).filter(Boolean), best=2;
     var ok=qTokens.every(function(qt){
@@ -3606,10 +3986,10 @@ function bookCalSlot(el,idx){
   if(_calendarLive()&&cal&&slotObj){
     if(detail) detail.textContent='Connecting to Google Calendar…';
     _pendingBooking={calendarId:cal.email,title:_calTask,slotLabel:slotLabel,
-      isoStart:slotObj.isoStart,isoEnd:slotObj.isoEnd,detailEl:detail,calName:cal.name};
+      isoStart:slotObj.isoStart,isoEnd:slotObj.isoEnd,detailEl:detail,calName:cal.name,description:_calDescription(_calTask)};
     _initGIS();
-    if(_gisTokenClient){_gisTokenClient.requestAccessToken();}
-    else{if(detail)detail.textContent='Google sign-in not ready.';_pendingBooking=null;}
+    if(_gisTokenClient){_bookStartTimer();_gisTokenClient.requestAccessToken();}
+    else{if(detail)detail.textContent='Google sign-in not ready. Check your internet and try again.';_pendingBooking=null;}
     return;
   }
   if(detail&&cal) detail.textContent=_calTask+' · '+slotLabel+' · '+cal.name+' (demo)';
@@ -3808,7 +4188,9 @@ function renderUtilities(){
     +'<label class="util-btn"><span class="util-ic">⬆</span><span class="util-tx"><b>Restore JSON</b><i>Load tasks back from a backup file.</i></span>'
       +'<input type="file" id="importFileInput" accept=".json" onchange="importData(this)" style="display:none;"></label>'
     +btn('✕','Clear completed','Permanently remove finished tasks.',' danger','clearDone()')
-    +btn('🔑','Keyword Manager','Words that pick the calendar: Picturizze, Personal, ITC.','','openKWM()')
+    +btn('📇','Contacts to save',(contactsToSaveCount()?contactsToSaveCount()+' not yet on your phone. ':'')+'Call, WhatsApp, or save to Contacts.','','openContactsPanel()')
+    +btn('📅','Check calendar connection','Tests that Chakra can add events to your Personal and Picturizze calendars.','','calCheck()')
+    +btn('🔑','Keyword Manager','Backup words for the calendar. Normally the task’s own category decides.','','openKWM()')
     +'</div>'+footer();
 }
 

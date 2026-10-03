@@ -82,6 +82,8 @@
       noDateGiven: t.no_date_given === true,
       dueDateAt: t.due_date_at || null,
       needsArea: t.needs_area === true,
+      details: t.details || null,
+      contacts: t.contacts || [],
       lifeArea: t.life_area,
       multitask: t.multitask,
       linkedTasks: t.linked_tasks || [],
@@ -116,6 +118,8 @@
       no_date_given: t.noDateGiven === true,
       due_date_at: t.dueDateAt || null,
       needs_area: t.needsArea === true,
+      details: t.details || null,
+      contacts: t.contacts || [],
       life_area: t.lifeArea || null,
       multitask: t.multitask === true,
       linked_tasks: t.linkedTasks || [],
@@ -281,16 +285,19 @@
     if (Object.keys(pendingDeletes).length) window.saveState();
   };
 
-  // AI classification, auto-linking and task reading go through the backend; no key in the page.
-  // After 9 s the page falls back to its keyword reader, so a slow reply never holds up saving.
-  window.apiCall = function (content, onSuccess, onError) {
+  // AI calls (task reading, sorting, linking, and reading photos) go through the backend; no key in the page.
+  // The page falls back to its keyword reader after 9 s for text, and to "type what you see" after 28 s for a photo,
+  // so a slow reply never holds up saving.
+  window.apiCall = function (content, onSuccess, onError, image) {
     var done = false;
     var timer = setTimeout(function () {
       if (done) return;
       done = true;
       if (onError) onError(new Error('AI timeout'));
-    }, 9000);
-    request('POST', '/llm/parse', { prompt: String(content) }).then(function (res) {
+    }, image ? 28000 : 9000);
+    var body = { prompt: String(content) };
+    if (image) { body.image = image; body.max_tokens = 1500; }
+    request('POST', '/llm/parse', body).then(function (res) {
       if (done) return;
       done = true; clearTimeout(timer);
       onSuccess((res.text || '').trim());
@@ -299,42 +306,5 @@
       done = true; clearTimeout(timer);
       if (onError) onError(e);
     });
-  };
-
-  // Photo → text through the backend; the Vision key stays on the server.
-  window.imgData = window.imgData || null;
-  window.handleImg = function (input) {
-    var file = input.files && input.files[0];
-    if (!file) return;
-    var prev = document.getElementById('imgPrev');
-    var scan = document.getElementById('imgScan');
-    var clr = document.getElementById('imgClear');
-    if (scan) { scan.className = 'img-scanning show'; scan.textContent = 'Reading your handwriting…'; }
-    var reader = new FileReader();
-    reader.onload = function (e) {
-      var image = new Image();
-      image.onload = function () {
-        var mW = 1200, scale = image.width > mW ? mW / image.width : 1;
-        var cv = document.createElement('canvas');
-        cv.width = Math.round(image.width * scale); cv.height = Math.round(image.height * scale);
-        cv.getContext('2d').drawImage(image, 0, 0, cv.width, cv.height);
-        var compressed = cv.toDataURL('image/jpeg', 0.85);
-        if (prev) { prev.src = compressed; prev.className = 'img-preview show'; }
-        if (clr) clr.className = 'img-clear show';
-        request('POST', '/ocr/scan', { image_base64: compressed.split(',')[1] }).then(function (res) {
-          if (scan) scan.className = 'img-scanning';
-          var text = (res.text || '').trim();
-          if (text) showOcrResult(text);
-          else toast('No text found in image — try a clearer photo.', 'warn', 3500);
-        }, function () {
-          if (scan) scan.className = 'img-scanning';
-          toast('Could not read the photo right now — type the tasks instead.', 'warn', 3500);
-        });
-      };
-      image.onerror = function () { if (scan) scan.className = 'img-scanning'; };
-      image.src = e.target.result;
-    };
-    reader.onerror = function () { if (scan) scan.className = 'img-scanning'; };
-    reader.readAsDataURL(file);
   };
 })();

@@ -1,5 +1,5 @@
-from pydantic import BaseModel
-from typing import Optional, List, Any
+from pydantic import BaseModel, Field
+from typing import Optional, List, Any, Literal
 from datetime import datetime
 
 
@@ -30,6 +30,8 @@ class TaskCreate(BaseModel):
     no_date_given: Optional[bool] = None
     due_date_at: Optional[str] = None
     needs_area: Optional[bool] = None
+    details: Optional[str] = None
+    contacts: Optional[List[Any]] = None
 
 
 class TaskUpdate(BaseModel):
@@ -58,6 +60,8 @@ class TaskUpdate(BaseModel):
     no_date_given: Optional[bool] = None
     due_date_at: Optional[str] = None
     needs_area: Optional[bool] = None
+    details: Optional[str] = None
+    contacts: Optional[List[Any]] = None
 
 
 class TaskOut(BaseModel):
@@ -89,6 +93,8 @@ class TaskOut(BaseModel):
     no_date_given: Optional[bool] = None
     due_date_at: Optional[str] = None
     needs_area: Optional[bool] = None
+    details: Optional[str] = None
+    contacts: Optional[List[Any]] = None
 
     class Config:
         from_attributes = True
@@ -105,8 +111,15 @@ class LoginResponse(BaseModel):
     display_name: str
 
 
+class LLMImage(BaseModel):
+    media_type: Literal["image/jpeg", "image/png", "image/gif", "image/webp"]
+    data: str = Field(max_length=7_000_000)   # base64; Claude's limit is 5 MB per image
+
+
 class LLMRequest(BaseModel):
     prompt: str
+    max_tokens: int = Field(default=700, ge=1, le=2000)
+    image: Optional[LLMImage] = None
 
 
 class LLMResponse(BaseModel):
