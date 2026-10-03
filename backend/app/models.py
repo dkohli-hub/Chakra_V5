@@ -35,3 +35,7 @@ class Task(Base):
     deadline_set_at = Column(String(40), nullable=True)
     # V17: task arrived with no date and was defaulted to Saturday 11:59 PM.
     no_date_given = Column(Boolean, nullable=True)
+    # V18: when the exact due date was set (ISO string); wins over the Deadline word if newer than deadline_set_at.
+    due_date_at = Column(String(40), nullable=True)
+    # V18: AI could not tell Picturizze / ITC / Personal - the card asks DK to pick.
+    needs_area = Column(Boolean, nullable=True)

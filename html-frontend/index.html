@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="Chakra">
 <meta name="theme-color" content="#F5F3EE">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Karma Kshetra™ — DK · Chakra V17</title>
+<title>Karma Kshetra™ — DK · Chakra V18</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -610,6 +610,40 @@ body.hdr-compact .km-badge{display:none;}
 .cal-ask-toast .cal-btn.go{box-shadow:0 3px 10px rgba(26,107,90,.35);}
 .cal-ask-toast.warn{border-color:#5A5A7A;}
 .cal-ask-toast.warn .cal-ask-txt{color:#4A4A68;}
+/* ===== v18 — readability, thicker battery, 3D pies, Time tab ===== */
+:root{--text:#111111;--text-dim:#242424;--text-faint:#3D3A33;--gold:#7D5A12;--amber:#8A5A00;--teal2:#13634A;--green:#1E6A24;}
+html,body{font-weight:500;}
+.col-name{font-weight:700;}
+.col-sub,.page-sub,.sec-count,.ith,.chevron,.bar-lbl,.ld-toggle,.bat-date,.bat-msg,.bat-charge-row,.bat-charge-lbl,.bat-total-sub{color:#262626!important;}
+.col-sub{font-size:12px!important;font-weight:500;}
+.page-sub{font-size:12px!important;font-weight:500;}
+.bar-lbl{font-size:12px;font-weight:500;width:124px;}
+.bar-val{font-size:12px;font-weight:700;}
+.ld-toggle{font-size:13px;font-weight:600;}
+.time-today .col-name{color:#7A1212!important;}
+.time-week .col-name{color:#7A4F00!important;}
+.time-next .col-name{color:#0F5A44!important;}
+.time-month .col-name{color:#1B5E20!important;}
+.time-q .col-name{color:#6E4F0C!important;}
+.time-year .col-name{color:#143C66!important;}
+.time-park .col-name,.time-nodate .col-name{color:#33302A!important;}
+.tag-lbl,.dd-lbl{color:#262626;font-weight:600;}
+/* thicker standing battery — in between the old fat one and the v16 thin one */
+.bat2-nub{width:34px;height:9px;border-radius:4px 4px 0 0;}
+.bat2-body{width:112px;border-radius:14px;}
+.bat2-ic{font-size:19px;}
+.bat2-n{font-size:24px;}
+.bat2-lbl{min-width:132px;max-width:170px;}
+.bat2-lbl b{font-size:14px;color:#111;}
+.bat2-lbl i{font-size:12px;color:#2E2B25;font-weight:500;}
+.ask-task{max-height:30vh;overflow:auto;}
+
+.iw{font-weight:700;}
+.iw.W1{color:#1B5E20;} .iw.W2{color:#6B4E10;} .iw.W3{color:#1F4E79;} .iw.W4{color:#7A4F00;} .iw.W5{color:#7A1212;} .iw.W6{color:#5A0F0F;}
+.mt-badge.amberm{background:#8A5A00;border-color:#8A5A00;}
+.od-badge.amber{color:#6B4500;}
+.bar-val{color:#1A1A1A;}
+.bat-add-btn{background:#13634A!important;color:#fff!important;}
 </style>
 </head>
 <body>
@@ -771,7 +805,7 @@ body.hdr-compact .km-badge{display:none;}
 
 <script>
 // v14: the ONE place the app version lives. Title, header, login footer and the backup file all read it.
-var APP_VERSION = 17;
+var APP_VERSION = 18;
 (function(){ function stamp(){ document.title='Karma Kshetra™ — DK · Chakra V'+APP_VERSION; document.querySelectorAll('.app-ver').forEach(function(e){ e.textContent=APP_VERSION; }); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',stamp); else stamp(); })();
 // ======================================================
@@ -971,8 +1005,8 @@ function classifyTask(title, onDone){
       if(!BUCKET_TESTS[parsed.bucket]) parsed.bucket = 'Karya';
       if(!parsed.ch || parsed.ch<1 || parsed.ch>18) parsed.ch = 3;
       onDone(parsed);
-    }catch(e){ onDone({bucket:'Karya', ch:3, lifeArea:null, note:'parse failed, fallback'}); }
-  }, function(){ onDone({bucket:'Karya', ch:3, lifeArea:null, note:'API failed, fallback'}); });
+    }catch(e){ onDone({bucket:'Karya', ch:3, lifeArea:null, failed:true, note:'parse failed, fallback'}); }
+  }, function(){ onDone({bucket:'Karya', ch:3, lifeArea:null, failed:true, note:'API failed, fallback'}); });
 }
 
 // Rule 20-adjacent: short, self-explanatory title condensed from a long dictated one.
@@ -1235,7 +1269,7 @@ function dueMoment(t){
   if(t.timeHorizonType==='parkingLot') return null;                       // explicit parking lot: no clock
   if(!t.timeHorizonType && t.bucket==='Vishram') return null;              // leisure by choice: no clock
   // exact date picked in the Set Deadline picker (ignored once the horizon has been edited since)
-  if(t.dueDate && !t.deadlineSetAt){
+  if(t.dueDate && (!t.deadlineSetAt || (t.dueDateAt && t.dueDateAt>=t.deadlineSetAt))){
     var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(t.dueDate);
     if(m){
       var hh=23, mm=59, ss=59, tm=/^(\d{1,2}):(\d{2})/.exec(t.dueTime||'');
@@ -1368,6 +1402,7 @@ function renderCard(t){
   if(st.state==='sun' && t.dueTime) meta+='<span class="od-badge soft" title="'+esc(clockText(t))+'">☀️ by '+fmtClock(dueMoment(t))+'</span>';
   else if(st.state==='amber' && t.dueTime) meta+='<span class="od-badge note" title="'+esc(clockText(t))+'">was by '+fmtClock(dueMoment(t))+'</span>';
   if(isUndated(t) && t.noDateGiven) meta+='<span class="od-badge note" title="No date was given — defaulted to Saturday 11:59 PM. Tap the task to set a real date.">no date given</span>';
+  if(t.needsArea) meta+='<span class="od-badge amber" onclick="openCatMenu(event,\''+t.id+'\')" title="Chakra could not tell Picturizze, ITC or Personal — tap to choose">⚠ pick category</span>';
   if(isInProgress(t)) meta+='<span class="od-badge soft" title="A child task has started">▶ in progress</span>';
   if(tam) meta+='<span class="od-badge" style="background:#5A0F0F;color:#fff;" title="'+esc(clockText(t))+'">🔥 TAMAS</span>';
   if(t.bucket==='Dhairya') meta+='<span class="cat-badge" onclick="openDhairyaMenu(event,\''+t.id+'\')" title="Waiting on someone — tap for options">⏳ waiting</span>';
@@ -1403,9 +1438,15 @@ function toggle(id){
 // TASK DETAIL MODAL — tap a card: complete, date/time, weight, bucket, Save
 // ═══════════════════════════════════════════════════════
 var BUCKET_ORDER=['Karya','Dhairya','Vishram','Manan','Manthan','Tyaga','Prarabdha'];
+// The exact date/time a task is currently held to, if it has one (otherwise the date comes from its Deadline word).
+function exactDueInfo(t){
+  if(t.dueDate && (!t.deadlineSetAt || (t.dueDateAt && t.dueDateAt>=t.deadlineSetAt))) return {date:t.dueDate, time:t.dueTime||''};
+  return {date:'', time:''};
+}
 function openTaskDetail(id){
   var t=state.tasks.find(function(x){return x.id===id;}); if(!t) return;
   var thOpts=[['today','Today'],['thisWeek','This week'],['nextWeek','Next week'],['thisMonth','Next month'],['Q3','Q3 2026'],['Q4','Q4 2026'],['thisYear','This year'],['1year','1–2 years'],['2years','2+ years'],['parkingLot','Parking lot'],['','No date (Vishram-style)']];
+  var _ex = exactDueInfo(t);
   var html='<div class="fab-panel-hdr"><div class="fab-panel-title">Task</div><div class="fab-panel-close" onclick="closeTaskDetail()">✕</div></div>'
     +'<div style="font-size:13px;color:var(--text-dim);margin-bottom:10px;line-height:1.5;">'+esc(t.title)+'</div>'
     +'<label style="display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:13px;"><input type="checkbox" id="tdComplete"'+(t.completed?' checked':'')+'> Mark complete</label>'
@@ -1414,9 +1455,12 @@ function openTaskDetail(id){
     +'<div class="tag-lbl">Category</div><select id="tdCat" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);margin-bottom:8px;">'
     +TOP_AREAS.map(function(a){return '<option value="'+a+'"'+(topArea(t)===a?' selected':'')+'>'+TOP_ICON[a]+' '+a+'</option>';}).join('')+'</select>'
     +'<div class="tag-lbl">Weight</div><select id="tdWeight" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);margin-bottom:8px;">'
-    +['W1','W2','W3','W4','W5','W6'].map(function(w){return '<option value="'+w+'"'+(t.weightage===w?' selected':'')+'>'+w+' — '+wLabel(w)+'</option>';}).join('')+'</select>'
+    +(t.weightage?'':'<option value="" selected>— not set —</option>')+['W1','W2','W3','W4','W5','W6'].map(function(w){return '<option value="'+w+'"'+(t.weightage===w?' selected':'')+'>'+w+' — '+wLabel(w)+'</option>';}).join('')+'</select>'
     +'<div class="tag-lbl">Deadline</div><select id="tdHorizon" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);margin-bottom:8px;">'
     +thOpts.map(function(o){return '<option value="'+o[0]+'"'+((t.timeHorizonType||'')===o[0]?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select>'
+    +'<div class="tag-lbl">Exact date (optional)</div><input type="date" id="tdDate" value="'+_ex.date+'" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);margin-bottom:8px;">'
+    +'<div class="tag-lbl">Time (optional)</div><input type="time" id="tdTime" value="'+_ex.time+'" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);margin-bottom:6px;">'
+    +'<div style="font-size:12px;color:var(--text-dim);margin-bottom:10px;line-height:1.4;">'+esc(clockText(t))+'. Leave date and time blank to use the Deadline above (due 11:59 PM).</div>'
     +'<div class="fab-panel-actions"><div class="fab-panel-save" onclick="saveTaskDetail(\''+id+'\')">Save</div></div>';
   document.getElementById('taskDetailBox').innerHTML=html;
   document.getElementById('taskDetailModal').style.display='flex';
@@ -1431,9 +1475,17 @@ function saveTaskDetail(id){
   t.completed=document.getElementById('tdComplete').checked;
   if(t.completed && !wasComplete){ t.completedTimestamp=new Date().toISOString(); }
   if(newBucket!==t.bucket){ t.stateHistory.push({bucket:newBucket,timestamp:new Date().toISOString()}); t.transitionCount++; t.bucket=newBucket; }
-  t.weightage=newWeight;
+  t.weightage=newWeight||null;
+  var _nd=(document.getElementById('tdDate')||{}).value||'', _nt=(document.getElementById('tdTime')||{}).value||null, _old=exactDueInfo(t), _dateTouched=(_nd!==_old.date)||((_nt||'')!==(_old.time||''));
+  if(_nt && !_nd){ toast('Add a date to go with that time','warn',2600); return; }
   t.timeHorizonType=newHorizon||null; t.timeHorizon=newHorizon?document.getElementById('tdHorizon').selectedOptions[0].text:null;
-  if(newHorizon!==oldH){ t.deadlineSetAt=new Date().toISOString(); t.dueDate=null; t.dueTime=null; t.noDateGiven=false; }   // v15: new date = clock restarts
+  if(_dateTouched && _nd){           // v18: an exact date/time was set or changed — it wins
+    var _dt=_ddParse(_nd), _ty=(_nd<_ddToday()) ? (t.timeHorizonType||'today') : horizonFromDate(_dt), _stamp=new Date().toISOString();
+    t.deadlineSetAt=_stamp; t.dueDate=_nd; t.dueTime=_nt; t.dueDateAt=_stamp; t.noDateGiven=false;
+    t.timeHorizonType=_ty; t.timeHorizon=horizonLabel(_ty,_dt);
+  } else if(_dateTouched && !_nd){   // date cleared: fall back to the Deadline word
+    t.deadlineSetAt=new Date().toISOString(); t.dueDate=null; t.dueTime=null; t.noDateGiven=false;
+  } else if(newHorizon!==oldH){ t.deadlineSetAt=new Date().toISOString(); t.dueDate=null; t.dueTime=null; t.noDateGiven=false; }   // v15: new date = clock restarts
   var _cs=document.getElementById('tdCat'); if(_cs && _cs.value!==topArea(t)) applyCategory(t,_cs.value);
   saveState(); closeTaskDetail(); renderTab(state.activeTab); updateHeader();
   toast('✓ Task updated','ok',1600);
@@ -1532,7 +1584,7 @@ function renderToday(){
     var h=n>0 ? Math.max(46,Math.round(n/Math.max(total,1)*300)) : 30;   // empty segments stay visible as a thin band
     var fn=s.fn||("batDrill('"+s.key+"')");
     segHtml+='<div class="bat2-seg" style="height:'+h+'px;background:'+s.col+';'+(n===0?'opacity:.45;':'')+'" title="'+esc(s.nm+' — '+s.sub)+'" onclick="'+fn+'">'
-      +'<span class="bat2-ic">'+s.ic+'</span><span class="bat2-n">'+n+'</span></div>';
+      +'<span class="bat2-ic">'+s.ic+'</span><span class="bat2-n" style="'+((s.key==='amber'||s.key==='sun'||s.key==='leaves')?'color:#111;text-shadow:none;':'color:#fff;')+'">'+n+'</span></div>';
     lblHtml+='<div class="bat2-lbl" style="height:'+h+'px;'+(n===0?'opacity:.55;':'')+'" onclick="'+fn+'"><b>'+s.nm+'</b><i>'+s.sub+'</i></div>';
   });
   var empty=total===0?'<div class="bat-empty">Empty field — add tasks in Gather</div>':'';
@@ -1565,7 +1617,7 @@ function renderToday(){
     +'<div class="bat-total" onclick="batDrill(\'all\')" title="Every active, incomplete task">'
     +'<div class="bat-total-num">'+total+'</div><div class="bat-total-sub">active</div></div>'
     +'<div class="bat-pills">'
-    +(B.amber.length>0?'<button class="bat-pill" style="background:#B87800;" onclick="batDrill(\'amber\')">⏳ '+B.amber.length+' ticking</button>':'')
+    +(B.amber.length>0?'<button class="bat-pill" style="background:#8A5A00;" onclick="batDrill(\'amber\')">⏳ '+B.amber.length+' ticking</button>':'')
     +(B.sun.length>0?'<button class="bat-pill" style="background:#1A6B20;" onclick="batDrill(\'sun\')">☀️ Due today '+B.sun.length+'</button>':'')
     +(function(){ var n=state.tasks.filter(function(t){return !t.completed && t.multitask===true;}).length; return n>0?'<button class="bat-pill mtpill" onclick="openMtPanel()">🔀 '+n+' can multitask</button>':''; })()
     +'</div>'
@@ -1779,43 +1831,35 @@ function clearImg(){
   var note=document.getElementById('imgNote'); if(note) note.value='';
 }
 
-// ── CLAUDE API HELPER ───────────────────────────────────
-function apiCall(content, onSuccess, onError){
-  fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
-    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:content}]})
-  })
-  .then(function(r){ return r.json(); })
-  .then(function(d){
-    // Detect API-level error response
-    if(d.type==='error' || !d.content || !d.content[0]){
-      if(onError) onError(d.error||'API error');
-      return;
-    }
-    onSuccess((d.content[0].text||'').trim());
-  })
-  .catch(function(e){ if(onError) onError(e); });
-}
 
 // ── KEYWORD PARSERS — extract metadata from commentary without API ──
+// ═══════════════════════════════════════════════════════
+// v18 — READING WHAT DK SAYS (2 Oct 2026)
+//  1. Words that mean NO win first: "cannot be multitasked", "not multitaskable", "no multitasking".
+//  2. Real dates and times: tomorrow, day after tomorrow, Friday, next Friday, "Oct 24", "by 5 pm", EOD.
+//  3. AI reads the sentence first (option B). The keyword reader below is the backup if the AI is unreachable.
+// ═══════════════════════════════════════════════════════
 function parseWeightage(text){
   if(!text) return null;
   var t = text.toLowerCase();
-  if(/30.?day.{0,12}effort|multiple hours over|spread over (a|the) (month|period)|month.?long effort/.test(t)) return 'W6';   // v16
-  if(/full.day|all.day|whole.day/.test(t)) return 'W5';
+  if(/30.?day.{0,12}effort|multiple hours over|spread over (a|the) (month|period)|month.?long effort/.test(t)) return 'W6';
+  if(/full.day|all.day|whole.day|one day of|a day of/.test(t)) return 'W5';
   if(/half.day|4.hour|four.hour/.test(t)) return 'W4';
-  if(/\b(1|one)\s*hour|\b60\s*min/.test(t)) return 'W3';
-  if(/\b(2|two|3|three)\s*hour/.test(t)) return 'W4';
-  if(/30\s*min|half.hour|thirty\s*min/.test(t)) return 'W2';
-  if(/\b(5|10|15)\s*min|quick|fast|brief/.test(t)) return 'W1';
+  if(/\b(1|one|an)\s*hour|\b60\s*min|an hour|sixty\s*min/.test(t)) return 'W3';
+  if(/\b(2|two|3|three|2\.5)\s*hours?/.test(t)) return 'W4';
+  if(/\b(20|25|30|35|40|45)\s*min|half.(an.)?hour|thirty\s*min|twenty\s*min|forty.five\s*min/.test(t)) return 'W2';
+  if(/\b(5|10|15)\s*min|\b(five|ten|fifteen)\s*min|quick|fast|brief/.test(t)) return 'W1';
   return null;
 }
+// Returns true / false / null (not stated). Negatives are checked FIRST.
 function parseMultitask(text){
   if(!text) return null;
-  var t = text.toLowerCase();
-  if(/multi.task|multitask|driving|walking|can.do|while.driv|while.walk/.test(t)) return true;
-  if(/full.focus|no.multitask|focus.only|needs.focus/.test(t)) return false;
+  var t = text.toLowerCase().replace(/multi[\s\-]?cast/g,'multitask');
+  var MT = '(multi[\\s\\-]?task\\w*|multi[\\s\\-]?tasking)';
+  var neg = new RegExp("(cannot|can not|can'?t|cant|could not|couldn'?t|not|never|no|without|isn'?t|is not|aren'?t|won'?t|shouldn'?t|non)[\\s\\-]*(be\\s+|a\\s+|an\\s+|really\\s+|possible\\s+to\\s+)?"+MT);
+  if(neg.test(t)) return false;
+  if(/non[\s\-]?multi|full.?focus|focus.?only|needs?.{0,6}focus|dedicated|no.?distraction|uninterrupted|undivided/.test(t)) return false;
+  if(new RegExp(MT).test(t) || /while.{0,6}(driving|walking|cooking|eating|watching|commut)|can.do.while|on the go|hands.?free/.test(t)) return true;
   return null;
 }
 function parseHorizon(text){
@@ -1829,6 +1873,198 @@ function parseHorizon(text){
   if(/q4|october|november|december/.test(t)) return 'Q4';
   if(/this.year|by.year|end.of.year/.test(t)) return 'thisYear';
   return null;
+}
+function _p2(n){ return (n<10?'0':'')+n; }
+function ymdOf(d){ return d.getFullYear()+'-'+_p2(d.getMonth()+1)+'-'+_p2(d.getDate()); }
+var _DOW_FULL={sunday:0,monday:1,tuesday:2,wednesday:3,thursday:4,friday:5,saturday:6};
+var _DOW_ABBR={sun:0,mon:1,tue:2,tues:2,wed:3,thu:4,thur:4,thurs:4,fri:5,sat:6};
+var _MON3={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
+function parseClockTime(t){
+  var m=/\b(?:by|at|before|until|till|around|@)\s*(\d{1,2})(?::(\d{2}))?\s*(a\.?m\.?|p\.?m\.?)(?![a-z])/i.exec(t) || /\b(\d{1,2})(?::(\d{2}))?\s*(a\.?m\.?|p\.?m\.?)(?![a-z])/i.exec(t);
+  if(m){
+    var h=+m[1], mi=m[2]?+m[2]:0, ap=m[3].toLowerCase().replace(/\./g,'');
+    if(h<1||h>12||mi>59) return null;
+    if(ap==='pm' && h<12) h+=12; if(ap==='am' && h===12) h=0;
+    return _p2(h)+':'+_p2(mi);
+  }
+  if(/\b(?:by|at|before)\s+noon\b|\bnoon\b/.test(t)) return '12:00';
+  if(/\b(?:by|before)\s+midnight\b/.test(t)) return '23:59';
+  return null;
+}
+// → {dueDate:'YYYY-MM-DD', dueTime:'HH:MM'|null} or null when the words contain no date or time
+function parseDueFromText(text){
+  var t=(text||'').toLowerCase(); if(!t.trim()) return null;
+  var now=nowWall(), today=startOfDay(now), d=null, explicit=false;
+  var time=parseClockTime(t);
+  if(/\bday after tomorrow\b|\bovermorrow\b/.test(t)) { d=addDays(today,2); explicit=true; }
+  else if(/\btomorrow\b|\btmrw\b|\btmr\b/.test(t)) { d=addDays(today,1); explicit=true; }
+  else if(/\b(today|tonight|this evening|this afternoon|this morning|end of (the )?day|eod|right now)\b/.test(t)) { d=today; explicit=true; }
+  if(!d){
+    var mm=/\b(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\.?\s+(\d{1,2})(?:st|nd|rd|th)?\b(?!\s*(?:am|pm|a\.m|p\.m|:))/.exec(t);
+    if(mm && _MON3[mm[1].slice(0,3)]!==undefined && +mm[2]>=1 && +mm[2]<=31){
+      var cand=new Date(today.getFullYear(),_MON3[mm[1].slice(0,3)],+mm[2]);
+      if(cand.getTime()<today.getTime()) cand=new Date(today.getFullYear()+1,_MON3[mm[1].slice(0,3)],+mm[2]);
+      d=cand; explicit=true;
+    }
+  }
+  if(!d){
+    var wk=/\b(?:(this coming|this|next|coming)\s+)?(sunday|monday|tuesday|wednesday|thursday|friday|saturday)\b/.exec(t), dow=null, pre=null;
+    if(wk){ dow=_DOW_FULL[wk[2]]; pre=wk[1]||null; }
+    else {
+      var ab=/\b(?:by|on|this|next|before|until)\s+(sun|mon|tues?|wed|thur?s?|fri|sat)\b/.exec(t);
+      if(ab){ dow=_DOW_ABBR[ab[1]]; pre=/\bnext\s+\w+$/.test(ab[0])?'next':null; }
+    }
+    if(dow!==null){
+      var occ=(dow-today.getDay()+7)%7;
+      if(pre==='next'){ if(occ===0) occ=7; var leftThisWeek=6-today.getDay(); if(occ<=leftThisWeek) occ+=7; }
+      d=addDays(today,occ); explicit=true;
+    }
+  }
+  if(!d && /\bthis weekend\b/.test(t)){ d=saturdayOfWeek(today); explicit=true; }
+  if(!d && time){                       // a clock time with no day: today, or tomorrow if that time has already passed
+    d=today; var hm=time.split(':'); var at=new Date(today.getFullYear(),today.getMonth(),today.getDate(),+hm[0],+hm[1],0);
+    if(at.getTime()<=now.getTime()) d=addDays(today,1);
+  }
+  if(!d) return null;
+  return {dueDate:ymdOf(d), dueTime:time};
+}
+function parseLeisureWords(text){
+  return /\b(at leisure|no rush|no deadline|whenever|any ?time|some ?day|when i have (spare )?time|not urgent|vishram)\b/i.test(text||'');
+}
+// The backup reader — works with no internet and no AI.
+function keywordParse(text, note){
+  var both=(note?note+' . ':'')+(text||'');
+  var due=parseDueFromText(both);
+  return {
+    w: parseWeightage(note)||parseWeightage(text),
+    mt: parseMultitask(note)!==null ? parseMultitask(note) : parseMultitask(text),
+    horizon: parseHorizon(note)||parseHorizon(text),
+    dueDate: due?due.dueDate:null, dueTime: due?due.dueTime:null,
+    leisure: parseLeisureWords(both), la:null, src:'keywords'
+  };
+}
+function minutesToW(m){
+  if(!(m>0)) return null;
+  if(m<=15) return 'W1'; if(m<=45) return 'W2'; if(m<=90) return 'W3'; if(m<=300) return 'W4'; return 'W5';
+}
+
+// ── AI (goes through Mayur's server — the Anthropic key never sits in this page) ──
+var AI_PROXY_URL = '/api/ai';     // POST {content, max_tokens} -> {text}
+var _aiDownUntil = 0, _aiWarned = false;
+function _aiOff(){ return !AI_PROXY_URL || Date.now() < _aiDownUntil; }
+function _aiFailed(){
+  _aiDownUntil = Date.now() + 5*60000;          // stop trying for 5 minutes so saving stays fast
+  if(!_aiWarned){ _aiWarned = true; toast('AI could not be reached — I read your words with the keyword list. Please check the date and category.','warn',6000); }
+}
+function apiCall(content, onSuccess, onError){
+  if(_aiOff()){ if(onError) onError('ai-off'); return; }
+  var ctl = (typeof AbortController!=='undefined') ? new AbortController() : null;
+  var to = setTimeout(function(){ try{ if(ctl) ctl.abort(); }catch(e){} }, 9000);
+  fetch(AI_PROXY_URL,{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({content:content, max_tokens:700}), signal: ctl?ctl.signal:undefined
+  })
+  .then(function(r){ if(!r.ok) throw new Error('http '+r.status); return r.json(); })
+  .then(function(d){
+    clearTimeout(to);
+    var txt = d && (typeof d.text==='string' ? d.text : (d.content && d.content[0] && d.content[0].text));
+    if(typeof txt!=='string') throw new Error('bad reply');
+    onSuccess(txt.trim());
+  })
+  .catch(function(e){ clearTimeout(to); _aiFailed(); if(onError) onError(e); });
+}
+var _AI_AREAS={'Personal/Family':1,'Work/Employment':1,'Picturizze':1,'Other':1};
+function aiParseLine(text, note, cb){
+  if(_aiOff()){ cb(null); return; }
+  var n=nowWall(), dn=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var prompt='Today is '+dn[n.getDay()]+' '+ymdOf(n)+', local time '+_p2(n.getHours())+':'+_p2(n.getMinutes())+' (America/Chicago).\n'
+    +'DK dictated ONE task. Read it and answer with ONLY raw JSON, no markdown, no explanation:\n'
+    +'{"dueDate":"YYYY-MM-DD or null","dueTime":"HH:MM in 24h or null","minutes":number or null,"multitask":true or false or null,"lifeArea":"Personal/Family" or "Work/Employment" or "Picturizze" or "Other" or null,"leisure":true or false}\n'
+    +'Rules:\n'
+    +'- dueDate = the day it must be done by. Turn words like tomorrow, Friday, next week into a real date. "This week" means the coming Saturday. null if no deadline is stated.\n'
+    +'- dueTime only if a clock time is stated.\n'
+    +'- minutes = how long the task takes, if stated.\n'
+    +'- multitask: true only if DK says it can be done while doing something else. false if he says it cannot be, is not, needs focus or is dedicated. null if not stated.\n'
+    +'- lifeArea: Picturizze = his photography and videography business (shoots, clients, equipment, videos, pictures, payments from clients). Work/Employment = his ITC job. Personal/Family = home, family, health, money, errands. null if unsure.\n'
+    +'- leisure = true only if DK says it has no deadline, is at leisure or no rush.\n'
+    +'Task: "'+String(text).replace(/"/g,'\\"')+'"\n'+(note?'Extra notes: "'+String(note).replace(/"/g,'\\"')+'"\n':'');
+  apiCall(prompt, function(txt){
+    try{
+      var j=JSON.parse(txt.replace(/```json|```/g,'').trim()), o={w:null,mt:null,dueDate:null,dueTime:null,la:null,leisure:false};
+      if(typeof j.dueDate==='string' && /^\d{4}-\d{2}-\d{2}$/.test(j.dueDate)) o.dueDate=j.dueDate;
+      if(typeof j.dueTime==='string' && /^\d{2}:\d{2}$/.test(j.dueTime)) o.dueTime=j.dueTime;
+      if(typeof j.minutes==='number') o.w=minutesToW(j.minutes);
+      if(j.multitask===true || j.multitask===false) o.mt=j.multitask;
+      if(typeof j.lifeArea==='string' && _AI_AREAS[j.lifeArea]) o.la=j.lifeArea;
+      if(j.leisure===true) o.leisure=true;
+      if(o.dueDate && o.dueDate < ymdOf(startOfDay(n))) { o.dueDate=null; o.dueTime=null; }   // never trust a date in the past
+      cb(o);
+    }catch(e){ _aiFailed(); cb(null); }
+  }, function(){ cb(null); });
+}
+// AI first, keywords for anything the AI left blank (or everything, if the AI is down).
+function smartParse(line, note, cb){
+  var kw=keywordParse(line, note);
+  aiParseLine(line, note, function(ai){
+    var out=kw;
+    if(ai){
+      out.src='ai';
+      if(ai.w) out.w=ai.w;
+      if(ai.mt===true || ai.mt===false) out.mt=ai.mt;
+      if(ai.la) out.la=ai.la;
+      if(ai.dueDate){ out.dueDate=ai.dueDate; out.dueTime=ai.dueTime||null; }
+      if(ai.leisure) out.leisure=true;
+    }
+    cb(out);
+  });
+}
+
+// ── ONE ENTRY POINT for Gather tab and Quick Gather ──
+var _gatherBusy=false;
+function _commitWithDate(line,w,mt,la,dv,tv,skipCal){
+  var dt=_ddParse(dv); var type=horizonFromDate(dt);
+  commitTasks([line], w, mt, type, la, false, skipCal?{skipCalOffer:true}:undefined);
+  var t=state.tasks[state.tasks.length-1];
+  if(t){
+    t.timeHorizonType=type; t.timeHorizon=horizonLabel(type,dt);
+    t.dueDate=dv; t.dueTime=tv||null; t.dueDateAt=new Date().toISOString(); t.noDateGiven=false;
+    if(w) t.durationMin=W_MIN[w];
+    saveState(); renderTab(state.activeTab); updateHeader();
+  }
+  return t;
+}
+function _readbackText(p, w, mt){
+  var dn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], parts=[];
+  if(p.dueDate){ var d=_ddParse(p.dueDate); parts.push('due '+dn[d.getDay()]+' '+(d.getMonth()+1)+'/'+d.getDate()+(p.dueTime?' by '+fmtClock(new Date(2000,0,1,+p.dueTime.split(':')[0],+p.dueTime.split(':')[1])):'')); }
+  if(w) parts.push(wLabel(w)); parts.push(mt?'can multitask':'needs focus');
+  return 'Understood: '+parts.join(' · ');
+}
+function gatherFlow(lines, chips, note){
+  if(_gatherBusy) return;
+  _gatherBusy=true;
+  if(!_aiOff()) toast('Reading your words…','ok',1400);
+  var results=new Array(lines.length), left=lines.length;
+  lines.forEach(function(line,i){ smartParse(line, note||'', function(p){ results[i]=p; if(--left===0) finish(); }); });
+  function finish(){
+    _gatherBusy=false;
+    var pending=[], multi=lines.length>1, last=null;
+    lines.forEach(function(line,i){
+      var p=results[i];
+      var w  = chips.w || p.w || null;
+      var mt = (chips.mt===true||chips.mt===false) ? chips.mt : (p.mt===true||p.mt===false ? p.mt : false);   // not stated → NOT multitaskable
+      var la = chips.la || p.la || null;
+      if(chips.th){ commitTasks([line], w, mt, chips.th, la, false, multi?{skipCalOffer:true}:undefined); return; }
+      if(p.dueDate){ _commitWithDate(line,w,mt,la,p.dueDate,p.dueTime,multi); last={p:p,w:w,mt:mt}; return; }
+      if(p.horizon){ commitTasks([line], w, mt, p.horizon, la, false, multi?{skipCalOffer:true}:undefined); return; }
+      if(p.leisure){ commitTasks([line], w, mt, null, la, true, multi?{skipCalOffer:true}:undefined); return; }
+      pending.push({line:line,w:w,mt:mt,la:la});
+    });
+    if(!multi && last && !chips.th) toast(_readbackText(last.p,last.w,last.mt),'ok',4200);
+    if(pending.length){
+      _pendingGather={lines:pending.map(function(x){return x.line;}), useW:pending[0].w, useMT:pending[0].mt, useLA:pending[0].la, per:pending};
+      var el=document.getElementById('leisureAskToast'); if(el) el.className='cal-ask-toast show';
+    }
+  }
 }
 
 // ── SAVE ────────────────────────────────────────────────
@@ -1855,13 +2091,9 @@ function gatherSave(){
   if(!rawText){ return; }
   var lines = rawText.split('\n').map(function(s){return s.trim();}).filter(Boolean);
   // Extract metadata from commentary using simple keyword matching (no API)
-  var useW  = w  ? w.value  : parseWeightage(note);
-  var useMT = mt ? (mt.value==='yes') : (parseMultitask(note) !== null ? parseMultitask(note) : parseMultitask(rawText));   // true / false / null(=not stated)
-  var useTH = th ? th.value : parseHorizon(note);
-  var useLA = la ? la.value : null;
   if(btn){btn.textContent='Add to Chakra ＋';btn.disabled=false;}
-  // v11: multitask Yes/No is mandatory. Not chosen and not in the words -> ask.
-  _gatherContinue({lines:lines, useW:useW, useMT:useMT, useTH:useTH, useLA:useLA});
+  // v18: AI reads the sentence first (keywords are the backup). Chips you tapped always win.
+  gatherFlow(lines, {w: w?w.value:null, mt: mt?(mt.value==='yes'):null, th: th?th.value:null, la: la?la.value:null}, note);
 }
 
 // v11: shared by the Gather tab and the floating icon.
@@ -1892,7 +2124,7 @@ function leisureAskDeadline(){
   // v10: the task is NOT saved yet. The Set Deadline picker opens immediately; the task is
   // saved with its real date / time / duration when DK presses Save (one picker per task).
   _ddQueue = _pendingGather.lines.slice();
-  _ddCtx = {useW:_pendingGather.useW, useMT:_pendingGather.useMT, useLA:_pendingGather.useLA, total:_pendingGather.lines.length, n:0};
+  _ddCtx = {useW:_pendingGather.useW, useMT:_pendingGather.useMT, useLA:_pendingGather.useLA, total:_pendingGather.lines.length, n:0, per:_pendingGather.per||null};
   _pendingGather = null;
   openDeadlinePicker();
 }
@@ -1902,7 +2134,7 @@ var _ddQueue = [], _ddCtx = null;
 var W_MIN = {W1:5, W2:30, W3:60, W4:240, W5:480, W6:480};   // W6 = 30 days of effort spread over time; a calendar block for it is a full working session (8h)   // minutes per weightage (W4/W5 assumed: half day 4h, full day 8h)
 var DD_LABEL = {today:'Today', thisWeek:'This week', nextWeek:'Next week', thisMonth:'Next month', Q3:'Q3', Q4:'Q4', thisYear:'This year', '1year':'1–2 years', '2years':'2+ years'};
 function horizonFromDate(dt){
-  var now = new Date(); var t0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var now = nowWall(); var t0 = startOfDay(now);
   var diff = Math.round((dt - t0) / 86400000);
   if(diff <= 0) return 'today';
   if(diff <= 7) return 'thisWeek';
@@ -1923,7 +2155,7 @@ function horizonLabel(type, dt){
 }
 function _ddPad(n){ return (n<10?'0':'')+n; }
 function _ddParse(v){ var p=(v||'').split('-'); return p.length===3 ? new Date(+p[0], +p[1]-1, +p[2]) : null; }
-function _ddToday(){ var n=new Date(); return n.getFullYear()+'-'+_ddPad(n.getMonth()+1)+'-'+_ddPad(n.getDate()); }
+function _ddToday(){ var n=nowWall(); return n.getFullYear()+'-'+_ddPad(n.getMonth()+1)+'-'+_ddPad(n.getDate()); }
 function ddUpdateDow(){
   var dv=(document.getElementById('ddDate')||{}).value, d = _ddParse(dv), el = document.getElementById('ddDow');
   if(!el) return;
@@ -1937,9 +2169,10 @@ function openDeadlinePicker(){
   if(!_ddQueue.length){ closeDeadlinePicker(); return; }
   var line = _ddQueue[0];
   var old = document.getElementById('ddModal'); if(old) old.remove();
-  var now = new Date();
+  var now = nowWall();
   var minD = now.getFullYear()+'-'+_ddPad(now.getMonth()+1)+'-'+_ddPad(now.getDate());
-  var w = _ddCtx.useW || 'W2';
+  var _pl0 = (_ddCtx.per && _ddCtx.per[_ddCtx.n]) || {};
+  var w = _pl0.w || _ddCtx.useW || 'W2';
   var wOpts = ['W1','W2','W3','W4','W5','W6'].map(function(x){
     return '<option value="'+x+'"'+(x===w?' selected':'')+'>'+x+' — '+wLabel(x)+'</option>';
   }).join('');
@@ -1950,7 +2183,7 @@ function openDeadlinePicker(){
     +'<div class="dd-task">'+esc(line)+'</div>'
     +'<div class="dd-lbl">Date</div><input type="date" class="dd-in" id="ddDate" min="'+minD+'" oninput="ddUpdateDow()" onchange="ddUpdateDow()">'
     +'<div class="dd-dow" id="ddDow"></div>'
-    +'<div class="dd-lbl">Time (optional)</div><input type="time" class="dd-in" id="ddTime">'
+    +'<div class="dd-lbl">Time (optional)</div><input type="time" class="dd-in" id="ddTime"><div class="dd-dow" style="cursor:pointer;" onclick="var x=document.getElementById(\'ddTime\'); if(x) x.value=\'\';">✕ no specific time (due 11:59 PM)</div>'
     +'<div class="dd-lbl">How long will it take</div><select class="dd-in" id="ddW">'+wOpts+'</select>'
     +'<div class="dd-lbl">Category (optional)</div><div class="dd-cats">'+TOP_AREAS.map(function(a){return '<label class="dd-cat"><input type="radio" name="ddCat" value="'+a+'"><span>'+TOP_ICON[a]+' '+a+'</span></label>';}).join('')+'</div>'
     +'<div class="dd-row">'
@@ -1972,12 +2205,13 @@ function ddSave(){
   var tv = (document.getElementById('ddTime')||{}).value || null;
   var w  = (document.getElementById('ddW')||{}).value || 'W2';
   var dt = _ddParse(dv); var type = horizonFromDate(dt);
+  var _pl = (_ddCtx.per && _ddCtx.per[_ddCtx.n]) || {}; var _mt = (_pl.mt===true||_pl.mt===false) ? _pl.mt : _ddCtx.useMT; var _la = (_pl.la!==undefined) ? _pl.la : _ddCtx.useLA;
   var line = _ddQueue.shift(); var single = (_ddCtx.total===1);
-  commitTasks([line], w, _ddCtx.useMT, type, _ddCtx.useLA, false, {skipCalOffer:true});
+  commitTasks([line], w, _mt, type, _la, false, {skipCalOffer:true});
   var t = state.tasks[state.tasks.length-1];
   if(t){
     t.timeHorizonType = type; t.timeHorizon = horizonLabel(type, dt);
-    t.dueDate = dv; t.dueTime = tv; t.durationMin = W_MIN[w]; t.weightage = w;
+    t.dueDate = dv; t.dueTime = tv; t.dueDateAt = new Date().toISOString(); t.durationMin = W_MIN[w]; t.weightage = w;
     var _cc=document.querySelector('input[name="ddCat"]:checked'); if(_cc) applyCategory(t,_cc.value);
     saveState(); renderTab(state.activeTab); updateHeader();
   }
@@ -1985,13 +2219,14 @@ function ddSave(){
   _ddAdvance();
 }
 function ddLeisure(){
+  var _pl = (_ddCtx.per && _ddCtx.per[_ddCtx.n]) || {}; var _mt = (_pl.mt===true||_pl.mt===false) ? _pl.mt : _ddCtx.useMT; var _la = (_pl.la!==undefined) ? _pl.la : _ddCtx.useLA;
   var line = _ddQueue.shift();
-  commitTasks([line], _ddCtx.useW, _ddCtx.useMT, null, _ddCtx.useLA, true, {skipCalOffer:true});
+  commitTasks([line], _pl.w || _ddCtx.useW, _mt, null, _la, true, {skipCalOffer:true});
   _ddAdvance();
 }
 function ddBack(){
   // Nothing is lost: the unsaved lines go back to the Deadline-or-Leisure question.
-  _pendingGather = {lines:_ddQueue.slice(), useW:_ddCtx.useW, useMT:_ddCtx.useMT, useLA:_ddCtx.useLA};
+  _pendingGather = {lines:_ddQueue.slice(), useW:_ddCtx.useW, useMT:_ddCtx.useMT, useLA:_ddCtx.useLA, per:(_ddCtx.per||[]).slice(_ddCtx.n)};
   _ddQueue = []; _ddCtx = null; closeDeadlinePicker();
   var el = document.getElementById('leisureAskToast'); if(el) el.className='cal-ask-toast show';
 }
@@ -2006,8 +2241,9 @@ function leisureAskAgain(){
 function leisureConfirm(){
   var warn = document.getElementById('leisureWarnToast'); if(warn) warn.className='cal-ask-toast';
   if(!_pendingGather) return;
-  commitTasks(_pendingGather.lines, _pendingGather.useW, _pendingGather.useMT, null, _pendingGather.useLA, true);
-  _pendingGather = null;
+  var _pg=_pendingGather; _pendingGather = null;
+  if(_pg.per && _pg.per.length){ _pg.per.forEach(function(x){ commitTasks([x.line], x.w, x.mt, null, x.la, true, _pg.per.length>1?{skipCalOffer:true}:undefined); }); }
+  else commitTasks(_pg.lines, _pg.useW, _pg.useMT, null, _pg.useLA, true);
 }
 
 function commitTasks(tasks,useW,useMT,useTH,useLA,isLeisure,opts){
@@ -2038,6 +2274,7 @@ function commitTasks(tasks,useW,useMT,useTH,useLA,isLeisure,opts){
         t.bucket = result.bucket;
         t.ch = result.ch;
         if(!t.lifeArea && result.lifeArea) t.lifeArea = result.lifeArea;
+        if(result.failed && !t.lifeArea) t.needsArea = true;   // v18: the card says so — never a silent default
         t.stateHistory.push({bucket:result.bucket,timestamp:new Date().toISOString()});
         t.originBucket = result.bucket;
         saveState(); renderTab(state.activeTab);
@@ -2084,11 +2321,13 @@ function renderTime(){
     {key:'month',label:'Next Month',sub:'Within 30 days',cls:'time-month',types:['thisMonth']},
     {key:'q',label:'Q3 / Q4 2026',sub:'July–December',cls:'time-q',types:['Q3','Q4']},
     {key:'year',label:'This Year / Beyond',sub:'Annual and multi-year',cls:'time-year',types:['thisYear','1year','2years']},
-    {key:'park',label:'Parking Lot',sub:'No timeline',cls:'time-park',types:['parkingLot']}
+    {key:'park',label:'Parking Lot',sub:'No timeline',cls:'time-park',types:['parkingLot']},
+    {key:'nodate',label:'No Date',sub:'Not on the clock — leisure, Vishram and undated',cls:'time-nodate',types:[],leftover:true}
   ];
+  var _usedTypes=[]; groups.forEach(function(g){ _usedTypes=_usedTypes.concat(g.types); });
   var html='<div class="wrap">';
   groups.forEach(function(g){
-    var items=tasks.filter(function(t){return g.types.indexOf(t.timeHorizonType)>=0;});
+    var items=tasks.filter(function(t){ return g.leftover ? _usedTypes.indexOf(t.timeHorizonType)<0 : g.types.indexOf(t.timeHorizonType)>=0; });
     if(!items.length) return;
     html+='<div class="col '+g.cls+' collapsed">'
       +'<div class="col-hdr" onclick="toggleCol(this)">'
@@ -2235,7 +2474,7 @@ function renderEffortBars(){
   }
   var maxDemand = Math.max.apply(null,rows.map(function(r){return r.demand;}).concat([1]));
   // Busiest arenas first; truly quiet ones (demand 0) naturally sink to the bottom.
-  rows.sort(function(a,b){ return b.demand-a.demand; });
+  rows.sort(function(a,b){ return a.ch-b.ch; });   // v18: always Chapter 1 → 18 (DK: so people memorise the Gita)
 
   var html='<div class="sec-hdr"><span class="sec-title">Arena Effort Bar</span>'
     +'<span class="sec-count"><button class="cal-btn'+(win===7?' go':' cancel')+'" style="padding:2px 8px;font-size:11px;margin-right:4px;" onclick="setEffortWindow(7)">7d</button>'
@@ -2251,7 +2490,7 @@ function renderEffortBars(){
     var redPct=Math.round(Math.max(0,r.addedW-r.completedW)/maxDemand*100);
     var isEmpty = r.demand===0;
     html+='<div onclick="explainEffortBar('+r.ch+','+win+')" title="'+esc(hoverTxt)+'" style="display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;">'
-      +'<div class="arena-tip" title="" onclick="showArenaTip(event,'+r.ch+')" onmouseenter="showArenaTip(event,'+r.ch+',true)" onmouseleave="hideArenaTip()" style="width:156px;font-size:12.5px;font-weight:'+(isEmpty?'400':'600')+';color:'+(isEmpty?'#5A564C':'#1A1A1A')+';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+esc(r.name)+'</div>'
+      +'<div class="arena-tip" title="" onclick="showArenaTip(event,'+r.ch+')" onmouseenter="showArenaTip(event,'+r.ch+',true)" onmouseleave="hideArenaTip()" style="width:176px;font-size:13px;font-weight:'+(isEmpty?'500':'700')+';color:'+(isEmpty?'#3D3A33':'#111')+';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+r.ch+' · '+esc(r.name)+'</div>'
       +'<div style="flex:1;background:var(--surface3);border:1px solid '+(isEmpty?'var(--border)':'transparent')+';border-radius:6px;height:14px;overflow:hidden;display:flex;opacity:'+(isEmpty?'.45':'1')+';">'
       +(greenPct>0?'<div style="width:'+greenPct+'%;height:100%;background:#2E7D32;box-shadow:inset -2px 0 0 rgba(255,255,255,.55);"></div>':'')
       +(redPct>0?'<div style="width:'+redPct+'%;height:100%;background:#8B1A1A;"></div>':'')
@@ -2307,7 +2546,7 @@ function renderGita(){
     var cnt=tasks.filter(function(t){return t.ch===ch.ch;}).length;
     html+='<div class="gita-tile'+(state.gitaOpen===ch.ch?' open':'')+'" id="gt-'+ch.ch+'" role="button" aria-pressed="'+(state.gitaOpen===ch.ch?'true':'false')+'" onclick="toggleGita('+ch.ch+')">'
       +'<div class="gita-ch">Ch '+ch.ch+'</div>'
-      +'<div class="gita-name" style="color:'+ch.color+'">'+ch.name+'</div>'
+      +'<div class="gita-name" style="color:'+shade3(ch.color,0.7)+'">'+ch.name+'</div>'
       +'<div class="gita-essence">'+ch.essence+'</div>'
       +'<div class="gita-count">'+cnt+' task'+(cnt!==1?'s':'')+'</div>'
       +'<div class="gita-expanded">'
@@ -2401,6 +2640,50 @@ function toggleQT(code){var el=document.getElementById('qt-'+code);if(el)el.clas
 // ═══════════════════════════════════════════════════════
 // BRAIN TWIN TAB
 // ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
+// v18 — ONE 3D PIE for the whole app (DK, 2 Oct 2026: "all graphs consistent, 3D pies").
+// items = [{label, n, col}] in the order to show. Slices only for n>0; the legend lists EVERY item, even at 0.
+// ═══════════════════════════════════════════════════════
+var _pie3dUid=0;
+function shade3(hex,f){
+  var h=String(hex).replace('#',''); if(h.length===3) h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+  var n=parseInt(h,16); if(isNaN(n)) return hex;
+  return 'rgb('+Math.min(255,Math.round(((n>>16)&255)*f))+','+Math.min(255,Math.round(((n>>8)&255)*f))+','+Math.min(255,Math.round((n&255)*f))+')';
+}
+function pie3D(items, total){
+  var sum=items.reduce(function(s,x){return s+x.n;},0), tot=total||sum||1;
+  var uid='pz'+(++_pie3dUid);
+  var cx=66, cy=42, rx=58, ry=32, dep=16, W=132, H=104;
+  function P(a,dy){ var r=a*Math.PI/180; return [cx+rx*Math.sin(r), cy-ry*Math.cos(r)+(dy||0)]; }
+  function f(n){ return n.toFixed(2); }
+  var acc=0, walls='', tops='', legend='';
+  items.forEach(function(it){
+    var col=it.col;
+    if(it.n>0){
+      var a0=acc/tot*360; acc+=it.n; var a1=Math.min(acc/tot*360, a0+359.99);
+      var s0=Math.max(a0,90), e0=Math.min(a1,270);
+      if(s0<e0){
+        var p0=P(s0), p1=P(e0), q0=P(s0,dep), q1=P(e0,dep), lg=(e0-s0)>180?1:0;
+        walls+='<path d="M'+f(p0[0])+' '+f(p0[1])+' A'+rx+' '+ry+' 0 '+lg+' 1 '+f(p1[0])+' '+f(p1[1])+' L'+f(q1[0])+' '+f(q1[1])+' A'+rx+' '+ry+' 0 '+lg+' 0 '+f(q0[0])+' '+f(q0[1])+' Z" fill="'+shade3(col,0.6)+'" stroke="'+shade3(col,0.6)+'" stroke-width="0.6"/>';
+      }
+      var t0=P(a0), t1=P(a1), lgt=(a1-a0)>180?1:0;
+      tops+='<path d="M'+cx+' '+cy+' L'+f(t0[0])+' '+f(t0[1])+' A'+rx+' '+ry+' 0 '+lgt+' 1 '+f(t1[0])+' '+f(t1[1])+' Z" fill="'+col+'" stroke="#fff" stroke-width="0.9" stroke-linejoin="round"/>';
+    }
+    legend+='<div style="display:flex;align-items:center;gap:6px;font-size:12px;margin-bottom:4px;">'
+      +'<span style="width:10px;height:10px;border-radius:2px;background:'+col+';display:inline-block;flex-shrink:0;"></span>'
+      +'<span style="flex:1;color:#1A1A1A;font-weight:500;">'+it.label+'</span><b style="color:#1A1A1A;">'+it.n+'</b></div>';
+  });
+  if(sum===0) tops='<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="#D8D3C8"/>';
+  var svg='<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" style="flex-shrink:0;overflow:visible;" role="img" aria-label="3D pie chart">'
+    +'<defs><filter id="'+uid+'b" x="-20%" y="-50%" width="140%" height="220%"><feGaussianBlur stdDeviation="3.2"/></filter>'
+    +'<radialGradient id="'+uid+'g" cx="0.34" cy="0.22" r="0.85"><stop offset="0" stop-color="#fff" stop-opacity="0.42"/><stop offset="0.55" stop-color="#fff" stop-opacity="0.06"/><stop offset="1" stop-color="#000" stop-opacity="0.16"/></radialGradient></defs>'
+    +'<ellipse cx="'+cx+'" cy="'+(cy+dep+7)+'" rx="'+(rx*0.94)+'" ry="'+(ry*0.7)+'" fill="#000" opacity="0.30" filter="url(#'+uid+'b)"/>'
+    +walls+tops
+    +'<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="url(#'+uid+'g)"/>'
+    +'</svg>';
+  return '<div style="display:flex;gap:14px;align-items:center;padding:6px 0 12px;">'+svg+'<div style="flex:1;">'+legend+'</div></div>';
+}
+
 function renderBT(){
   var p=document.getElementById('pane-bt');
   var tasks=state.tasks;
@@ -2434,42 +2717,25 @@ function renderBT(){
   var small=tasks.filter(function(t){return t.weightage==='W1'||t.weightage==='W2';}).length;
   var large=tasks.filter(function(t){return t.weightage==='W3'||t.weightage==='W4';}).length;
   var huge =tasks.filter(function(t){return t.weightage==='W5';}).length;
-  // v16 (DK, 2 Oct 2026): one row per weight, W1–W6, EVERY weight shown even at 0, plus a Bars | Pie radio.
+  // v18 (DK, 2 Oct 2026): one row per weight W1–W6 plus "No weight", ACTIVE tasks only (same numbers as the Data tab),
+  // a Bars | Pie radio, and the same 3D pie used everywhere.
   state.loadView = state.loadView || 'bars';
-  var LD_W=['W1','W2','W3','W4','W5','W6'];
-  var LD_COL={W1:'#2E7D32',W2:'#7CA82F',W3:'#C9A227',W4:'#E08A1E',W5:'#C0392B',W6:'#5A0F0F'};
-  var ldRows=LD_W.map(function(w){ return {w:w, n:tasks.filter(function(t){return t.weightage===w;}).length, col:LD_COL[w], lab:w+' · '+wLabel(w)}; });
-  var ldSum=ldRows.reduce(function(s,r){return s+r.n;},0);
+  var LD_W=['W1','W2','W3','W4','W5','W6','none'];
+  var LD_COL={W1:'#2E7D32',W2:'#7CA82F',W3:'#C9A227',W4:'#E08A1E',W5:'#C0392B',W6:'#5A0F0F',none:'#8A8A8A'};
+  var ldActive=tasks.filter(function(t){return !t.completed;});
+  var ldRows=LD_W.map(function(w){
+    var n = ldActive.filter(function(t){ return w==='none' ? !t.weightage : t.weightage===w; }).length;
+    return {w:w, n:n, col:LD_COL[w], lab: w==='none' ? 'No weight' : (w+' · '+wLabel(w))};
+  });
+  var ldTot=Math.max(1, ldActive.length);
   function ldBars(){
     return ldRows.map(function(r){
       return '<div class="bar-row"><div class="bar-lbl">'+r.lab+'</div>'
-        +'<div class="bar-track"><div class="bar-fill" style="width:'+Math.round(r.n/tot*100)+'%;background:'+r.col+';"></div></div>'
-        +'<div class="bar-val" style="color:'+r.col+';">'+r.n+'</div></div>';
+        +'<div class="bar-track"><div class="bar-fill" style="width:'+Math.round(r.n/ldTot*100)+'%;background:'+r.col+';"></div></div>'
+        +'<div class="bar-val">'+r.n+'</div></div>';
     }).join('');
   }
-  function ldPie(){
-    var cx=60,cy=60,R=52,svg='<svg viewBox="0 0 120 120" width="132" height="132" style="flex-shrink:0;" role="img" aria-label="Load distribution pie chart">';
-    var nz=ldRows.filter(function(r){return r.n>0;});
-    if(!nz.length) svg+='<circle cx="60" cy="60" r="52" fill="#E8E5DE"/>';
-    else if(nz.length===1) svg+='<circle cx="60" cy="60" r="52" fill="'+nz[0].col+'"/>';
-    else{
-      var a=-Math.PI/2;
-      nz.forEach(function(r){
-        var ang=r.n/ldSum*2*Math.PI, a2=a+ang, lg=ang>Math.PI?1:0;
-        var x0=cx+R*Math.cos(a), y0=cy+R*Math.sin(a), x1=cx+R*Math.cos(a2), y1=cy+R*Math.sin(a2);
-        svg+='<path d="M'+cx+' '+cy+' L'+x0.toFixed(2)+' '+y0.toFixed(2)+' A'+R+' '+R+' 0 '+lg+' 1 '+x1.toFixed(2)+' '+y1.toFixed(2)+' Z" fill="'+r.col+'" stroke="#fff" stroke-width="1.5"/>';
-        a=a2;
-      });
-    }
-    svg+='</svg>';
-    // the legend lists EVERY weight, so a weight with no tasks is still visible (as 0)
-    var legend=ldRows.map(function(r){
-      return '<div style="display:flex;align-items:center;gap:6px;font-size:12px;margin-bottom:4px;'+(r.n===0?'opacity:.6;':'')+'">'
-        +'<span style="width:10px;height:10px;border-radius:2px;background:'+r.col+';display:inline-block;"></span>'
-        +'<span style="flex:1;color:var(--text-dim);">'+r.lab+'</span><b style="color:'+r.col+';">'+r.n+'</b></div>';
-    }).join('');
-    return '<div style="display:flex;gap:14px;align-items:center;padding:6px 0 4px;">'+svg+'<div style="flex:1;">'+legend+'</div></div>';
-  }
+  function ldPie(){ return pie3D(ldRows.map(function(r){return {label:r.lab,n:r.n,col:r.col};}), ldTot); }
   var ldBarsOn=(state.loadView!=='pie');
   html+='<div class="col"><div class="col-hdr" style="display:flex;justify-content:space-between;align-items:center;"><div class="col-name" style="color:var(--gold);">Load Distribution</div>'
     +'<div class="ld-toggle" role="radiogroup" aria-label="Chart type">'
@@ -2495,7 +2761,7 @@ function renderData(){
   tasks.forEach(function(t){
     bkCounts[t.bucket]=(bkCounts[t.bucket]||0)+1;
     laCounts[t.lifeArea||'Other']=(laCounts[t.lifeArea||'Other']||0)+1;
-    wCounts[t.weightage||'?']=(wCounts[t.weightage||'?']||0)+1;
+    wCounts[t.weightage||'No weight']=(wCounts[t.weightage||'No weight']||0)+1;
     var _mk = (t.multitask===true) ? 'Can multitask' : 'Needs focus';
     mtCounts[_mk]=(mtCounts[_mk]||0)+1;
   });
@@ -2515,52 +2781,26 @@ function renderData(){
   // CSS conic-gradient — no chart library needed.
   // v9: 3D pie — tilted disc with visible thickness, soft shadow and gloss. Pure SVG, no library.
   var PIE_FALLBACK=['#1A6B5A','#A07828','#3A6B8A','#6A3A8A','#B87800','#2E7D32','#8B1A1A','#5A5A7A'];
-  var _pieUid=0;
+  var _pieUid=0; // (v18: pies now come from the shared pie3D())
   function shade(hex,f){
     var h=String(hex).replace('#',''); if(h.length===3) h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
     var n=parseInt(h,16); if(isNaN(n)) return hex;
     var r=Math.min(255,Math.round(((n>>16)&255)*f)), g=Math.min(255,Math.round(((n>>8)&255)*f)), b=Math.min(255,Math.round((n&255)*f));
     return 'rgb('+r+','+g+','+b+')';
   }
-  function pie(obj,cols){
+  function pie(obj,cols,labelFn){
     var keys=Object.keys(obj).sort(function(a,b){return obj[b]-obj[a];});
-    var uid='pz'+(++_pieUid);
-    var cx=66, cy=42, rx=58, ry=32, dep=16, W=132, H=104;
-    function P(a,dy){ var r=a*Math.PI/180; return [cx+rx*Math.sin(r), cy-ry*Math.cos(r)+(dy||0)]; }
-    function f(n){ return n.toFixed(2); }
-    var acc=0, walls='', tops='', legend='';
-    keys.forEach(function(k,i){
-      var col=(cols&&cols[k])||PIE_FALLBACK[i%PIE_FALLBACK.length];
-      var a0=acc/tot*360; acc+=obj[k]; var a1=Math.min(acc/tot*360, a0+359.99);
-      var s0=Math.max(a0,90), e0=Math.min(a1,270);
-      if(s0<e0){
-        var p0=P(s0), p1=P(e0), q0=P(s0,dep), q1=P(e0,dep), lg=(e0-s0)>180?1:0;
-        walls+='<path d="M'+f(p0[0])+' '+f(p0[1])+' A'+rx+' '+ry+' 0 '+lg+' 1 '+f(p1[0])+' '+f(p1[1])+' L'+f(q1[0])+' '+f(q1[1])+' A'+rx+' '+ry+' 0 '+lg+' 0 '+f(q0[0])+' '+f(q0[1])+' Z" fill="'+shade(col,0.6)+'" stroke="'+shade(col,0.6)+'" stroke-width="0.6"/>';
-      }
-      var t0=P(a0), t1=P(a1), lgt=(a1-a0)>180?1:0;
-      tops+='<path d="M'+cx+' '+cy+' L'+f(t0[0])+' '+f(t0[1])+' A'+rx+' '+ry+' 0 '+lgt+' 1 '+f(t1[0])+' '+f(t1[1])+' Z" fill="'+col+'" stroke="#fff" stroke-width="0.9" stroke-linejoin="round"/>';
-      legend+='<div style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:3px;">'
-        +'<span style="width:9px;height:9px;border-radius:2px;background:'+col+';display:inline-block;"></span>'
-        +'<span style="flex:1;color:var(--text-dim);">'+k+'</span><span style="color:var(--text-faint);">'+obj[k]+'</span></div>';
-    });
-    var svg='<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" style="flex-shrink:0;overflow:visible;" role="img" aria-label="3D pie chart">'
-      +'<defs><filter id="'+uid+'b" x="-20%" y="-50%" width="140%" height="220%"><feGaussianBlur stdDeviation="3.2"/></filter>'
-      +'<radialGradient id="'+uid+'g" cx="0.34" cy="0.22" r="0.85"><stop offset="0" stop-color="#fff" stop-opacity="0.42"/><stop offset="0.55" stop-color="#fff" stop-opacity="0.06"/><stop offset="1" stop-color="#000" stop-opacity="0.16"/></radialGradient></defs>'
-      +'<ellipse cx="'+cx+'" cy="'+(cy+dep+7)+'" rx="'+(rx*0.94)+'" ry="'+(ry*0.7)+'" fill="#000" opacity="0.30" filter="url(#'+uid+'b)"/>'
-      +walls+tops
-      +'<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="url(#'+uid+'g)"/>'
-      +'</svg>';
-    return '<div style="display:flex;gap:14px;align-items:center;padding:6px 0 12px;">'+svg+'<div style="flex:1;">'+legend+'</div></div>';
+    return pie3D(keys.map(function(k,i){ return {label:(labelFn?labelFn(k):k), n:obj[k], col:(cols&&cols[k])||PIE_FALLBACK[i%PIE_FALLBACK.length]}; }), tot);
   }
   var lacol={'Personal/Family':'#1A6B5A','Picturizze':'#A07828','Work/Employment':'#3A6B8A','Other':'#6A3A8A'};
   var bcol={Karya:'#A07828',Dhairya:'#B87800',Vishram:'#5A5A7A',Manan:'#8B6914',Manthan:'#3A6B8A',Tyaga:'#2E7D32',Prarabdha:'#6A3A8A'};
-  var wcol={W1:'#2E7D32',W2:'#A07828',W3:'#3A6B8A',W4:'#B87800',W5:'#8B1A1A',W6:'#5A0F0F'};
+  var wcol={W1:'#2E7D32',W2:'#7CA82F',W3:'#C9A227',W4:'#E08A1E',W5:'#C0392B',W6:'#5A0F0F','No weight':'#8A8A8A'};
   var isPie = state.dataChartType==='pie';
   var toggleBtn = '<button class="cal-btn'+(isPie?' cancel':' go')+'" style="padding:2px 8px;font-size:11px;margin-right:4px;" onclick="setDataChart(\'bar\')">bars</button>'
     +'<button class="cal-btn'+(isPie?' go':' cancel')+'" style="padding:2px 8px;font-size:11px;" onclick="setDataChart(\'pie\')">pie</button>';
   function section(title,obj,cols,labelFn){
     return '<div class="col"><div class="col-hdr" style="display:flex;justify-content:space-between;align-items:center;"><div class="col-name" style="color:var(--gold);">'+title+'</div><span>'+toggleBtn+'</span></div>'
-      +'<div class="col-body">'+(isPie?pie(obj,cols):bars(obj,cols,labelFn))+'</div></div>';
+      +'<div class="col-body">'+(isPie?pie(obj,cols,labelFn):bars(obj,cols,labelFn))+'</div></div>';
   }
   var html='<div class="wrap">'
     +section('By Bucket',bkCounts,bcol)
@@ -2951,8 +3191,8 @@ function saveFabQuick(){
   if(ov) ov.className=ov.className.replace(' open','');
   // v10/v11: same questions as the Gather tab. Multitask Yes/No is mandatory (chip, words, or prompt);
   // no stated horizon -> ask Deadline or Leisure (no silent 'this week' / 30-minute default).
-  var mtF = (_fabMt===true || _fabMt===false) ? _fabMt : parseMultitask(val);
-  _gatherContinue({lines:lines, useW:(parseWeightage(val)||null), useMT:mtF, useTH:parseHorizon(val), useLA:null});
+  // v18: Quick Gather no longer asks about multitasking. Not stated = not multitaskable.
+  gatherFlow(lines, {w:null, mt:null, th:null, la:null}, '');
 }
 var _fabMt = null;
 function fabSetMt(v){
@@ -3078,7 +3318,7 @@ function _askTaskText(id){
   else if(id==='mtAskToast'){ if(typeof _mtPending!=='undefined' && _mtPending && _mtPending.lines) lines=_mtPending.lines; }
   else { if(typeof _pendingGather!=='undefined' && _pendingGather && _pendingGather.lines) lines=_pendingGather.lines; }
   if(!lines.length) return '';
-  var first=String(lines[0]||''); if(first.length>150) first=first.slice(0,147)+'…';
+  var first=String(lines[0]||'');
   return first+(lines.length>1?'  (+'+(lines.length-1)+' more)':'');
 }
 function askShown(){ for(var i=0;i<ASK_IDS.length;i++){ var e=document.getElementById(ASK_IDS[i]); if(e && e.classList.contains('show')) return ASK_IDS[i]; } return null; }
@@ -3452,6 +3692,7 @@ function areaLabel(t){
 }
 // Sets BOTH fields with the proper names. A personal task keeps its detailed label (Financial, Home...).
 function applyCategory(t,area){
+  t.needsArea=false;
   if(area==='Picturizze'){ t.category='Picturizze'; t.lifeArea='Picturizze'; }
   else if(area==='ITC'){ t.category='Employment'; t.lifeArea='Work/Employment'; }
   else { t.lifeArea='Personal/Family'; if(!t.category || t.category==='Picturizze' || t.category==='Employment') t.category='Personal'; }
@@ -3617,13 +3858,11 @@ function renderUtilities(){
       <div class="fab-panel-close" onclick="closeFabOverlay()">✕</div>
     </div>
     <textarea id="fabPanelText" class="fab-panel-ta" placeholder="What is on your mind? Voice it. No format needed."></textarea>
-    <div class="fab-mt"><div class="fab-mt-lbl">🔀 Can I do this while multitasking? *</div>
-      <div class="fab-mt-opts"><div class="fab-mt-chip" id="fabMtYes" onclick="fabSetMt(true)">Yes</div><div class="fab-mt-chip" id="fabMtNo" onclick="fabSetMt(false)">No</div></div></div>
     <div class="fab-panel-actions">
       <div class="fab-panel-save" onclick="saveFabQuick()">Save to Chakra™</div>
       <div class="fab-panel-mic">🎤</div>
     </div>
-    <div class="fab-panel-hint">Advanced users: include W3, Q3, ITC in your text</div>
+    <div class="fab-panel-hint">Say it naturally — "by tomorrow", "about 30 minutes", "cannot be multitasked". Chakra reads it.</div>
     <div class="fab-panel-cal" id="fabCalPrompt">
       <div class="fab-panel-cal-title">✓ Saved — Add to Calendar?</div>
       <div class="cal-btn-row">

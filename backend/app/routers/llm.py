@@ -4,6 +4,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import jwt, JWTError
 
 from ..config import settings
+from ..claude import claude_generate
 from ..gemini import gemini_generate
 from ..schemas import LLMRequest, LLMResponse
 
@@ -24,6 +25,8 @@ async def parse_tasks(
     body: LLMRequest,
     user_id: str = Depends(get_current_user),
 ):
+    if settings.ANTHROPIC_API_KEY:
+        return LLMResponse(text=await claude_generate(body.prompt))
     if settings.GEMINI_API_KEY:
         return LLMResponse(text=await gemini_generate([{"text": body.prompt}], timeout=30))
     if not settings.OPENROUTER_API_KEY:

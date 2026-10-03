@@ -12,6 +12,10 @@ class Settings(BaseSettings):
     # directly; otherwise they fall back to OpenRouter.
     GEMINI_API_KEY: str = ""
     GEMINI_MODEL: str = "gemini-3.5-flash"
+    # When ANTHROPIC_API_KEY is set, AI sorting, linking and task reading use Claude;
+    # photo reading stays on Gemini.
+    ANTHROPIC_API_KEY: str = ""
+    ANTHROPIC_MODEL: str = "claude-haiku-4-5-20251001"
     USER_ACCOUNTS: str = '[{"id":"dk","password":"CHANGE_ME_1","displayName":"DK"}]'
 
     def get_user_accounts(self):

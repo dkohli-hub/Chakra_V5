@@ -80,6 +80,8 @@
       durationMin: t.duration_min == null ? null : t.duration_min,
       deadlineSetAt: t.deadline_set_at || null,
       noDateGiven: t.no_date_given === true,
+      dueDateAt: t.due_date_at || null,
+      needsArea: t.needs_area === true,
       lifeArea: t.life_area,
       multitask: t.multitask,
       linkedTasks: t.linked_tasks || [],
@@ -112,6 +114,8 @@
       duration_min: t.durationMin == null ? null : t.durationMin,
       deadline_set_at: t.deadlineSetAt || null,
       no_date_given: t.noDateGiven === true,
+      due_date_at: t.dueDateAt || null,
+      needs_area: t.needsArea === true,
       life_area: t.lifeArea || null,
       multitask: t.multitask === true,
       linked_tasks: t.linkedTasks || [],
@@ -277,11 +281,24 @@
     if (Object.keys(pendingDeletes).length) window.saveState();
   };
 
-  // AI classification and auto-linking go through the backend; no key in the page.
+  // AI classification, auto-linking and task reading go through the backend; no key in the page.
+  // After 9 s the page falls back to its keyword reader, so a slow reply never holds up saving.
   window.apiCall = function (content, onSuccess, onError) {
+    var done = false;
+    var timer = setTimeout(function () {
+      if (done) return;
+      done = true;
+      if (onError) onError(new Error('AI timeout'));
+    }, 9000);
     request('POST', '/llm/parse', { prompt: String(content) }).then(function (res) {
+      if (done) return;
+      done = true; clearTimeout(timer);
       onSuccess((res.text || '').trim());
-    }, function (e) { if (onError) onError(e); });
+    }, function (e) {
+      if (done) return;
+      done = true; clearTimeout(timer);
+      if (onError) onError(e);
+    });
   };
 
   // Photo → text through the backend; the Vision key stays on the server.
