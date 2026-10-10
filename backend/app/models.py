@@ -42,3 +42,9 @@ class Task(Base):
     # V20: what Claude read from a photo (details text) and the people in it (contact list).
     details = Column(Text, nullable=True)
     contacts = Column(JSON, nullable=True)
+    # V21 follow-ups: the next step held on a task, its gap in days, the task a follow-up came from,
+    # and the follow-up a task already created (or "route2") so completing it again never duplicates.
+    follow_up_text = Column(Text, nullable=True)
+    follow_up_gap = Column(Integer, nullable=True)
+    follows_id = Column(String, nullable=True)
+    follow_up_spawned_id = Column(String, nullable=True)

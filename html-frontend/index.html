@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="Chakra">
 <meta name="theme-color" content="#F5F3EE">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Karma Kshetra™ — DK · Chakra V20</title>
+<title>Karma Kshetra™ — DK · Chakra V21</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -182,7 +182,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-s
 .tag-opts input[type=radio]:checked + .tag-chip{background:var(--gold);border-color:var(--gold);color:#1A1000;font-weight:600;}
 
 /* TOAST */
-.toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(16px);font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;padding:10px 20px;border-radius:24px;z-index:9000;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;white-space:nowrap;box-shadow:0 3px 12px rgba(0,0,0,.15);}
+.toast{position:fixed;bottom:220px;left:50%;transform:translateX(-50%) translateY(16px);font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;padding:10px 20px;border-radius:24px;z-index:9000;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;white-space:nowrap;box-shadow:0 3px 12px rgba(0,0,0,.15);}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .toast.ok{background:#1A6B5A;color:#fff;}
 .toast.warn{background:#7A4A00;color:#fff;}
@@ -832,7 +832,7 @@ html,body{font-weight:500;}
 
 <script>
 // v14: the ONE place the app version lives. Title, header, login footer and the backup file all read it.
-var APP_VERSION = 20;
+var APP_VERSION = 21;
 (function(){ function stamp(){ document.title='Karma Kshetra™ — DK · Chakra V'+APP_VERSION; document.querySelectorAll('.app-ver').forEach(function(e){ e.textContent=APP_VERSION; }); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',stamp); else stamp(); })();
 // ======================================================
@@ -1363,8 +1363,18 @@ function saturdayOfWeek(d){ return addDays(startOfDay(d), 6-d.getDay()); }   // 
 function fmtClock(d){ var h=d.getHours(), m=d.getMinutes(), ap=h>=12?'PM':'AM'; h=h%12||12; return h+':'+(m<10?'0':'')+m+' '+ap; }
 
 var wMap={W1:1,W2:2,W3:3,W4:4,W5:5,W6:6};
+// v21 display fallback: a task with no weight is treated as W2 (30 min). Stored data is never changed.
+function effW(t){ return (t&&t.weightage)||'W2'; }
+// v21: days sitting come from the date the task was entered, never from the stored counter.
+function sittingDays(t){
+  var raw=t.entryTimestamp||(t.stateHistory&&t.stateHistory.length?t.stateHistory[0].timestamp:null);
+  if(!raw) return 0;
+  var e=new Date(raw); if(isNaN(e.getTime())) return 0;
+  var d=Math.floor((startOfDay(nowWall()).getTime()-startOfDay(chiWall(e)).getTime())/86400000);
+  return d>0?d:0;
+}
 var W_DAYS={W6:30};   // effort in days for the spread-over-time weight (DK, 2 Oct 2026: flat 30 days)
-function effortDays(t){ return W_DAYS[t.weightage]||0; }
+function effortDays(t){ return W_DAYS[effW(t)]||0; }
 
 // Fixes a bug found 29 Sep 2026 (kept): the deadline is anchored to the task's OWN entry date
 // (or the date DK last changed its deadline), never to "today".
@@ -1392,8 +1402,8 @@ function dueMoment(t){
     case '1year':     return endOfDay(new Date(yr+1,11,31));
     case '2years':    return endOfDay(new Date(yr+2,11,31));
   }
-  // no horizon at all → DK's default for undated tasks: Saturday 11:59 PM of the entry week
-  return endOfDay(saturdayOfWeek(aDay));
+  // v21 display fallback: no due date and no horizon → due tomorrow (rolling, never overdue). Stored data is never changed.
+  return endOfDay(addDays(startOfDay(nowWall()),1));
 }
 function isUndated(t){ return !t.timeHorizonType && t.bucket!=='Vishram'; }
 // kept for older callers
@@ -1471,7 +1481,7 @@ function importance(t){
   if(/\b(dr\.?|doctor|appointment|consult|hospital|medicine|medication|prescription|clinic|neurolog\w*|infusion|pharmacy)\b/.test(txt)) s+=45;   // health
   if(/\b(pay|payment|invoice|advance|reconcil\w*|refund|insurance|tax)\b/.test(txt)) s+=15;                                    // money
   if(/\b(remind|follow.?up|send|text|call|ask)\b/.test(txt)) s+=5;                                                              // someone is waiting
-  s += 7-(wMap[t.weightage]||3);                                                                                                // quick tasks first on ties
+  s += 7-(wMap[effW(t)]||3);                                                                                                // quick tasks first on ties
   return s;
 }
 // ── ONE ORDER, EVERYWHERE (DK, 2 Oct 2026): from yesterday → due today → older pile → future.
@@ -1485,7 +1495,7 @@ function sortTasks(list){
 
 function renderCard(t){
   var st=taskState(t); var od=isOD(t); var tc=tcol(t); var tam=isTamas(t);
-  var meta='<span class="iw '+(t.weightage||'')+'" title="Weight — how much time this takes">'+( t.weightage||'-')+'<span style="font-size:11px;opacity:.85;margin-left:5px;">'+wLabel(t.weightage)+'</span></span>';
+  var meta='<span class="iw '+effW(t)+'" title="Weight — how much time this takes">'+effW(t)+'<span style="font-size:11px;opacity:.85;margin-left:5px;">'+wLabel(effW(t))+'</span></span>';
   if(t.timeHorizon){
     var heatTxt = clockText(t);
     meta+='<span class="ith" style="color:'+tc+';" title="'+esc(heatTxt)+'">'+t.timeHorizon+'</span>';
@@ -1516,10 +1526,11 @@ function renderCard(t){
     t.linkedTasks.forEach(function(lid){
       var lt=state.tasks.find(function(x){return x.id===lid;});
       if(!lt) return;
-      meta+='<span class="cat-badge" title="AI-linked — tap ✕ to remove">🔗 '+esc(lt.shortTitle||lt.title).slice(0,24)
+      meta+='<span class="cat-badge" title="'+(lid===t.followsId?'Follow-up of a closed task — tap ✕ to remove the link':'AI-linked — tap ✕ to remove')+'">'+(lid===t.followsId?'↪ follows: ':'🔗 ')+esc(lt.shortTitle||lt.title).slice(0,24)
         +'<span onclick="unlinkTask(event,\''+t.id+'\',\''+lid+'\')" style="margin-left:4px;opacity:.6;">✕</span></span>';
     });
   }
+  if(t.followUpText && !t.completed && !t.followUpSpawnedId) meta+='<span class="cat-badge" title="'+esc('Next step, created when this task is completed: '+t.followUpText)+'">➜ then: '+esc(t.followUpText).slice(0,28)+'</span>';
   var titleLine = t.shortTitle ? esc(t.shortTitle) : esc(t.title);
   return '<div class="icard'+(t.completed?' done':'')+cardStateCls(t)+'" id="ic-'+t.id+'">'
     +'<input type="checkbox" class="icheck"'+(t.completed?' checked':'')+' onchange="toggle(\''+t.id+'\')">'
@@ -1532,11 +1543,101 @@ function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').repla
 
 function footer(){return '<div class="page-footer"><div class="footer-disc">These are signals, not certainties. The quality and accuracy of what Chakra reads depends entirely on the quality and accuracy of what you have put in. Your words, your choices, your data — Chakra reflects back what you gave it, through the lens of the Gita and DK Sutra.</div></div>';}
 
+
+// ═══════════════════════════════════════════════════════
+// v21 — CLOSE AND INITIATE FOLLOW-UP
+// Route 1: DK dictates the next step inside the task ("…, then follow up for the balance in 15 days").
+//          The words after "then" / "after that" / "next" are held on the task and become a normal task when it is completed.
+// Route 2: "Close and initiate follow-up" in the task menu closes the task and opens Quick Gather for the next step.
+// Plain word matching only. A held follow-up is text on the task — it is not a task and counts nowhere.
+// ═══════════════════════════════════════════════════════
+var _FU_NUM={a:1,an:1,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,fifteen:15,twenty:20,thirty:30};
+function parseFollowUp(title){
+  var s0=String(title||''), m=null;
+  var re1=/(?:^|[\s,;.\-–—]+)(?:and\s+)?(then|after\s+that|afterwards)\b[\s,:\-–—]*/i;
+  var re2=/[,;.\-–—]\s*(next)\b(?!\s+(?:week|month|year|day|monday|tuesday|wednesday|thursday|friday|saturday|sunday|quarter|time))[\s,:\-–—]*/i;
+  var a=re1.exec(s0), b=re2.exec(s0);
+  if(a && (!b || a.index<=b.index)) m=a; else if(b) m=b;
+  if(!m) return null;
+  var before=s0.slice(0,m.index).trim();
+  var text=s0.slice(m.index+m[0].length).trim().replace(/[.\s]+$/,'');
+  if(!before || text.length<3) return null;
+  return {text:text.charAt(0).toUpperCase()+text.slice(1), gapDays:followGapDays(text)};
+}
+function followGapDays(text){
+  var t=String(text||'').toLowerCase(), m=/\b(?:in|after|within)\s+(\d+|an?|one|two|three|four|five|six|seven|eight|nine|ten|fifteen|twenty|thirty)\s*(day|days|week|weeks|month|months)\b/.exec(t);
+  if(m){
+    var n=/^\d+$/.test(m[1])?parseInt(m[1],10):(_FU_NUM[m[1]]||1), u=m[2].charAt(0);
+    return Math.max(1, n*(u==='d'?1:u==='w'?7:30));
+  }
+  if(/\bnext week\b/.test(t)) return 7;
+  return 1;   // "tomorrow", or no gap given → due tomorrow
+}
+function _fuYmd(d){ function p(n){return (n<10?'0':'')+n;} return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate()); }
+// Builds the follow-up as a normal, fully compliant task: weight W2 (30 min) and a real due date counted from today (the day the first task closes).
+function makeFollowUp(src, text, gapDays){
+  var now=new Date().toISOString();
+  var due=addDays(startOfDay(nowWall()), gapDays||1), dv=_fuYmd(due), type=horizonFromDate(due);
+  var title=String(text||'').trim(); title=title.charAt(0).toUpperCase()+title.slice(1);
+  var rec={
+    id:'task_'+Date.now()+'_fu'+Math.floor(Math.random()*1000), title:title, shortTitle:shortTitleFrom(title),
+    bucket:'Karya', ch:3, weightage:'W2', durationMin:W_MIN.W2,
+    timeHorizonType:type, timeHorizon:horizonLabel(type,due), dueDate:dv, dueTime:null, dueDateAt:now, deadlineSetAt:now,
+    lifeArea:src.lifeArea||null, category:src.category, multitask:false, dependsOn:null,
+    stateHistory:[{bucket:'Karya',timestamp:now}], transitionCount:0, originBucket:'Karya', completed:false,
+    entryTimestamp:now, agingDays:0, num:state.tasks.length+1,
+    followsId:src.id, linkedTasks:[src.id]
+  };
+  if(rec.category===undefined) delete rec.category;
+  var chain=parseFollowUp(title); if(chain) rec.followUpText=chain.text, rec.followUpGap=chain.gapDays;   // proposal 5: chains
+  state.tasks.push(rec);
+  src.followUpSpawnedId=rec.id;
+  return rec;
+}
+function onTaskCompleted(t){
+  if(!t || !t.followUpText || t.followUpSpawnedId) return;
+  var f=makeFollowUp(t, t.followUpText, t.followUpGap);
+  toast('✓ Follow-up created: '+(f.shortTitle||f.title).slice(0,40),'ok',3000);
+}
+function onTaskReopened(t){
+  if(!t || !t.followUpSpawnedId || t.followUpSpawnedId==='route2') return;
+  var f=state.tasks.find(function(x){return x.id===t.followUpSpawnedId;});
+  if(f && !f.completed && confirm('This task is open again. Remove the follow-up it created?\n\n"'+f.title+'"')){
+    state.tasks=state.tasks.filter(function(x){return x.id!==f.id;});
+    t.followUpSpawnedId=null;
+  }
+}
+function onTaskReleased(t){
+  if(!t || !t.followUpText || t.followUpSpawnedId) return;
+  if(confirm('Create the next step anyway?\n\n"'+t.followUpText+'"')){
+    var f=makeFollowUp(t, t.followUpText, t.followUpGap);
+    toast('✓ Follow-up created: '+(f.shortTitle||f.title).slice(0,40),'ok',3000);
+  }
+}
+// Route 2
+window._followOfArm=null; window._followOfCommit=null;
+function closeAndFollowUp(id){
+  var t=state.tasks.find(function(x){return x.id===id;}); if(!t || t.completed) return;
+  var held=(t.followUpText && !t.followUpSpawnedId) ? t.followUpText : '';
+  t.completed=true; t.completedTimestamp=new Date().toISOString();
+  t.stateHistory.push({bucket:'Completed',timestamp:t.completedTimestamp}); t.transitionCount++;
+  t.followUpSpawnedId='route2';   // the next step is entered through Quick Gather now, so nothing is auto-created
+  saveState();
+  if(typeof closeTaskDetail==='function') closeTaskDetail();
+  if(typeof closeDhairyaMenu==='function') closeDhairyaMenu();
+  renderTab(state.activeTab); updateHeader();
+  window._followOfArm={id:id, at:Date.now()};
+  openFabOverlay(true);
+  var ta=document.getElementById('fabPanelText'); if(ta) ta.value=held;
+  toast('✓ Closed — now the next step','ok',3000);
+}
+
 function toggle(id){
   var t=state.tasks.find(function(x){return x.id===id;});
   if(!t) return;
   t.completed=!t.completed;
-  if(t.completed){ t.completedTimestamp=new Date().toISOString(); t.stateHistory.push({bucket:'Completed',timestamp:new Date().toISOString()}); t.transitionCount++; }
+  if(t.completed){ t.completedTimestamp=new Date().toISOString(); t.stateHistory.push({bucket:'Completed',timestamp:new Date().toISOString()}); t.transitionCount++; onTaskCompleted(t); }
+  else onTaskReopened(t);
   saveState(); renderTab(state.activeTab); updateHeader();
 }
 
@@ -1730,6 +1831,7 @@ function openTaskDetail(id){
     +'<div class="tag-lbl">Time (optional)</div><input type="time" id="tdTime" value="'+_ex.time+'" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);margin-bottom:6px;">'
     +'<div style="font-size:12px;color:var(--text-dim);margin-bottom:10px;line-height:1.4;">'+esc(clockText(t))+'. Leave date and time blank to use the Deadline above (due 11:59 PM).</div>'
     +detailsEditorHtml(t)
+    +(t.completed?'':'<div class="fab-panel-save" style="background:var(--surface3);color:var(--text);margin-top:12px;" onclick="closeAndFollowUp(\''+id+'\')">➜ Close and initiate follow-up</div>')
     +'<div class="fab-panel-actions"><div class="fab-panel-save" onclick="saveTaskDetail(\''+id+'\')">Save</div></div>';
   document.getElementById('taskDetailBox').innerHTML=html;
   document.getElementById('taskDetailModal').style.display='flex';
@@ -1742,8 +1844,9 @@ function saveTaskDetail(id){
   var newHorizon=document.getElementById('tdHorizon').value;
   var wasComplete=t.completed; var oldH=t.timeHorizonType||'';
   t.completed=document.getElementById('tdComplete').checked;
-  if(t.completed && !wasComplete){ t.completedTimestamp=new Date().toISOString(); }
-  if(newBucket!==t.bucket){ t.stateHistory.push({bucket:newBucket,timestamp:new Date().toISOString()}); t.transitionCount++; t.bucket=newBucket; }
+  if(t.completed && !wasComplete){ t.completedTimestamp=new Date().toISOString(); onTaskCompleted(t); }
+  else if(!t.completed && wasComplete){ onTaskReopened(t); }
+  if(newBucket!==t.bucket){ t.stateHistory.push({bucket:newBucket,timestamp:new Date().toISOString()}); t.transitionCount++; t.bucket=newBucket; if(newBucket==='Tyaga' && !t.completed) onTaskReleased(t); }
   t.weightage=newWeight||null;
   t.details=((document.getElementById('tdDetails')||{value:(t.details||'')}).value||'').trim();
   var _nd=(document.getElementById('tdDate')||{}).value||'', _nt=(document.getElementById('tdTime')||{}).value||null, _old=exactDueInfo(t), _dateTouched=(_nd!==_old.date)||((_nt||'')!==(_old.time||''));
@@ -1775,6 +1878,7 @@ function openDhairyaMenu(e,id){
     +'<div style="display:flex;flex-direction:column;gap:8px;">'
     +'<div class="fab-panel-save" style="background:var(--green,#2E7D32);" onclick="dhairyaResolve(\''+id+'\',true)">✓ It got done — move to Karya</div>'
     +'<div class="fab-panel-save" style="background:var(--red,#8B1A1A);" onclick="dhairyaResolve(\''+id+'\',false)">✕ It did not get done — release to Tyaga</div>'
+    +'<div class="fab-panel-save" style="background:var(--surface3);color:var(--text);" onclick="closeAndFollowUp(\''+id+'\')">➜ Close and initiate follow-up</div>'
     +'<div class="fab-panel-save" style="background:var(--surface3);color:var(--text);" onclick="closeDhairyaMenu();openTaskDetail(\''+id+'\')">↔ Move bucket / date &amp; time</div>'
     +'<div class="fab-panel-save" style="background:var(--surface3);color:var(--text);" onclick="openCatMenu(event,\''+id+'\',function(){openDhairyaMenu({stopPropagation:function(){}},\''+id+'\');})">🏷 Category: '+areaLabel(t)+' ▾</div>'
     +'</div>';
@@ -1786,9 +1890,11 @@ function dhairyaResolve(id,gotDone){
   var t=state.tasks.find(function(x){return x.id===id;}); if(!t) return;
   var group=[t].concat((t.linkedTasks||[]).map(function(lid){return state.tasks.find(function(x){return x.id===lid;});}).filter(Boolean));
   var destBucket=gotDone?'Karya':'Tyaga';
+  group=group.filter(function(g){return g===t || !g.completed;});   // v21: a closed task a follow-up points back to is never moved
   group.forEach(function(g){
     g.stateHistory.push({bucket:destBucket,timestamp:new Date().toISOString()});
     g.transitionCount++; g.bucket=destBucket;
+    if(!gotDone) onTaskReleased(g);
   });
   saveState(); closeDhairyaMenu(); renderTab(state.activeTab); updateHeader();
   toast((gotDone?'✓ Moved to Karya':'Released to Tyaga')+(group.length>1?' — '+group.length+' linked tasks':''),'ok',2000);
@@ -1803,7 +1909,7 @@ function toast(msg,type,duration){
   var el=document.getElementById('toast');
   el.textContent=msg; el.className='toast '+(type||'ok');
   void el.offsetWidth; el.classList.add('show');
-  clearTimeout(el._t); el._t=setTimeout(function(){el.classList.remove('show');},duration||2200);
+  clearTimeout(el._t); el._t=setTimeout(function(){el.classList.remove('show');},duration||3000);
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1823,8 +1929,8 @@ function renderToday(){
   var total=tasks.length;
 
   var odAll=odT.length;
-  var odDrain=odT.reduce(function(s,t){return s+Math.min(10+(t.agingDays||1)*2,20);},0);
-  var heavy=tasks.filter(function(t){return (t.weightage==='W4'||t.weightage==='W5')&&(t.agingDays||0)>7;}).length;
+  var odDrain=odT.reduce(function(s,t){return s+Math.min(10+(sittingDays(t)||1)*2,20);},0);
+  var heavy=tasks.filter(function(t){return (effW(t)==='W4'||effW(t)==='W5')&&sittingDays(t)>7;}).length;
   var drain=Math.min(odDrain+heavy*8+tamasT.length*4,100);
   var charge=Math.max(0,100-drain);
   var chCol=charge>70?'#2E7D32':charge>40?'#B87800':charge>20?'#8B5A00':'#8B1A1A';
@@ -2628,6 +2734,9 @@ function commitTasks(tasks,useW,useMT,useTH,useLA,isLeisure,opts){
     // v16 (DK, 2 Oct 2026): a task that arrives with no date and is not leisure defaults to Saturday 11:59 PM, tagged "no date given".
     if(!isLeisure && !useTH){ rec.timeHorizonType='thisWeek'; rec.timeHorizon='This week'; rec.noDateGiven=true; }
     var _at=(window._attachByLine||{})[clean]; if(_at){ rec.details=_at.details; rec.contacts=_at.contacts; delete window._attachByLine[clean]; }   // v19: details read from a photo
+    var _fu=parseFollowUp(clean); if(_fu){ rec.followUpText=_fu.text; rec.followUpGap=_fu.gapDays; }   // v21 Route 1
+    var _fo=window._followOfCommit;
+    if(_fo && (Date.now()-_fo.at)<600000 && state.tasks.some(function(x){return x.id===_fo.id;})){ rec.followsId=_fo.id; rec.linkedTasks=[_fo.id]; window._followOfCommit=null; }   // v21 Route 2
     state.tasks.push(rec);
     // Rule 2/17/3: classify bucket + arena + life area by context (Gita rule book).
     // Runs after the task is already visible, so entry is never blocked by the API.
@@ -2790,8 +2899,8 @@ function effortRows(win){
     var all = state.tasks.filter(function(t){return t.ch===g.ch;});
     var added = all.filter(function(t){return t.entryTimestamp && new Date(t.entryTimestamp).getTime()>=since;});
     var completed = all.filter(function(t){var ca=completedAt(t); return t.completed && ca && new Date(ca).getTime()>=since;});
-    var addedW = added.reduce(function(s,t){return s+(wMap[t.weightage]||0);},0);
-    var completedW = completed.reduce(function(s,t){return s+(wMap[t.weightage]||0);},0);
+    var addedW = added.reduce(function(s,t){return s+(wMap[effW(t)]||0);},0);
+    var completedW = completed.reduce(function(s,t){return s+(wMap[effW(t)]||0);},0);
     var demand = Math.max(addedW,completedW);
     return {ch:g.ch,name:g.name,addedW:addedW,completedW:completedW,demand:demand,
       addedN:added.length,completedN:completed.length};
@@ -2948,8 +3057,8 @@ function renderSoul(){
   // PQ
   var committed=tasks.filter(function(t){return t.bucket==='Karya';});
   var done=committed.filter(function(t){return t.completed;});
-  var wc=committed.reduce(function(s,t){return s+(wMap[t.weightage]||0);},0);
-  var wd=done.reduce(function(s,t){return s+(wMap[t.weightage]||0);},0);
+  var wc=committed.reduce(function(s,t){return s+(wMap[effW(t)]||0);},0);
+  var wd=done.reduce(function(s,t){return s+(wMap[effW(t)]||0);},0);
   var pq=wc>0?Math.round(wd/wc*100):0;
   // CQ
   var arenas={}; tasks.forEach(function(t){if(t.ch) arenas[t.ch]=1;});
@@ -3053,10 +3162,10 @@ function renderBT(){
   var tasks=state.tasks;
   // Gunas
   var vol=Math.min(tasks.length/100,1);
-  var heavy=tasks.filter(function(t){return t.weightage==='W4'||t.weightage==='W5';});
+  var heavy=tasks.filter(function(t){return effW(t)==='W4'||effW(t)==='W5';});
   var rajas=Math.round(((vol*.3)+(Math.min(tasks.length/70,1)*.4)+(tasks.length>0?heavy.length/tasks.length:.0)*.3)*100);
   var hold=['Dhairya','Vishram','Manan','Manthan'];
-  var stag=tasks.filter(function(t){return hold.indexOf(t.bucket)>=0&&t.agingDays>14&&!t.completed;});
+  var stag=tasks.filter(function(t){return hold.indexOf(t.bucket)>=0&&sittingDays(t)>14&&!t.completed;});
   var defl=tasks.filter(function(t){return t.transitionCount>3&&!t.completed;});
   var tot=tasks.length||1;
   var tamas=Math.round(((stag.length/tot*.5)+(defl.length/tot*.5))*100);
@@ -3078,9 +3187,9 @@ function renderBT(){
     +'</div></div>';
 
   // Clutter
-  var small=tasks.filter(function(t){return t.weightage==='W1'||t.weightage==='W2';}).length;
-  var large=tasks.filter(function(t){return t.weightage==='W3'||t.weightage==='W4';}).length;
-  var huge =tasks.filter(function(t){return t.weightage==='W5';}).length;
+  var small=tasks.filter(function(t){return effW(t)==='W1'||effW(t)==='W2';}).length;
+  var large=tasks.filter(function(t){return effW(t)==='W3'||effW(t)==='W4';}).length;
+  var huge =tasks.filter(function(t){return effW(t)==='W5';}).length;
   // v18 (DK, 2 Oct 2026): one row per weight W1–W6 plus "No weight", ACTIVE tasks only (same numbers as the Data tab),
   // a Bars | Pie radio, and the same 3D pie used everywhere.
   state.loadView = state.loadView || 'bars';
@@ -3088,7 +3197,7 @@ function renderBT(){
   var LD_COL={W1:'#2E7D32',W2:'#7CA82F',W3:'#C9A227',W4:'#E08A1E',W5:'#C0392B',W6:'#5A0F0F',none:'#8A8A8A'};
   var ldActive=tasks.filter(function(t){return !t.completed;});
   var ldRows=LD_W.map(function(w){
-    var n = ldActive.filter(function(t){ return w==='none' ? !t.weightage : t.weightage===w; }).length;
+    var n = ldActive.filter(function(t){ return w==='none' ? false : effW(t)===w; }).length;
     return {w:w, n:n, col:LD_COL[w], lab: w==='none' ? 'No weight' : (w+' · '+wLabel(w))};
   });
   var ldTot=Math.max(1, ldActive.length);
@@ -3125,7 +3234,7 @@ function renderData(){
   tasks.forEach(function(t){
     bkCounts[t.bucket]=(bkCounts[t.bucket]||0)+1;
     laCounts[t.lifeArea||'Other']=(laCounts[t.lifeArea||'Other']||0)+1;
-    wCounts[t.weightage||'No weight']=(wCounts[t.weightage||'No weight']||0)+1;
+    wCounts[effW(t)]=(wCounts[effW(t)]||0)+1;
     var _mk = (t.multitask===true) ? 'Can multitask' : 'Needs focus';
     mtCounts[_mk]=(mtCounts[_mk]||0)+1;
   });
@@ -3523,7 +3632,8 @@ function showChakraFab(show){
   if(row) row.style.display = show ? 'flex' : 'none';
 }
 
-function openFabOverlay(){
+function openFabOverlay(armed){
+  if(armed!==true) window._followOfArm=null;
   // Spin the chakra
   var wrap = document.getElementById('chakraFabWrap');
   if(wrap) wrap.classList.add('spinning');
@@ -3533,6 +3643,7 @@ function openFabOverlay(){
 }
 
 function closeFabOverlay(){
+  if(window._followOfArm){ window._followOfArm=null; toast('Follow-up skipped','ok',3000); }
   document.getElementById('fabOverlay').classList.remove('open');
   document.getElementById('fabPanelText').value = '';
   var cp = document.getElementById('fabCalPrompt');
@@ -3549,6 +3660,7 @@ function saveFabQuick(){
     if(!confirm('This looks like a task you just added (within 1 minute). Add anyway?')) return;
   }
   _lastSaveTime=now; _lastSaveText=val;
+  window._followOfCommit=window._followOfArm; window._followOfArm=null;
   var lines=val.split('\n').map(function(s){return s.trim();}).filter(Boolean);
   if(ta){ta.value='';ta.placeholder='What\'s on your mind?';}
   var ov=document.getElementById('fabOverlay');
@@ -3846,7 +3958,7 @@ function sfAfter(msg){
 function sfClose(id){
   var t=sfTask(id); if(!t) return;
   t.completed=true; t.completedTimestamp=new Date().toISOString();
-  t.stateHistory.push({bucket:'Completed',timestamp:new Date().toISOString()}); t.transitionCount++;
+  t.stateHistory.push({bucket:'Completed',timestamp:new Date().toISOString()}); t.transitionCount++; onTaskCompleted(t);
   sfAfter('✓ Closed');
 }
 function sfShowPanel(id,html){
@@ -3861,13 +3973,13 @@ function sfReassign(id){
 }
 function sfMove(id,bucket){
   var t=sfTask(id); if(!t || t.bucket===bucket) return;
-  t.stateHistory.push({bucket:bucket,timestamp:new Date().toISOString()}); t.transitionCount++; t.bucket=bucket;
+  t.stateHistory.push({bucket:bucket,timestamp:new Date().toISOString()}); t.transitionCount++; t.bucket=bucket; if(bucket==='Tyaga') onTaskReleased(t);
   sfAfter('✓ Moved to '+bucket);
 }
 function sfEdit(id){
   var t=sfTask(id); if(!t) return;
   sfShowPanel(id,'<input class="sf-field" id="sfe-title-'+id+'" value="'+esc(t.title).replace(/"/g,'&quot;')+'">'
-    +'<select class="sf-field" id="sfe-w-'+id+'">'+['W1','W2','W3','W4','W5','W6'].map(function(w){return '<option value="'+w+'"'+(t.weightage===w?' selected':'')+'>'+w+' — '+wLabel(w)+'</option>';}).join('')+'</select>'
+    +'<select class="sf-field" id="sfe-w-'+id+'">'+['W1','W2','W3','W4','W5','W6'].map(function(w){return '<option value="'+w+'"'+(effW(t)===w?' selected':'')+'>'+w+' — '+wLabel(w)+'</option>';}).join('')+'</select>'
     +'<select class="sf-field" id="sfe-mt-'+id+'"><option value="no"'+(t.multitask!==true?' selected':'')+'>🔀 Multitask: No — needs focus</option><option value="yes"'+(t.multitask===true?' selected':'')+'>🔀 Multitask: Yes — can multitask</option></select>'
     +'<select class="sf-field" id="sfe-h-'+id+'">'+SF_TH.map(function(o){return '<option value="'+o[0]+'"'+((t.timeHorizonType||'')===o[0]?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select>'
     +'<div class="sf-actions"><button class="sf-act done" onclick="sfSave(\''+id+'\')">Save</button><button class="sf-act" onclick="sfShowPanel(\''+id+'\',\'\')">Cancel</button></div>');
@@ -3917,7 +4029,7 @@ function openCalModal(taskTitle){
   // v10: booked slot length = the task's own duration (W1 5 min ... W5 full day), not a fixed 30 minutes.
   var _ct = null;
   for(var _i=state.tasks.length-1; _i>=0; _i--){ if(state.tasks[_i].title===_calTask){ _ct=state.tasks[_i]; break; } }
-  window._calDurMin = _ct ? (_ct.durationMin || W_MIN[_ct.weightage] || 30) : 30;
+  window._calDurMin = _ct ? (_ct.durationMin || W_MIN[effW(_ct)] || 30) : 30;
   _calSelCal = suggestCalendar(_calTask);
   renderCalModal();
   var m = document.getElementById('calModal');
@@ -4156,7 +4268,7 @@ function tmFind(id){ return state.tasks.find(function(x){return x.id===id;}); }
 function tmComplete(id){
   var t=tmFind(id); if(!t) return;
   t.completed=true; t.completedTimestamp=new Date().toISOString();
-  t.stateHistory.push({bucket:'Completed',timestamp:new Date().toISOString()}); t.transitionCount++;
+  t.stateHistory.push({bucket:'Completed',timestamp:new Date().toISOString()}); t.transitionCount++; onTaskCompleted(t);
   tmAfter('✓ Completed — out of Tamas');
 }
 function tmDate(id){
@@ -4172,7 +4284,7 @@ function tmSetDate(id,type){
 function tmBucket(id){ var t=tmFind(id); if(!t) return; tmPanel(id,bucketRows(t,'tmMove')); }
 function tmMove(id,b){
   var t=tmFind(id); if(!t || t.bucket===b) return;
-  t.stateHistory.push({bucket:b,timestamp:new Date().toISOString()}); t.transitionCount++; t.bucket=b;
+  t.stateHistory.push({bucket:b,timestamp:new Date().toISOString()}); t.transitionCount++; t.bucket=b; if(b==='Tyaga') onTaskReleased(t);
   tmAfter('✓ Moved to '+b+' — clock reset');
 }
 

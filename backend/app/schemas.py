@@ -32,6 +32,10 @@ class TaskCreate(BaseModel):
     needs_area: Optional[bool] = None
     details: Optional[str] = None
     contacts: Optional[List[Any]] = None
+    follow_up_text: Optional[str] = None
+    follow_up_gap: Optional[int] = None
+    follows_id: Optional[str] = None
+    follow_up_spawned_id: Optional[str] = None
 
 
 class TaskUpdate(BaseModel):
@@ -62,6 +66,10 @@ class TaskUpdate(BaseModel):
     needs_area: Optional[bool] = None
     details: Optional[str] = None
     contacts: Optional[List[Any]] = None
+    follow_up_text: Optional[str] = None
+    follow_up_gap: Optional[int] = None
+    follows_id: Optional[str] = None
+    follow_up_spawned_id: Optional[str] = None
 
 
 class TaskOut(BaseModel):
@@ -95,6 +103,10 @@ class TaskOut(BaseModel):
     needs_area: Optional[bool] = None
     details: Optional[str] = None
     contacts: Optional[List[Any]] = None
+    follow_up_text: Optional[str] = None
+    follow_up_gap: Optional[int] = None
+    follows_id: Optional[str] = None
+    follow_up_spawned_id: Optional[str] = None
 
     class Config:
         from_attributes = True

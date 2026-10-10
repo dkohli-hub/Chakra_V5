@@ -84,6 +84,10 @@
       needsArea: t.needs_area === true,
       details: t.details || null,
       contacts: t.contacts || [],
+      followUpText: t.follow_up_text || null,
+      followUpGap: t.follow_up_gap == null ? null : t.follow_up_gap,
+      followsId: t.follows_id || null,
+      followUpSpawnedId: t.follow_up_spawned_id || null,
       lifeArea: t.life_area,
       multitask: t.multitask,
       linkedTasks: t.linked_tasks || [],
@@ -120,6 +124,10 @@
       needs_area: t.needsArea === true,
       details: t.details || null,
       contacts: t.contacts || [],
+      follow_up_text: t.followUpText || null,
+      follow_up_gap: t.followUpGap == null ? null : t.followUpGap,
+      follows_id: t.followsId || null,
+      follow_up_spawned_id: t.followUpSpawnedId || null,
       life_area: t.lifeArea || null,
       multitask: t.multitask === true,
       linked_tasks: t.linkedTasks || [],
@@ -135,7 +143,7 @@
 
   // ── Sync engine ───────────────────────────────────────────────────────────
   var synced = {};          // id -> JSON of toApi() as last confirmed by the server
-  var pendingDeletes = {};  // ids "Clear completed" removed, not yet deleted on server
+  var pendingDeletes = {};  // ids removed by "Clear completed" (or a confirmed follow-up removal), not yet deleted on server
   var chain = Promise.resolve();
   var debounceTimer = null, retryTimer = null;
   var dirty = false;
@@ -274,7 +282,7 @@
     });
   };
 
-  // The only path that may delete on the server.
+  // The only paths that may delete on the server: "Clear completed", and removing a follow-up when its task is reopened.
   var htmlClearDone = window.clearDone;
   window.clearDone = function () {
     var doneIds = state.tasks.filter(function (t) { return t.completed; }).map(function (t) { return t.id; });
@@ -284,6 +292,20 @@
     doneIds.forEach(function (id) { if (!stillThere[id]) pendingDeletes[id] = true; });
     if (Object.keys(pendingDeletes).length) window.saveState();
   };
+
+  // V21: reopening a completed task can remove the follow-up it created (after DK confirms).
+  // That removal is deleted on the server too, otherwise it would come back after a refresh.
+  // The caller (tick box / Task screen) saves right after.
+  var htmlOnTaskReopened = window.onTaskReopened;
+  if (typeof htmlOnTaskReopened === 'function') {
+    window.onTaskReopened = function (t) {
+      var before = state.tasks.map(function (x) { return x.id; });
+      htmlOnTaskReopened(t);
+      var stillThere = {};
+      state.tasks.forEach(function (x) { stillThere[x.id] = true; });
+      before.forEach(function (id) { if (!stillThere[id]) pendingDeletes[id] = true; });
+    };
+  }
 
   // AI calls (task reading, sorting, linking, and reading photos) go through the backend; no key in the page.
   // The page falls back to its keyword reader after 9 s for text, and to "type what you see" after 28 s for a photo,
