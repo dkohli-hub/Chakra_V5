@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="Chakra">
 <meta name="theme-color" content="#F5F3EE">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Karma Kshetra™ — DK · Chakra V21</title>
+<title>Karma Kshetra™ — DK · Chakra V22</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -657,6 +657,7 @@ html,body{font-weight:500;}
 .ct-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:8px;}
 .ct-saved{font-size:12.5px;color:#111;display:flex;align-items:center;gap:6px;}
 .ct-add{margin:10px 0;}
+.ct-cc-in{width:3.6em;padding:6px;border-radius:8px;border:1px solid var(--border);font-family:inherit;font-size:13px;text-align:center;background:var(--surface,#fff);color:inherit;}
 .td-in,.td-details{width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);margin-bottom:8px;font-family:inherit;font-size:13px;box-sizing:border-box;color:#111;background:#fff;}
 .img-read-info{font-size:12.5px;color:#13634A;font-weight:700;margin:6px 0;line-height:1.45;}
 .cc-row{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:10px;margin:8px 0;border:1px solid var(--border);background:#fff;}
@@ -832,7 +833,7 @@ html,body{font-weight:500;}
 
 <script>
 // v14: the ONE place the app version lives. Title, header, login footer and the backup file all read it.
-var APP_VERSION = 21;
+var APP_VERSION = 22;
 (function(){ function stamp(){ document.title='Karma Kshetra™ — DK · Chakra V'+APP_VERSION; document.querySelectorAll('.app-ver').forEach(function(e){ e.textContent=APP_VERSION; }); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',stamp); else stamp(); })();
 // ======================================================
@@ -1295,6 +1296,7 @@ function switchTab(id){
 }
 
 function renderTab(id){
+  updateHeader();   // v22: header counts refresh with every redraw, ahead of the battery
   if(id==='today')  renderToday();
   else if(id==='gather') renderGather();
   else if(id==='time')   renderTime();
@@ -1516,8 +1518,9 @@ function renderCard(t){
   else if(st.state==='amber' && t.dueTime) meta+='<span class="od-badge note" title="'+esc(clockText(t))+'">was by '+fmtClock(dueMoment(t))+'</span>';
   if(isUndated(t) && t.noDateGiven) meta+='<span class="od-badge note" title="No date was given — defaulted to Saturday 11:59 PM. Tap the task to set a real date.">no date given</span>';
   if(t.needsArea) meta+='<span class="od-badge amber" onclick="openCatMenu(event,\''+t.id+'\')" title="Chakra could not tell Picturizze, ITC or Personal — tap to choose">⚠ pick category</span>';
-  var _c0=(t.contacts&&t.contacts[0])||null, _p0=_c0&&_c0.phones&&_c0.phones[0];
-  if(_p0){ var _w0=waLink(_p0); meta+='<a class="od-badge soft" href="'+telLink(_p0)+'" onclick="event.stopPropagation()" title="Call">📞 '+esc(_p0)+'</a>'+(_w0?'<a class="od-badge soft" href="'+_w0+'" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="WhatsApp">💬</a>':''); }
+  var _c0=(t.contacts&&t.contacts[0])||null, _p0=_c0&&_c0.phones&&_c0.phones[0], _cc0=_c0?_c0.cc:t.cc;
+  if(!_p0){ var _ph=extractPhones((t.title||'')+'\n'+(t.details||'')); if(_ph.length) _p0=_ph[0]; }   // v22: a number typed in the task shows Call / WhatsApp on its own
+  if(_p0){ var _w0=waLink(_p0,_cc0); meta+='<a class="od-badge soft" href="'+telLink(_p0,_cc0)+'" onclick="event.stopPropagation()" title="Call">📞 '+esc(_p0)+'</a>'+(_w0?'<a class="od-badge soft" href="'+_w0+'" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="WhatsApp">💬</a>':''); }
   if(t.details || (t.contacts&&t.contacts.length)) meta+='<span class="od-badge note badge-ct" onclick="event.stopPropagation();openTaskDetail(\''+t.id+'\')" title="Open details">📝 details'+((t.contacts&&t.contacts.length)?' · '+t.contacts.length+' contact'+(t.contacts.length>1?'s':''):'')+'</span>';
   if(isInProgress(t)) meta+='<span class="od-badge soft" title="A child task has started">▶ in progress</span>';
   if(tam) meta+='<span class="od-badge" style="background:#5A0F0F;color:#fff;" title="'+esc(clockText(t))+'">🔥 TAMAS</span>';
@@ -1639,6 +1642,7 @@ function toggle(id){
   if(t.completed){ t.completedTimestamp=new Date().toISOString(); t.stateHistory.push({bucket:'Completed',timestamp:new Date().toISOString()}); t.transitionCount++; onTaskCompleted(t); }
   else onTaskReopened(t);
   saveState(); renderTab(state.activeTab); updateHeader();
+  refreshOpenPanel();
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1672,8 +1676,32 @@ function waDigits(p){
   if(/^00/.test(s)) return d.length>=10 ? d.replace(/^00/,'') : null;
   return null;                                     // no country code shown → never guess one
 }
-function waLink(p){ var d=waDigits(p); return d ? 'https://wa.me/'+d : null; }
-function telLink(p){ return 'tel:'+String(p||'').replace(/[^\d+]/g,''); }
+// v22: a 10-digit number with no country code is treated as +1 (DK, 11 Oct 2026). DK can change the code on screen for any number;
+// a code set on screen applies to any number that has no + or 00 of its own. Numbers that already carry a code are never changed.
+var DEFAULT_CC='+1';
+function ccClean(v){ var s=String(v||'').trim().replace(/[^\d+]/g,''); if(/^00\d/.test(s)) s='+'+s.slice(2); if(/^\d+$/.test(s)) s='+'+s; return /^\+\d{1,4}$/.test(s)?s:null; }
+function fullPhone(p,cc){
+  var s=String(p||'').trim(), d=s.replace(/\D/g,'');
+  if(/^\+/.test(s) || /^00/.test(s)) return s;                 // already has its own code
+  var chosen=ccClean(cc);
+  if(chosen) return chosen+d.replace(/^0+/,'');                  // DK set a code on screen
+  if(d.length===10) return DEFAULT_CC+d;                         // default +1 for a plain 10-digit number
+  return s;
+}
+function needsCC(p){ var s=String(p||'').trim(); return !(/^\+/.test(s) || /^00/.test(s)); }
+function waLink(p,cc){ var d=waDigits(fullPhone(p,cc)); return d ? 'https://wa.me/'+d : null; }
+function telLink(p,cc){ return 'tel:'+String(fullPhone(p,cc)||'').replace(/[^\d+]/g,''); }
+function ccBox(p,cc,kind,id,idx){
+  if(!needsCC(p)) return '';
+  var cur=ccClean(cc)||(String(p).replace(/\D/g,'').length===10?DEFAULT_CC:'');
+  return '<span class="ct-cc" title="Country code — tap to change"><input class="ct-cc-in" type="text" inputmode="tel" size="4" value="'+esc(cur)+'" placeholder="+code" onchange="setCC(\''+kind+'\',\''+id+'\','+idx+',this.value)"></span>';
+}
+function setCC(kind,id,idx,v){
+  var t=state.tasks.find(function(x){return x.id===id;}); if(!t) return;
+  var c=ccClean(v); if(!c){ toast('Country code looks like +1 or +91','warn',3000); _ctRefresh(id); return; }
+  if(kind==='c'){ if(!t.contacts||!t.contacts[idx]) return; t.contacts[idx].cc=c; } else { t.cc=c; }
+  _ctSnapDetails(id); saveState(); _ctRefresh(id); renderTab(state.activeTab);
+}
 function _vEsc(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n'); }
 function buildVCard(c, noteText){
   var name=(c.name||'').trim(), org=(c.org||'').trim(), fn=name||org||'Chakra contact', given='', fam='';
@@ -1700,16 +1728,27 @@ function _vcfDownload(vcf,fname){
 }
 function saveContactVCard(taskId, idx){
   var t=state.tasks.find(function(x){return x.id===taskId;}); if(!t||!t.contacts||!t.contacts[idx]) return;
+  var c=t.contacts[idx], cc2=JSON.parse(JSON.stringify(c));
+  cc2.phones=(c.phones||[]).map(function(p){ return fullPhone(p,c.cc); });   // the card carries the full international number
+  var vcf=buildVCard(cc2, 'Added from Chakra: '+t.title), fname=_vcfName(c);
+  // v22: open the card itself so iPhone shows its own contact preview with "Create New Contact".
+  try{
+    var url='data:text/vcard;charset=utf-8,'+encodeURIComponent(vcf), a=document.createElement('a');
+    a.href=url; a.target='_blank'; a.rel='noopener'; a.style.display='none'; document.body.appendChild(a); a.click();
+    setTimeout(function(){ try{ document.body.removeChild(a); }catch(e){} },1500);
+    toast('Tap Create New Contact','ok',3000); return;
+  }catch(e){}
+  _vcfDownload(vcf,fname);
+  toast('Contact file ready — open it and tap Create New Contact','ok',3000);
+}
+function shareContactVCard(taskId, idx){
+  var t=state.tasks.find(function(x){return x.id===taskId;}); if(!t||!t.contacts||!t.contacts[idx]) return;
   var c=t.contacts[idx], vcf=buildVCard(c, 'Added from Chakra: '+t.title), fname=_vcfName(c);
   try{
     var file=new File([vcf],fname,{type:'text/vcard'});
-    if(navigator.canShare && navigator.canShare({files:[file]}) && navigator.share){
-      navigator.share({files:[file],title:c.name||c.org||'Contact'}).catch(function(e){ if(!e || e.name!=='AbortError') _vcfDownload(vcf,fname); });
-      toast('Choose Contacts, or open the file and tap Create New Contact','ok',4500); return;
-    }
+    if(navigator.canShare && navigator.canShare({files:[file]}) && navigator.share){ navigator.share({files:[file],title:c.name||c.org||'Contact'}).catch(function(){}); return; }
   }catch(e){}
   _vcfDownload(vcf,fname);
-  toast('Contact file ready — open it and tap Create New Contact','ok',4500);
 }
 function contactsFromRead(r){
   return ((r&&r.contacts)||[]).map(function(c){ return {name:c.name||null,org:c.org||null,title:c.title||null,phones:(c.phones||[]).slice(),emails:(c.emails||[]).slice(),website:c.website||null,address:c.address||null,saved:false}; })
@@ -1764,8 +1803,8 @@ function removeContact(id,idx){
 function contactBlockHtml(t,c,i,showTask){
   var head=esc([c.name,c.org,c.title].filter(Boolean).join(' · ')||'Contact');
   var rows=(c.phones||[]).map(function(p){
-    var wa=waLink(p);
-    return '<div class="ct-row"><span class="ct-num">'+esc(p)+'</span><a class="ct-btn" href="'+telLink(p)+'">📞 Call</a>'
+    var wa=waLink(p,c.cc);
+    return '<div class="ct-row"><span class="ct-num">'+esc(p)+'</span>'+ccBox(p,c.cc,'c',t.id,i)+'<a class="ct-btn" href="'+telLink(p,c.cc)+'">📞 Call</a>'
       +(wa?'<a class="ct-btn wa" href="'+wa+'" target="_blank" rel="noopener">💬 WhatsApp</a>':'<span class="ct-hint">WhatsApp needs a country code (+91…)</span>')+'</div>';
   }).join('');
   (c.emails||[]).forEach(function(e){ rows+='<div class="ct-row"><span class="ct-num">'+esc(e)+'</span><a class="ct-btn" href="mailto:'+esc(e)+'">✉ Email</a></div>'; });
@@ -1783,16 +1822,13 @@ function detailsEditorHtml(t){
     +'<textarea id="tdDetails" class="td-details" rows="5" placeholder="Anything worth keeping — it stays with this task">'+esc(t.details||'')+'</textarea>';
   (t.contacts||[]).forEach(function(c,i){ h+=contactBlockHtml(t,c,i,false); });
   var have={}; (t.contacts||[]).forEach(function(c){ (c.phones||[]).forEach(function(p){ have[String(p).replace(/\D/g,'')]=1; }); });
-  extractPhones(t.details||'').forEach(function(p){
+  extractPhones((t.title||'')+'\n'+(t.details||'')).forEach(function(p){
     if(have[p.replace(/\D/g,'')]) return;
-    var wa=waLink(p);
-    h+='<div class="ct-block"><div class="ct-head">Number in your notes</div><div class="ct-row"><span class="ct-num">'+esc(p)+'</span>'
-      +'<a class="ct-btn" href="'+telLink(p)+'">📞 Call</a>'+(wa?'<a class="ct-btn wa" href="'+wa+'" target="_blank" rel="noopener">💬 WhatsApp</a>':'')
+    var wa=waLink(p,t.cc);
+    h+='<div class="ct-block"><div class="ct-head">Number in this task</div><div class="ct-row"><span class="ct-num">'+esc(p)+'</span>'+ccBox(p,t.cc,'t',t.id,0)
+      +'<a class="ct-btn" href="'+telLink(p,t.cc)+'">📞 Call</a>'+(wa?'<a class="ct-btn wa" href="'+wa+'" target="_blank" rel="noopener">💬 WhatsApp</a>':'<span class="ct-hint">WhatsApp needs a country code (+91…)</span>')
       +'<button class="ct-btn" onclick="addContactFromNumber(\''+t.id+'\',\''+String(p).replace(/'/g,'')+'\')">＋ Make contact</button></div></div>';
   });
-  h+='<div class="ct-add"><div class="tag-lbl">Add a contact</div>'
-    +'<input id="ctName" class="td-in" placeholder="Name (optional)"><input id="ctPhone" class="td-in" type="tel" placeholder="Phone, with country code e.g. +1 214…">'
-    +'<button class="ct-btn" onclick="addContactManual(\''+t.id+'\')">＋ Add contact</button></div>';
   return h;
 }
 function allContacts(){
@@ -1836,7 +1872,13 @@ function openTaskDetail(id){
   document.getElementById('taskDetailBox').innerHTML=html;
   document.getElementById('taskDetailModal').style.display='flex';
 }
-function closeTaskDetail(){ document.getElementById('taskDetailModal').style.display='none'; }
+function closeTaskDetail(){ document.getElementById('taskDetailModal').style.display='none'; window._panelReopen=null; }
+// v22: a list opened as a pop-up (multitask, Tamas, Not in your hands) redraws after a task is ticked, so a closed task leaves the list at once.
+function refreshOpenPanel(){
+  var m=document.getElementById('taskDetailModal'), box=document.getElementById('taskDetailBox');
+  if(!m || m.style.display!=='flex' || typeof window._panelReopen!=='function' || !box || !box.querySelector('.icard')) return;
+  var keep=box?box.scrollTop:0; window._panelReopen(); if(box) box.scrollTop=keep;
+}
 function saveTaskDetail(id){
   var t=state.tasks.find(function(x){return x.id===id;}); if(!t) return;
   var newBucket=document.getElementById('tdBucket').value;
@@ -2009,6 +2051,7 @@ function renderToday(){
 // untouched), not "turning." Now shown as the bottom segment of the battery
 // itself, not a separate pill. Brahma Muhurta stays out of Chakra entirely.
 function openMtPanel(){
+  window._panelReopen=openMtPanel;
   var items=state.tasks.filter(function(t){return !t.completed && t.multitask===true;});
   var html='<div class="fab-panel-hdr"><div class="fab-panel-title">🔀 Can be done while multitasking</div><div class="fab-panel-close" onclick="closeTaskDetail()">✕</div></div>'
     +'<div style="font-size:11px;color:var(--text-faint);margin-bottom:10px;">Walking, driving on Bluetooth, meals, quiet moments — knock these off alongside something else.</div>'
@@ -3087,6 +3130,7 @@ function renderSoul(){
 // currently sitting in a held bucket (Dhairya, Vishram, Manan, Manthan, Tyaga,
 // Prarabdha) — the ones genuinely not in your hands right now.
 function openAQList(){
+  window._panelReopen=openAQList;
   var hold=['Dhairya','Vishram','Manan','Manthan','Tyaga','Prarabdha'];
   var items=state.tasks.filter(function(t){return !t.completed && hold.indexOf(t.bucket)>=0;});
   var html='<div class="fab-panel-hdr"><div class="fab-panel-title">Not in your hands</div><div class="fab-panel-close" onclick="closeTaskDetail()">✕</div></div>'
@@ -4237,6 +4281,7 @@ function bucketRows(t,fn){
 
 // ── TAMAS LIST: every row can be completed, re-dated, moved or re-categorised right there ──
 function openTamasPanel(){
+  window._panelReopen=openTamasPanel;
   var box=document.getElementById('taskDetailBox'); var keep=box?box.scrollTop:0;
   var items=state.tasks.filter(function(t){return !t.completed;}).filter(isTamas);
   var html='<div class="fab-panel-hdr"><div class="fab-panel-title">🔥 In Tamas</div><div class="fab-panel-close" onclick="closeTaskDetail()">✕</div></div>'

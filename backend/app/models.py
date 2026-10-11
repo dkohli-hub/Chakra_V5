@@ -48,3 +48,4 @@ class Task(Base):
     follow_up_gap = Column(Integer, nullable=True)
     follows_id = Column(String, nullable=True)
     follow_up_spawned_id = Column(String, nullable=True)
+    cc = Column(String(8), nullable=True)

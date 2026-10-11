@@ -36,6 +36,7 @@ class TaskCreate(BaseModel):
     follow_up_gap: Optional[int] = None
     follows_id: Optional[str] = None
     follow_up_spawned_id: Optional[str] = None
+    cc: Optional[str] = None
 
 
 class TaskUpdate(BaseModel):
@@ -70,6 +71,7 @@ class TaskUpdate(BaseModel):
     follow_up_gap: Optional[int] = None
     follows_id: Optional[str] = None
     follow_up_spawned_id: Optional[str] = None
+    cc: Optional[str] = None
 
 
 class TaskOut(BaseModel):
@@ -107,6 +109,7 @@ class TaskOut(BaseModel):
     follow_up_gap: Optional[int] = None
     follows_id: Optional[str] = None
     follow_up_spawned_id: Optional[str] = None
+    cc: Optional[str] = None
 
     class Config:
         from_attributes = True

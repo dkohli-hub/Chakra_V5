@@ -82,6 +82,7 @@ async def create_task(
         follow_up_gap=body.follow_up_gap,
         follows_id=body.follows_id,
         follow_up_spawned_id=body.follow_up_spawned_id,
+        cc=body.cc,
     )
     db.add(task)
     await db.commit()
@@ -208,6 +209,7 @@ async def bulk_import(
                 follow_up_gap=raw.get("follow_up_gap") or raw.get("followUpGap"),
                 follows_id=raw.get("follows_id") or raw.get("followsId"),
                 follow_up_spawned_id=raw.get("follow_up_spawned_id") or raw.get("followUpSpawnedId"),
+                cc=raw.get("cc"),
             )
             db.add(t)
             added += 1
