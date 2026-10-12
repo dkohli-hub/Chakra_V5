@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="Chakra">
 <meta name="theme-color" content="#F5F3EE">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Karma Kshetra™ — DK · Chakra V24</title>
+<title>Karma Kshetra™ — DK · Chakra V25</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -877,7 +877,7 @@ html,body{font-weight:500;}
 
 <script>
 // v14: the ONE place the app version lives. Title, header, login footer and the backup file all read it.
-var APP_VERSION = 24;
+var APP_VERSION = 25;
 (function(){ function stamp(){ document.title='Karma Kshetra™ — DK · Chakra V'+APP_VERSION; document.querySelectorAll('.app-ver').forEach(function(e){ e.textContent=APP_VERSION; }); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',stamp); else stamp(); })();
 // ======================================================
@@ -4733,7 +4733,7 @@ function locClose(){ var o=document.getElementById('locOverlay'); if(o) o.classL
 // ── Utilities: Reminders and location ──
 function locSettingsHtml(){
   var s=SETTINGS, m=s.remMode, g=function(v){ return m===v?' checked':''; };
-  function zone(k,lbl){ var z=s[k]; return '<div class="rs-row"><label class="rs-lbl" for="rs-'+k+'">'+lbl+'</label><input id="rs-'+k+'" class="rs-in" type="text" placeholder="Street address, city" value="'+esc(z&&z.addr?z.addr:'')+'" onchange="rsZoneAddr(\''+k+'\',this.value)">'
+  function zone(k,lbl){ var z=s[k]; return '<div class="rs-row"><label class="rs-lbl" for="rs-'+k+'">'+lbl+'</label><input id="rs-'+k+'" class="rs-in" type="text" placeholder="Street address, city" value="'+esc(z&&z.addr?z.addr:'')+'" data-zone="'+k+'">'
     +'<div class="rs-sm">'+(z&&typeof z.lat==='number'?'Saved ('+z.lat.toFixed(4)+', '+z.lng.toFixed(4)+')':'Not set')+' · <a href="#" onclick="rsZoneHere(\''+k+'\');return false;">Use where I am now</a></div></div>'; }
   return '<div class="rs-card"><div class="rs-h">🔔 Reminders and location</div>'
     +'<div class="rs-sub">Reminder pop-ups</div>'
@@ -4750,7 +4750,36 @@ function locSettingsHtml(){
     +'<div class="rs-row"><button class="rs-btn" onclick="locCheckNow(true)">📍 Check my location now</button></div>'
     +'<div class="rs-sub">Try it without driving</div>'
     +'<div class="rs-row"><label class="rs-lbl" for="rsPretend">Pretend I am at</label><input id="rsPretend" class="rs-in" type="text" placeholder="for example HEB in McKinney" value="'+esc(s.pretend||'')+'" onchange="rsPretend(this.value)"><div class="rs-sm"><a href="#" onclick="rsTryPretend();return false;">Try it</a> · <a href="#" onclick="rsPretend(\'\');return false;">Clear</a></div></div>'
+    +'<div class="rs-row rs-savebar"><button class="rs-btn rs-save" onclick="rsSaveAll()">💾 Save settings</button><div class="rs-sm" id="rsSaved">'+esc(rsSavedText())+'</div></div>'
     +'</div>';
+}
+function rsSavedText(){ return SETTINGS.savedAt ? ('Saved on this phone, '+SETTINGS.savedAt+'. Key: '+(SETTINGS.mapsKey?'saved':'not set')+' · Home: '+(SETTINGS.home?'saved':'not set')+' · Work: '+(SETTINGS.work?'saved':'not set')+' · GPS: '+(SETTINGS.gps?'on':'off')) : 'Not saved yet. Tap Save settings after you fill the boxes.'; }
+function rsSaveAll(){
+  var v=function(id){ var e=document.getElementById(id); return e?e.value:''; };
+  SETTINGS.mapsKey=String(v('rsKey')).trim();
+  var n=parseInt(v('rsCap'),10); SETTINGS.capPerHour=(n>0&&n<=500)?n:60;
+  SETTINGS.pretend=String(v('rsPretend')).trim();
+  var m=document.querySelector('input[name=rsmode]:checked'); if(m) SETTINGS.remMode=m.value;
+  var g=document.getElementById('rsGps'); var wasGps=SETTINGS.gps; if(g) SETTINGS.gps=!!g.checked;
+  var jobs=[], msgs=[];
+  ['home','work'].forEach(function(k){
+    var addr=String(v('rs-'+k)).trim(), cur=SETTINGS[k];
+    if(!addr){ SETTINGS[k]=null; return; }
+    if(cur && cur.addr===addr && typeof cur.lat==='number') return;       // unchanged
+    if(addr==='Current position' && cur) return;
+    if(!SETTINGS.mapsKey){ msgs.push((k==='home'?'Home':'Work')+' address needs the Google key first'); return; }
+    jobs.push(fetch('https://maps.googleapis.com/maps/api/geocode/json?address='+encodeURIComponent(addr)+'&key='+encodeURIComponent(SETTINGS.mapsKey)).then(function(r){return r.json();}).then(function(j){
+      var r0=j.results&&j.results[0]; if(!r0||!r0.geometry){ msgs.push((k==='home'?'Home':'Work')+' address not found'); return; }
+      SETTINGS[k]={addr:addr, lat:r0.geometry.location.lat, lng:r0.geometry.location.lng};
+    }).catch(function(){ msgs.push((k==='home'?'Home':'Work')+' address could not be looked up'); }));
+  });
+  Promise.all(jobs).then(function(){
+    var d=nowWall(); SETTINGS.savedAt=(d.getMonth()+1)+'/'+d.getDate()+' '+fmtClock(d);
+    saveSettings();
+    if(SETTINGS.gps && !wasGps) locStart(); else if(!SETTINGS.gps && wasGps) locStop();
+    renderUtilities();
+    toast(msgs.length?('✓ Saved. '+msgs.join('; ')):'✓ Settings saved','ok',3500);
+  });
 }
 function rsMode(v){ SETTINGS.remMode=v; saveSettings(); }
 function rsGps(on){ SETTINGS.gps=!!on; saveSettings(); if(on){ locStart(); } else { locStop(); } }

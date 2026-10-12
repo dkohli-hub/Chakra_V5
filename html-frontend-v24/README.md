@@ -1,9 +1,9 @@
 # html-frontend-v24
 
-DK's V24 prototype, served as its own static site. It uses the same backend
+DK's current prototype (V25; the folder keeps its V24 name so the Render site is unchanged), served as its own static site. It uses the same backend
 and the same database as `html-frontend` (V22), which stays as it is.
 
-- `index.html` — DK's V24 prototype, unchanged (it already has
+- `index.html` — DK's prototype (now V25), unchanged (it already has
   `var USER_ACCOUNTS = [];` and `<script src="chakra-api.js"></script>`).
 - `chakra-api.js` — a copy of the V22 adapter with two V24 additions:
   - after tasks load it calls `remInit()`, which starts the reminders bell and Location AI mode;
