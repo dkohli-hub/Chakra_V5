@@ -8,11 +8,11 @@ class Settings(BaseSettings):
     Nothing here is secret at rest in the repo.
     """
 
-    # The existing Chakra FastAPI backend, e.g. https://chakra-v5-backend.onrender.com
+    # The existing Chakra FastAPI backend, e.g. https://chakra-v5-api-service.onrender.com
     CHAKRA_API_URL: str = "http://localhost:8000"
 
-    # MUST match the Chakra backend's SECRET_KEY. Used only to mint a short-lived
-    # read token so we can call the app's own GET /tasks endpoint.
+    # MUST match the Chakra backend's SECRET_KEY. Used to mint a short-lived
+    # token so we can call the app's own task API (read, add, update).
     SECRET_KEY: str = "change-me"
 
     # The Chakra login id whose tasks this connector exposes. Tasks are scoped to

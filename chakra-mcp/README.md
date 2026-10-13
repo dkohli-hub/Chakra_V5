@@ -1,7 +1,8 @@
 # Chakra MCP Connector
 
-Read-only MCP server that lets Claude pull DK's Chakra tasks directly into a
-conversation. Runs as its own Render service; the main Chakra app is untouched.
+MCP server that lets Claude read, add and update DK's Chakra tasks from a
+conversation. It cannot delete a task (finish it, or move it to Tyaga). Runs as its
+own Render service; the main Chakra app is untouched.
 
 ## How it works
 
@@ -9,9 +10,12 @@ conversation. Runs as its own Render service; the main Chakra app is untouched.
 Claude  --https + OAuth-->  chakra-mcp  --short-lived JWT-->  chakra-v5-backend  -->  Postgres
 ```
 
-It calls the Chakra backend's existing `GET /tasks` rather than querying Postgres
-directly. Three reasons: the service is read-only by construction, user scoping is
-already enforced by the backend, and there is no second copy of the schema to drift.
+It calls the Chakra backend's own API (`GET /tasks`, `POST /tasks`, `PATCH /tasks/{id}`)
+rather than querying Postgres directly: user scoping is already enforced by the backend,
+there is no second copy of the schema to drift, and saves follow the web app's rules
+(only changed fields are sent; bucket moves go into `state_history`; dates use
+America/Chicago with "this week" ending Saturday; completing a task that holds a
+follow-up creates the follow-up task).
 
 Auth accepts **either** an OAuth 2.1 access token **or** a static bearer token, so
 whichever way Claude's connector dialog works, this is already handled.
@@ -20,12 +24,12 @@ whichever way Claude's connector dialog works, this is already handled.
 
 | File | Purpose |
 |---|---|
-| `app/server.py` | The MCP server and the `get_chakra_tasks` tool |
-| `app/chakra_client.py` | Mints the read token, calls `GET /tasks`, shapes rows |
+| `app/server.py` | The MCP server and its three tools |
+| `app/chakra_client.py` | Mints the short-lived token, calls the task API, the app's date rules, shapes rows |
 | `app/auth.py` | Bearer gate on `/mcp`, issues and verifies tokens |
 | `app/oauth.py` | OAuth 2.1: discovery, registration, consent, token exchange |
 | `app/main.py` | Wires it together into one ASGI app |
-| `smoke_test.py` | 28 end-to-end checks against a stub Chakra API |
+| `smoke_test.py` | 48 end-to-end checks against a stub Chakra API |
 
 ## Local run
 
@@ -63,7 +67,7 @@ Run the test suite (needs no database and no network):
 
    | Key | Value |
    |---|---|
-   | `CHAKRA_API_URL` | `https://chakra-v5-backend.onrender.com` |
+   | `CHAKRA_API_URL` | `https://chakra-v5-api-service.onrender.com` |
    | `SECRET_KEY` | **byte-identical** to chakra-v5-backend's `SECRET_KEY` |
    | `CHAKRA_USER_ID` | `dk` |
    | `MCP_ACCESS_TOKEN` | generated above |
@@ -112,22 +116,35 @@ Prompts that work well:
 - "Show me everything W4 or W5 that's still pending."
 - "Build me a calendar for tomorrow from my Chakra tasks this week."
 - "Which tasks have been sitting longest?"
+- "Add a task to call Raj at the framer on Friday by 4 pm, his number is 214 555 1234."
+- "Mark the framer task done." / "Move the Tesla letter to Dhairya." 
 
-## The tool
+## The tools
 
-`get_chakra_tasks(status, bucket, time_horizon, weightage, life_area, limit)`
+`get_chakra_tasks(status, bucket, time_horizon, weightage, life_area, search, limit)`
 
 - `status` — `pending` (default), `done`, `all`
-- `bucket` — Karya, Dhairya, Manan, Manthan, Vishram, Prarabdha, Tyaga
-- `time_horizon` — today, thisWeek, nextWeek, thisMonth, thisYear, Q3
-- `weightage` — W1 (lightest) to W5 (heaviest)
+- `bucket` — Karya, Dhairya, Vishram, Manan, Manthan, Tyaga, Prarabdha
+- `time_horizon` — today, thisWeek, nextWeek, thisMonth, Q3, Q4, thisYear, 1year, 2years, parkingLot
+- `weightage` — W1 5 min, W2 30 min, W3 1 hr, W4 half day, W5 full day, W6 30 days
 - `life_area` — Personal/Family, Work/Employment, Picturizze, Other
+- `search` — words in the title, details, contacts or follow-up text
 
-Roughly half of all tasks have no `time_horizon` or `weightage` set, so filtering
-on those fields excludes them. That is the data, not a bug.
+Rows carry every field the app keeps: due date and time, details, contacts (with
+country code), follow-up, links, category, `days_sitting` (counted from the entry
+date, as the app does since V21) and, only when a task has moved, `moved_from` /
+`times_moved`. Dated tasks come first, soonest first.
 
-Returned rows carry `chapter` (the schema's `ch`), `aging_days`, and — only when a
-task has actually moved — `moved_from` and `times_moved`.
+`add_chakra_task(title, details, due_date, due_time, time_horizon, weightage, bucket,
+life_area, multitask, chapter, contacts, follow_up_text, follow_up_gap_days)` — saves a
+task exactly as the app would. No date and not Vishram → due this Saturday, tagged
+"no date given". A past date is refused.
+
+`update_chakra_task(task_id, title, details, append_details, due_date, due_time,
+clear_due_date, time_horizon, weightage, bucket, life_area, multitask, completed,
+add_contacts, follow_up_text, follow_up_gap_days)` — changes only what is passed.
+
+There is no delete tool.
 
 ## Troubleshooting
 

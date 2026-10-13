@@ -17,7 +17,7 @@ import threading
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-BACKUP = Path(__file__).parent.parent / "karma-kshetra-backup-2026-07-05.json"
+BACKUP = Path(__file__).parent.parent / "chakra-full-backup-2026-10-14_0021.json"
 
 # Configure before app import so Settings picks these up.
 os.environ.update(
@@ -60,6 +60,7 @@ def load_tasks() -> list[dict]:
         row["num"] = i
         row["transition_count"] = 0
         row["aging_days"] = i % 40
+        row.setdefault("state_history", [])
         out.append(row)
     return out
 
@@ -78,7 +79,51 @@ async def stub_tasks(request):
     return JSONResponse([t for t in TASKS if t["user_id"] == claims["sub"]])
 
 
-stub = Starlette(routes=[Route("/tasks", stub_tasks, methods=["GET"])])
+WRITES: list[tuple[str, str, dict]] = []
+
+
+def _claims(request):
+    auth = request.headers.get("authorization", "")
+    try:
+        return jwt.decode(auth[7:], os.environ["SECRET_KEY"], algorithms=["HS256"])
+    except Exception:
+        return None
+
+
+async def stub_create(request):
+    if not _claims(request):
+        return JSONResponse({"detail": "Invalid token"}, status_code=401)
+    body = await request.json()
+    WRITES.append(("POST", body.get("id"), body))
+    row = {"transition_count": 0, "linked_tasks": [], "contacts": [], **body, "user_id": "dk"}
+    TASKS.append(row)
+    return JSONResponse(row)
+
+
+async def stub_patch(request):
+    if not _claims(request):
+        return JSONResponse({"detail": "Invalid token"}, status_code=401)
+    tid = request.path_params["tid"]
+    body = await request.json()
+    WRITES.append(("PATCH", tid, body))
+    for row in TASKS:
+        if row["id"] == tid:
+            row.update(body)
+            return JSONResponse(row)
+    return JSONResponse({"detail": "Task not found"}, status_code=404)
+
+
+async def stub_delete(request):
+    WRITES.append(("DELETE", request.path_params.get("tid", ""), {}))
+    return JSONResponse({"ok": True})
+
+
+stub = Starlette(routes=[
+    Route("/tasks", stub_tasks, methods=["GET"]),
+    Route("/tasks", stub_create, methods=["POST"]),
+    Route("/tasks/{tid}", stub_patch, methods=["PATCH"]),
+    Route("/tasks/{tid}", stub_delete, methods=["DELETE"]),
+])
 
 
 def serve(application, port: int) -> uvicorn.Server:
@@ -273,17 +318,18 @@ async def main() -> int:
         listed = await mcp_call(c, oauth_token, {"jsonrpc": "2.0", "id": 2, "method": "tools/list"})
         tools = listed.get("result", {}).get("tools", [])
         names = [t.get("name") for t in tools]
-        check("tools/list returns get_chakra_tasks", names == ["get_chakra_tasks"], str(names))
-        props = tools[0]["inputSchema"]["properties"] if tools else {}
+        check("tools/list returns read, add, update", sorted(names) == ["add_chakra_task", "get_chakra_tasks", "update_chakra_task"], str(names))
+        check("there is no delete tool", not any("delete" in (n or "") for n in names), str(names))
+        props = next((t["inputSchema"]["properties"] for t in tools if t["name"] == "get_chakra_tasks"), {})
         check(
-            "tool exposes all five filters",
-            set(props) == {"status", "bucket", "time_horizon", "weightage", "life_area", "limit"},
+            "read tool exposes all filters",
+            set(props) == {"status", "bucket", "time_horizon", "weightage", "life_area", "search", "limit"},
             str(sorted(props)),
         )
 
         print("\n[5] Tool call against real task shapes")
 
-        async def call_tool(args: dict) -> str:
+        async def call_tool(args: dict, name: str = "get_chakra_tasks") -> str:
             res = await mcp_call(
                 c,
                 oauth_token,
@@ -291,7 +337,7 @@ async def main() -> int:
                     "jsonrpc": "2.0",
                     "id": 9,
                     "method": "tools/call",
-                    "params": {"name": "get_chakra_tasks", "arguments": args},
+                    "params": {"name": name, "arguments": args},
                 },
             )
             if "error" in res:
@@ -310,9 +356,14 @@ async def main() -> int:
         check("chapter is mapped from ch", "chapter" in first or all("ch" not in t for t in data.get("tasks", [])),
               str(first)[:160])
         check("raw ch key is not leaked", all("ch" not in t for t in data.get("tasks", [])))
-        check("sorted by aging_days desc",
-              first.get("aging_days") == max(
-                  (t.get("aging_days", 0) for t in data.get("tasks", [])), default=-1))
+        dated = [t.get("due_date") for t in data.get("tasks", []) if t.get("due_date")]
+        check("dated tasks first, soonest first", dated == sorted(dated) and (not dated or data["tasks"][0].get("due_date") == dated[0]),
+              str(dated[:5]))
+        check("days_sitting is computed for every task", all("days_sitting" in t for t in data.get("tasks", [])))
+        allp = json.loads(await call_tool({"status": "all", "limit": 500}))
+        has = lambda k: any(k in t for t in allp["tasks"])
+        check("new fields reach Claude (due_date, details, contacts)", has("due_date") and has("details") and has("contacts"),
+              str([k for k in ("due_date", "details", "contacts") if not has(k)]))
 
         text = await call_tool({"bucket": "Vishram"})
         data = json.loads(text) if text.startswith("{") else {}
@@ -324,13 +375,70 @@ async def main() -> int:
         want = len([t for t in TASKS if t.get("time_horizon") == "thisWeek" and not t.get("completed")])
         check("time_horizon filter", data.get("count") == want, f"got {data.get('count')} want {want}")
 
-        text = await call_tool({"weightage": "W5", "status": "all"})
+        text = await call_tool({"weightage": "W2", "status": "all"})
         data = json.loads(text) if text.startswith("{") else {}
-        want = len([t for t in TASKS if t.get("weightage") == "W5"])
+        want = len([t for t in TASKS if t.get("weightage") == "W2"])
         check("weightage filter with status=all", data.get("count") == want, f"got {data.get('count')} want {want}")
 
         text = await call_tool({"bucket": "NoSuchBucket"})
         check("empty result is a clean message", text == "No tasks match those filters.", text[:120])
+
+        print("\n[5b] Add and update")
+        from datetime import date as _d, timedelta as _td
+        due = (_d.today() + _td(days=5)).isoformat()
+        text = await call_tool({"title": "ZZ smoke call the framer", "details": "Ask about matte frames",
+                                "due_date": due, "due_time": "17:30", "life_area": "Picturizze", "weightage": "W1",
+                                "contacts": [{"name": "Raj", "phones": ["2145551234"], "cc": "+1"}],
+                                "follow_up_text": "Pick up the frames", "follow_up_gap_days": 3}, "add_chakra_task")
+        added = json.loads(text).get("added", {}) if text.startswith("{") else {}
+        post = next((b for m, _, b in WRITES if m == "POST"), {})
+        check("add creates the task", added.get("title") == "ZZ smoke call the framer", text[:200])
+        check("add stores date, time, horizon stamps", post.get("due_date") == due and post.get("due_time") == "17:30"
+              and post.get("due_date_at") == post.get("deadline_set_at") and post.get("time_horizon") in ("thisWeek", "nextWeek", "today"), str(post)[:300])
+        check("add stores area as the app does", post.get("life_area") == "Picturizze" and post.get("category") == "Picturizze")
+        check("add stores contacts, details, follow-up", post.get("contacts", [{}])[0].get("phones") == ["2145551234"]
+              and post.get("details") == "Ask about matte frames" and post.get("follow_up_gap") == 3)
+        check("add starts bucket history", post.get("state_history", [{}])[0].get("bucket") == "Karya")
+        tid = post.get("id")
+
+        text = await call_tool({"title": "ZZ smoke undated"}, "add_chakra_task")
+        undated = [b for m, _, b in WRITES if m == "POST"][-1]
+        check("undated task follows the app rule (this week, no date given)",
+              undated.get("time_horizon") == "thisWeek" and undated.get("no_date_given") is True, str(undated)[:200])
+
+        text = await call_tool({"title": "x", "due_date": "2020-01-01"}, "add_chakra_task")
+        check("a past date is refused", text.startswith("Not added"), text[:120])
+
+        n0 = len(WRITES)
+        text = await call_tool({"task_id": tid, "bucket": "Dhairya", "append_details": "Raj prefers mornings"}, "update_chakra_task")
+        patch = WRITES[-1][2] if len(WRITES) > n0 else {}
+        check("update moves bucket and records history", patch.get("bucket") == "Dhairya"
+              and patch.get("state_history", [{}])[-1].get("bucket") == "Dhairya" and patch.get("transition_count") == 1, str(patch)[:300])
+        check("update appends details", patch.get("details") == "Ask about matte frames\n\nRaj prefers mornings")
+        check("update sends only changed fields", set(patch) == {"bucket", "details", "state_history", "transition_count"}, str(sorted(patch)))
+
+        n0 = len(WRITES)
+        text = await call_tool({"task_id": tid, "completed": True}, "update_chakra_task")
+        res = json.loads(text) if text.startswith("{") else {}
+        new_posts = [b for m, _, b in WRITES[n0:] if m == "POST"]
+        fu = new_posts[0] if new_posts else {}
+        from app.chakra_client import now_local as _nl; due_fu = (_nl().date() + _td(days=3)).isoformat()
+        check("completing creates the follow-up", fu.get("title") == "Pick up the frames" and fu.get("due_date") == due_fu
+              and fu.get("follows_id") == tid and fu.get("weightage") == "W2", str(fu)[:300])
+        patches = [b for m, _, b in WRITES[n0:] if m == "PATCH"]
+        cpatch = patches[-1] if patches else {}
+        check("completion is recorded as the app does", cpatch.get("completed") is True and bool(cpatch.get("completed_timestamp"))
+              and cpatch.get("state_history", [{}])[-1].get("bucket") == "Completed" and cpatch.get("follow_up_spawned_id") == fu.get("id"),
+              str(cpatch)[:300])
+        check("result reports the follow-up", "follow_up_created" in res, text[:200])
+
+        text = await call_tool({"task_id": tid, "completed": True}, "update_chakra_task")
+        check("completing twice changes nothing", text.startswith("Nothing to change"), text[:120])
+        text = await call_tool({"task_id": "no_such_task", "title": "x"}, "update_chakra_task")
+        check("unknown id is a clean message", text.startswith("Not changed: No task with id"), text[:120])
+        text = await call_tool({"search": "smoke framer", "status": "all"})
+        check("search finds by words", text.startswith("{") and json.loads(text)["count"] == 1, text[:160])
+        check("nothing was ever deleted", not any(m == "DELETE" for m, _, _ in WRITES))
 
         print("\n[6] Static bearer token path")
         init = await initialize(c, "static-token-abc123")
