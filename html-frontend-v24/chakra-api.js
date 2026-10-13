@@ -322,7 +322,8 @@
       if (onError) onError(new Error('AI timeout'));
     }, image ? 28000 : 9000);
     var body = { prompt: String(content) };
-    if (image) { body.image = image; body.max_tokens = 1500; }
+    // V27 asks for the full text of a photo (2600 tokens); the backend allows up to 2000.
+    if (image) { body.image = image; body.max_tokens = 2000; }
     request('POST', '/llm/parse', body).then(function (res) {
       if (done) return;
       done = true; clearTimeout(timer);
@@ -354,6 +355,28 @@
         done = true; clearTimeout(timer);
         bad();
       });
+    };
+  }
+
+  // V27: the confirmation box reads everything DK adds with one AI call. Same backend call; the page's 35 s wait
+  // is kept, and on failure the page marks AI as down and builds the box from its own word rules.
+  if (typeof window.v27Ai === 'function') {
+    window.v27Ai = function (content, ok, bad) {
+      if (typeof _aiOff === 'function' && _aiOff()) { bad(); return; }
+      var done = false;
+      var fail = function () {
+        if (done) return;
+        done = true; clearTimeout(timer);
+        if (typeof _aiFailed === 'function') _aiFailed();
+        bad();
+      };
+      var timer = setTimeout(fail, 35000);
+      request('POST', '/llm/parse', { prompt: String(content), max_tokens: 2000 }).then(function (res) {
+        if (done) return;
+        if (typeof res.text !== 'string') { fail(); return; }
+        done = true; clearTimeout(timer);
+        ok(res.text.trim());
+      }, fail);
     };
   }
 })();

@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="Chakra">
 <meta name="theme-color" content="#F5F3EE">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Karma Kshetra™ — DK · Chakra V25</title>
+<title>Karma Kshetra™ — DK · Chakra V27</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -716,6 +716,34 @@ html,body{font-weight:500;}
 .rs-in{width:100%;box-sizing:border-box;padding:9px;border:1px solid var(--border,#bbb);border-radius:8px;font-size:14px;background:transparent;color:inherit;}
 .rs-sm{font-size:11px;opacity:.75;margin-top:3px;}
 .rs-btn{width:100%;padding:11px;border-radius:10px;border:1px solid #5B3FA6;background:#5B3FA6;color:#fff;font-size:13px;font-weight:700;cursor:pointer;}
+
+/* v27 confirmation box */
+.v27-overlay{display:none;position:fixed;inset:0;background:rgba(20,30,20,.6);z-index:1300;align-items:flex-end;justify-content:center;padding:0;}
+.v27-overlay.open{display:flex;}
+.v27-card{background:var(--surface,#fff);color:var(--text,#222);width:100%;max-width:520px;max-height:92vh;display:flex;flex-direction:column;border-radius:16px 16px 0 0;font-family:Montserrat,sans-serif;box-shadow:0 -6px 30px rgba(0,0,0,.35);}
+.v27-card.sm{max-height:70vh;}
+.v27-hdr{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border,#ddd);}
+.v27-ttl{font-weight:700;font-size:16px;}
+.v27-x{border:0;background:transparent;font-size:20px;min-width:44px;min-height:44px;cursor:pointer;color:inherit;}
+.v27-body{overflow:auto;padding:10px 14px;flex:1;}
+.v27-sum{font-size:13px;margin-bottom:10px;line-height:1.4;}
+.v27-mode{display:flex;flex-direction:column;gap:6px;margin:6px 0 12px;padding:9px;border:1px solid var(--border,#ccc);border-radius:10px;font-size:13px;}
+.v27-row{border:1px solid var(--border,#ddd);border-radius:12px;padding:10px;margin-bottom:12px;}
+.v27-row.off{opacity:.55;}
+.v27-lbl{display:block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin:8px 0 3px;opacity:.75;}
+.v27-in{width:100%;box-sizing:border-box;padding:10px;border:1px solid var(--border,#bbb);border-radius:8px;font-size:15px;background:transparent;color:inherit;font-family:inherit;}
+.v27-ta{resize:vertical;font-size:13px;}
+.v27-two{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.v27-from{font-size:11px;opacity:.7;margin-top:3px;}
+.v27-chk,.v27-inc{display:flex;gap:8px;align-items:center;font-size:13px;margin:8px 0;min-height:34px;}
+.v27-night{background:#EFEAFB;border-left:4px solid #5B3FA6;border-radius:8px;padding:9px;margin:8px 0;font-size:13px;}
+.v27-night label{display:flex;gap:8px;align-items:flex-start;margin-top:6px;}
+.v27-foot{display:flex;gap:8px;padding:10px 14px 16px;border-top:1px solid var(--border,#ddd);}
+.v27-btn{flex:1;padding:13px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;border:1px solid #1A6B5A;min-height:46px;}
+.v27-btn.go{background:#1A6B5A;color:#fff;}
+.v27-btn.ghost{background:transparent;color:inherit;border-color:var(--border,#aaa);}
+.v27-sch{display:flex;gap:10px;align-items:flex-start;padding:9px;border:1px solid var(--border,#ddd);border-radius:10px;margin-bottom:8px;font-size:13px;}
+.v27-busy{display:none;position:fixed;left:50%;top:70px;transform:translateX(-50%);background:#1A6B5A;color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;font-weight:600;z-index:1400;box-shadow:0 3px 12px rgba(0,0,0,.3);}
 </style>
 </head>
 <body>
@@ -877,7 +905,7 @@ html,body{font-weight:500;}
 
 <script>
 // v14: the ONE place the app version lives. Title, header, login footer and the backup file all read it.
-var APP_VERSION = 25;
+var APP_VERSION = 27;
 (function(){ function stamp(){ document.title='Karma Kshetra™ — DK · Chakra V'+APP_VERSION; document.querySelectorAll('.app-ver').forEach(function(e){ e.textContent=APP_VERSION; }); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',stamp); else stamp(); })();
 // ======================================================
@@ -957,6 +985,7 @@ function _initGIS(){
         _googleAccessToken = resp.access_token;
         if(_calCheckPending){ _calCheckPending=false; runCalCheck(); return; }
         _completePendingBooking();
+        if(window._v27Queue) v27Flush();
       } else {
         _calSignInError(resp && resp.error ? {type:resp.error} : null);
       }
@@ -1574,7 +1603,7 @@ function renderCard(t){
     t.linkedTasks.forEach(function(lid){
       var lt=state.tasks.find(function(x){return x.id===lid;});
       if(!lt) return;
-      meta+='<span class="cat-badge" title="'+(lid===t.followsId?'Follow-up of a closed task — tap ✕ to remove the link':'AI-linked — tap ✕ to remove')+'">'+(lid===t.followsId?'↪ follows: ':'🔗 ')+esc(lt.shortTitle||lt.title).slice(0,24)
+      meta+='<span class="cat-badge" onclick="event.stopPropagation();openChain(\''+t.id+'\')" title="'+(lid===t.followsId?'Follow-up of a closed task — tap to see all linked tasks, ✕ to remove the link':'Linked — tap to see all linked tasks, ✕ to remove')+'">'+(lid===t.followsId?'↪ follows: ':'🔗 ')+esc(lt.shortTitle||lt.title).slice(0,24)
         +'<span onclick="unlinkTask(event,\''+t.id+'\',\''+lid+'\')" style="margin-left:4px;opacity:.6;">✕</span></span>';
     });
   }
@@ -1776,15 +1805,10 @@ function saveContactVCard(taskId, idx){
   var c=t.contacts[idx], cc2=JSON.parse(JSON.stringify(c));
   cc2.phones=(c.phones||[]).map(function(p){ return fullPhone(p,c.cc); });   // the card carries the full international number
   var vcf=buildVCard(cc2, 'Added from Chakra: '+t.title), fname=_vcfName(c);
-  // v22: open the card itself so iPhone shows its own contact preview with "Create New Contact".
-  try{
-    var url='data:text/vcard;charset=utf-8,'+encodeURIComponent(vcf), a=document.createElement('a');
-    a.href=url; a.target='_blank'; a.rel='noopener'; a.style.display='none'; document.body.appendChild(a); a.click();
-    setTimeout(function(){ try{ document.body.removeChild(a); }catch(e){} },1500);
-    toast('Tap Create New Contact','ok',3000); return;
-  }catch(e){}
+  // v26: the old way opened a data: address, which iPhone's viewer shows as a blank page called "data:".
+  // Now the card is handed over as a real .vcf file; open it from the download prompt and tap Create New Contact.
   _vcfDownload(vcf,fname);
-  toast('Contact file ready — open it and tap Create New Contact','ok',3000);
+  toast('Contact file ready. Open it and tap Create New Contact','ok',4500);
 }
 function shareContactVCard(taskId, idx){
   var t=state.tasks.find(function(x){return x.id===taskId;}); if(!t||!t.contacts||!t.contacts[idx]) return;
@@ -2194,7 +2218,7 @@ function aiReadImage(b64, cb){
   var prompt='DK uploaded this image to his task app. It may be a screenshot of a social-media post or ad, a business card, a handwritten note, or a to-do list. The text may be Hindi, English or mixed.\n'
     +'Answer with ONLY raw JSON, no markdown, no explanation:\n'
     +'{"kind":"tasklist" or "contact" or "info","title":"what this is, max 8 words","summary":"one or two plain sentences in English","lines":["only for a to-do list: one task per entry"],'
-    +'"contacts":[{"name":null,"org":null,"title":null,"phones":[],"emails":[],"website":null,"address":null}],"facts":["short factual lines: prices, rates, dates, what is included"]}\n'
+    +'"contacts":[{"name":null,"org":null,"title":null,"phones":[],"emails":[],"website":null,"address":null}],"facts":["short factual lines: prices, rates, dates, what is included"],"text":"ALL the text visible in the image, copied exactly, line by line"}\n'
     +'Rules:\n'
     +'- Copy phone numbers EXACTLY as printed, digit for digit, with the country code if it is shown. Never guess or complete a number.\n'
     +'- Use null or [] for anything that is not visible. Never invent anything.\n'
@@ -2202,11 +2226,11 @@ function aiReadImage(b64, cb){
     +'- Keep names of people, places and businesses as written. Write summary and facts in English.\n';
   apiCall(prompt, function(txt){
     try{
-      var j=JSON.parse(txt.replace(/```json|```/g,'').trim()), r={kind:'info',title:null,summary:null,lines:[],contacts:[],facts:[]};
+      var j=JSON.parse(txt.replace(/```json|```/g,'').trim()), r={kind:'info',title:null,summary:null,lines:[],contacts:[],facts:[],fullText:''};
       if(j.kind==='tasklist'||j.kind==='contact'||j.kind==='info') r.kind=j.kind;
       r.title=_sStr(j.title,120); r.summary=_sStr(j.summary,400);
       r.lines=_sArr(j.lines,40,function(x){return _sStr(x,300);});
-      r.facts=_sArr(j.facts,25,function(x){return _sStr(x,200);});
+      r.facts=_sArr(j.facts,25,function(x){return _sStr(x,200);}); r.fullText=_sStr(j.text,3000)||'';
       r.contacts=_sArr(j.contacts,6,function(c){
         if(!c||typeof c!=='object') return null;
         return {name:_sStr(c.name,80),org:_sStr(c.org,120),title:_sStr(c.title,80),
@@ -2309,11 +2333,21 @@ function parseClockTime(t){
   return null;
 }
 // → {dueDate:'YYYY-MM-DD', dueTime:'HH:MM'|null} or null when the words contain no date or time
-function parseDueFromText(text){
+// v27 (DK, 13 Oct 2026): next month = the 15th; next quarter = one month into that quarter; next year = 31 March.
+function _nextPeriodDate(t, today){
+  if(/\bnext year\b/.test(t)) return new Date(today.getFullYear()+1,2,31);
+  if(/\bnext quarter\b/.test(t)){ var q=Math.floor(today.getMonth()/3), nq=(q+1)%4, y=today.getFullYear()+(q===3?1:0); return new Date(y,nq*3+1,1); }
+  if(/\bnext month\b/.test(t)) return new Date(today.getFullYear(),today.getMonth()+1,15);
+  return null;
+}
+function parseDueFromText(text, strict){
   var t=(text||'').toLowerCase(); if(!t.trim()) return null;
   var now=nowWall(), today=startOfDay(now), d=null, explicit=false;
   var time=parseClockTime(t);
-  if(/\bday after tomorrow\b|\bovermorrow\b/.test(t)) { d=addDays(today,2); explicit=true; }
+  var _np=_nextPeriodDate(t,today), _inN=/\bin\s+(\d{1,2}|one|two|three|four|five|six|seven|eight|nine|ten)\s+days?\b/.exec(t);
+  if(_np){ d=_np; explicit=true; }
+  else if(/\bday after tomorrow\b|\bovermorrow\b/.test(t)) { d=addDays(today,2); explicit=true; }
+  else if(_inN && (({one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10})[_inN[1]]||+_inN[1])>=1){ d=addDays(today,({one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10})[_inN[1]]||+_inN[1]); explicit=true; }
   else if(/\btomorrow\b|\btmrw\b|\btmr\b/.test(t)) { d=addDays(today,1); explicit=true; }
   else if(/\b(today|tonight|this evening|this afternoon|this morning|end of (the )?day|eod|right now)\b/.test(t)) { d=today; explicit=true; }
   if(!d){
@@ -2325,7 +2359,7 @@ function parseDueFromText(text){
     }
   }
   if(!d){
-    var wk=/\b(?:(this coming|this|next|coming)\s+)?(sunday|monday|tuesday|wednesday|thursday|friday|saturday)\b/.exec(t), dow=null, pre=null;
+    var wk=/\b(?:(this coming|this|next|coming|following)\s+)?(sunday|monday|tuesday|wednesday|thursday|friday|saturday)\b/.exec(t), dow=null, pre=null;
     if(wk){ dow=_DOW_FULL[wk[2]]; pre=wk[1]||null; }
     else {
       var ab=/\b(?:by|on|this|next|before|until)\s+(sun|mon|tues?|wed|thur?s?|fri|sat)\b/.exec(t);
@@ -2333,12 +2367,13 @@ function parseDueFromText(text){
     }
     if(dow!==null){
       var occ=(dow-today.getDay()+7)%7;
+      if(occ===0 && pre!=='this' && pre!=='next') occ=7;       // v27: the same weekday as today means the next one, a week away
       if(pre==='next'){ if(occ===0) occ=7; var leftThisWeek=6-today.getDay(); if(occ<=leftThisWeek) occ+=7; }
       d=addDays(today,occ); explicit=true;
     }
   }
-  if(!d && /\bthis weekend\b/.test(t)){ d=saturdayOfWeek(today); explicit=true; }
-  if(!d && time){                       // a clock time with no day: today, or tomorrow if that time has already passed
+  if(!d && /\bweekend\b/.test(t)){ d=saturdayOfWeek(today); if(/\bnext weekend\b/.test(t)) d=addDays(d,7); explicit=true; }   // v27: weekend always means Saturday
+  if(!d && time && !strict){            // a clock time with no day: today, or tomorrow if that time has already passed
     d=today; var hm=time.split(':'); var at=new Date(today.getFullYear(),today.getMonth(),today.getDate(),+hm[0],+hm[1],0);
     if(at.getTime()<=now.getTime()) d=addDays(today,1);
   }
@@ -2379,7 +2414,7 @@ function apiCall(content, onSuccess, onError, image){
   var to = setTimeout(function(){ try{ if(ctl) ctl.abort(); }catch(e){} }, image?28000:9000);
   fetch(AI_PROXY_URL,{
     method:'POST', headers:{'Content-Type':'application/json'},
-    body:JSON.stringify(image?{content:content, max_tokens:1500, image:image}:{content:content, max_tokens:700}), signal: ctl?ctl.signal:undefined
+    body:JSON.stringify(image?{content:content, max_tokens:2600, image:image}:{content:content, max_tokens:700}), signal: ctl?ctl.signal:undefined
   })
   .then(function(r){ if(!r.ok) throw new Error('http '+r.status); return r.json(); })
   .then(function(d){
@@ -2530,8 +2565,7 @@ function _afterEachRead(){
   renderImgThumbs();
   if(imgItems.some(function(x){return x.status==='reading';})) return;
   // every image has been read: to-do-list images open the Scanned Text list (lines from all of them together)
-  var lines=[]; imgItems.forEach(function(x){ if(x.read && x.read.kind==='tasklist' && !x.listShown){ x.listShown=true; lines=lines.concat(x.read.lines); } });
-  if(lines.length) showOcrResult(lines.join('\n'));
+  // v27: a list photo goes through the same confirmation box as every other image (no separate Scanned Text list).
 }
 function visionFallback(it){
   var vKey=GOOGLE_CALENDAR_CONFIG.visionApiKey;
@@ -2550,8 +2584,7 @@ function visionFallback(it){
     else{
       it.ocr=text.trim(); it.status='ocr';
       var typed=((document.getElementById('gatherText')||{}).value||'').trim();
-      if(!typed && imgItems.length===1) showOcrResult(it.ocr);
-      else toast('Image read — its text will be saved as details','ok',2800);
+      toast('Image read — its text will be saved as details','ok',2800);
     }
     _afterEachRead();
   }).catch(function(){ it.status='fail'; toast('Image reading failed — check your connection.','warn',3500); _afterEachRead(); });
@@ -4817,6 +4850,390 @@ function remInit(){
   }
   try{ renderUtilities(); }catch(e){}
   if(!window._uhWrapped){ window._uhWrapped=true; var _uh=updateHeader; updateHeader=function(){ _uh.apply(this,arguments); try{ remUpdateBell(); locUpdatePill(); }catch(e){} }; }
+}
+
+
+
+// ═══════════════════════════════════════════════════════════════════════════
+// v27 — ONE FLOW FOR EVERYTHING DK ADDS (DK, 13 Oct 2026)
+// Chakra reads the pictures in full, adds your typed words, the context box and your multitask choice, and ONE AI analysis
+// works out what it all means for DK. A confirmation box shows what was found and WHERE each fact came from; DK edits it and confirms.
+//   • By default several lines become ONE task (the Save-as-separate option is DK's choice). Errors and "not sure" also mean ONE task.
+//   • The title is written from the whole description (not the first words cut off). Everything else goes into the notes.
+//   • Weight is not shown: stated time is used if there is one, otherwise the default.
+//   • Dates are worked out by Chakra's own rules (today, tomorrow, weekend = Saturday, first coming weekday, next month = 15th,
+//     next quarter = 1 month in, next year = 31 March). Between 11 PM and 5 AM on the phone, "tomorrow" and friends are asked about.
+//   • After saving, an extra tap asks whether to put it on the calendar. ITC tasks are saved but never written to the calendar.
+// ═══════════════════════════════════════════════════════════════════════════
+var V27_MAX_ROWS=12, V27_TITLE_MAX=100;
+var V27={open:false, mode:'one', draft:null, one:null, sep:[], chips:null, attach:null, busy:false};
+
+// ── dates ──
+function v27PhoneNow(){ if(window.__PHONE_HOUR!==undefined){ var d=new Date(); d.setHours(window.__PHONE_HOUR,window.__PHONE_MIN||0,0,0); return d; } return new Date(); }
+function v27IsNight(){ var h=v27PhoneNow().getHours(); return h>=23 || h<5; }
+var V27_NUMW={one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,a:1,an:1};
+function v27RelWord(text){
+  var t=String(text||'').toLowerCase();
+  if(/\bday after tomorrow\b|\bovermorrow\b/.test(t)) return {word:'day after tomorrow', plus:2};
+  if(/\btomorrow\b|\btmrw\b|\btmr\b/.test(t)) return {word:'tomorrow', plus:1};
+  var m=/\bin\s+(\d{1,2}|one|two|three|four|five|six|seven|eight|nine|ten)\s+days?\b/.exec(t) || /\b(\d{1,2}|one|two|three|four|five|six|seven|eight|nine|ten)\s+days?\s+(?:from now|later)\b/.exec(t);
+  if(m){ var n=V27_NUMW[m[1]]||+m[1]; if(n>=1&&n<=10) return {word:'in '+n+' day'+(n>1?'s':''), plus:n}; }
+  if(/\byesterday\b/.test(t)) return {word:'yesterday', plus:-1};
+  return null;
+}
+function v27Fmt(ymd,hm){
+  var d=_ddParse(ymd); if(!d) return ''; var dn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var s=dn[d.getDay()]+' '+(d.getMonth()+1)+'/'+d.getDate();
+  if(hm){ var p=hm.split(':'); s+=' '+fmtClock(new Date(2000,0,1,+p[0],+p[1])); }
+  return s;
+}
+// Resolve the words DK used for the date. Chakra's own rules decide; the AI's date is only used when the words are not a known phrase.
+function v27ResolveDate(phrase){
+  if(!phrase) return null;
+  var t=String(phrase).toLowerCase(), today=startOfDay(nowWall());
+  var nm=/\b(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?\b/.exec(t);
+  if(nm){ var mo=+nm[1]-1, da=+nm[2], yr=nm[3]?(+nm[3]<100?2000+ +nm[3]:+nm[3]):today.getFullYear(); if(mo>=0&&mo<12&&da>=1&&da<=31){ var c=new Date(yr,mo,da); if(!nm[3] && c.getTime()<today.getTime()) c=new Date(yr+1,mo,da); return {dueDate:ymdOf(c), dueTime:parseClockTime(t)}; } }
+  return parseDueFromText(t,true);
+}
+function v27NightFor(phrase){
+  if(!v27IsNight()) return null;
+  var rel=v27RelWord(phrase); if(!rel || rel.plus<1) return null;
+  var today=startOfDay(nowWall()), lit=addDays(today,rel.plus), alt=addDays(today,rel.plus-1), ph=v27PhoneNow();
+  var clock=fmtClock(ph);
+  return {word:rel.word, clock:clock, A:{date:ymdOf(alt), label:v27Fmt(ymdOf(alt))+' — the day that begins when you wake up'}, B:{date:ymdOf(lit), label:v27Fmt(ymdOf(lit))+' — one day after today’s calendar date'}, choice:null};
+}
+
+// ── titles (used only when the AI is not reachable) ──
+function v27LocalTitle(text){
+  var t=String(text||'').replace(/\s+/g,' ').trim(); if(!t) return 'New task';
+  var s=t.split(/(?<=[.!?])\s+/)[0]; if(s.length<=V27_TITLE_MAX) return s.replace(/[.\s]+$/,'');
+  var cut=s.slice(0,V27_TITLE_MAX), k=Math.max(cut.lastIndexOf(', '),cut.lastIndexOf('; '),cut.lastIndexOf(' — '),cut.lastIndexOf(' and '),cut.lastIndexOf(' then '));
+  if(k<30) k=cut.lastIndexOf(' ');
+  return cut.slice(0,k>0?k:V27_TITLE_MAX).replace(/[,;\s]+$/,'');
+}
+function v27CleanTitle(t){
+  t=String(t||'').replace(/\s+/g,' ').trim().replace(/^["“]+|["”]+$/g,'');
+  if(t.length>V27_TITLE_MAX){ var cut=t.slice(0,V27_TITLE_MAX), k=cut.lastIndexOf(' '); t=cut.slice(0,k>20?k:V27_TITLE_MAX).replace(/[,;:\s]+$/,''); }
+  return t;
+}
+
+// ── AI call (own, longer than the one-line parsers) ──
+function v27Ai(content, ok, bad){
+  if(_aiOff()){ bad(); return; }
+  var ctl=(typeof AbortController!=='undefined')?new AbortController():null, to=setTimeout(function(){ try{ if(ctl) ctl.abort(); }catch(e){} },35000);
+  fetch(AI_PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:content,max_tokens:2600}),signal:ctl?ctl.signal:undefined})
+  .then(function(r){ if(!r.ok) throw new Error('http '+r.status); return r.json(); })
+  .then(function(d){ clearTimeout(to); var txt=d && (typeof d.text==='string'?d.text:(d.content&&d.content[0]&&d.content[0].text)); if(typeof txt!=='string') throw new Error('bad reply'); ok(txt.trim()); })
+  .catch(function(){ clearTimeout(to); _aiFailed(); bad(); });
+}
+function v27Json(txt){ var s=String(txt||'').replace(/```json|```/g,''), a=s.indexOf('{'), b=s.lastIndexOf('}'); if(a<0||b<a) return null; try{ return JSON.parse(s.slice(a,b+1)); }catch(e){ return null; } }
+
+function v27Prompt(inp){
+  var n=nowWall(), dn=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'], tab=[];
+  for(var i=0;i<=21;i++){ var d=addDays(startOfDay(n),i); tab.push(dn[d.getDay()].slice(0,3)+' '+ymdOf(d)+(i===0?' (today)':'')); }
+  var ph=v27PhoneNow();
+  var h='You are the reading brain of Chakra, DK’s task app. DK gave you the material below. Work out what it means for him and answer with ONLY raw JSON.\n\n';
+  h+='TODAY: '+dn[n.getDay()]+' '+ymdOf(n)+', '+_p2(n.getHours())+':'+_p2(n.getMinutes())+' America/Chicago. Phone time now: '+fmtClock(ph)+'.\nCALENDAR (use it for every date):\n'+tab.join('\n')+'\n\n';
+  h+='WHAT DK TYPED:\n'+(inp.typed||'(nothing)')+'\n\nCONTEXT BOX:\n'+(inp.note||'(nothing)')+'\n\n';
+  h+='DK’S CHOICES: multitask='+(inp.chips.mt===true?'yes':inp.chips.mt===false?'no':'not chosen')+'\n\n';
+  (inp.imgs||[]).forEach(function(it,i){ h+='IMAGE '+(i+1)+' (read by AI'+(it.read&&it.read.title?': '+it.read.title:'')+'):\n'+((it.read&&(it.read.fullText||detailsFromRead(it.read)))||it.ocr||'(unreadable)')+'\n\n'; });
+  h+='JSON shape:\n{"overallTitle":"one self-explanatory title for everything together","summary":"one plain sentence","scheduleRequested":true or false,"calendar":"personal" or "picturizze" or "itc" or null,\n"tasks":[{"title":"...","dueDate":"YYYY-MM-DD or null","datePhrase":"DK’s exact words for the date or null","dueTime":"HH:MM 24h or null","minutes":number or null,"multitask":true or false or null,"lifeArea":"Personal/Family" or "Work/Employment" or "Picturizze" or "Other" or null,"leisure":true or false,"notes":"extra details for THIS task only, plain lines","linkNext":true or false,"from":{"title":"typed|context|image 1|image 2…","date":"typed|context|image 1…|null","time":"typed|context|image 1…|null"}}],\n"facts":[{"text":"other relevant fact found","from":"typed|context|image 1…"}],"conflicts":["where the image and DK’s words disagree, if anywhere"]}\n\n';
+  h+='RULES:\n- Create tasks only for ACTIONS DK must do. An event he mentions as the reason for the dates (for example her photo shoot) is a note, not a task, unless DK says he must attend or do it (an appointment he must go to is a task).\n- Split into several tasks ONLY when there are clearly separate actions with their own deadline or person. Otherwise ONE task. At most '+V27_MAX_ROWS+' tasks.\n- TITLE: say what the task is and with whom, in DK’s own words where possible, 4 to 14 words, complete in meaning. Never copy the first words and cut off. Do not invent new phrases.\n- Dates: weekend means Saturday. A weekday name alone means the FIRST such day coming up (never today). tomorrow, day after tomorrow, in N days, next month (the 15th of next month), next quarter (1st of the second month of that quarter), next year (31 March next year) follow these rules exactly. If a date has no year, use the next one on or after today whose weekday fits. If no date is stated or found, dueDate is null. Never guess a date.\n- dueTime only if a clock time is stated or printed.\n- DK’s own words and context box win over the images if they disagree; say so in conflicts.\n- minutes only if a duration is stated (3 hours = 180).\n- scheduleRequested = true only if DK asks to put it on his calendar.\n- notes and facts: every other useful detail (address, phone, amount, instructions) with where it came from. Copy phone numbers digit for digit. Never invent anything.\n- linkNext = true when this task and the next belong to the same matter or person.\n- lifeArea: Picturizze = photography and videography business and its clients. Work/Employment = his ITC job. Personal/Family = home, family, health, money, errands.\n';
+  return h;
+}
+var V27_FROM={typed:'your words',context:'your context box'};
+function v27FromLabel(f){ f=String(f||'').toLowerCase().trim(); if(!f||f==='null') return ''; if(V27_FROM[f]) return V27_FROM[f]; if(/^image/.test(f)) return f; return f; }
+
+// ── build the draft ──
+function v27NormRow(r, chips, typedAll){
+  var row={title:v27CleanTitle(r.title)||'New task', titleFrom:v27FromLabel(r.from&&r.from.title)||'worked out by Chakra', dueDate:'', dueTime:'', dateFrom:'', timeFrom:'', leisure:!!r.leisure, mt:null, la:null, minutes:null, notes:String(r.notes||'').trim(), include:true, linkNext:!!r.linkNext, night:null};
+  var phrase=r.datePhrase||'', res=v27ResolveDate(phrase), today=startOfDay(nowWall());
+  var date=null, time=null, dfrom='';
+  if(res){ date=res.dueDate; time=res.dueTime||null; dfrom=(v27FromLabel(r.from&&r.from.date)||'your words')+': “'+String(phrase).slice(0,40)+'”, worked out by Chakra'; }
+  else if(typeof r.dueDate==='string' && /^\d{4}-\d{2}-\d{2}$/.test(r.dueDate)){ date=r.dueDate; dfrom=v27FromLabel(r.from&&r.from.date)||'read by AI'; }
+  if(date && _ddParse(date) && _ddParse(date).getTime()<today.getTime()){ date=null; dfrom='the date found looks like it is in the past, please check'; }
+  if(typeof r.dueTime==='string' && /^\d{2}:\d{2}$/.test(r.dueTime) && !time){ time=r.dueTime; row.timeFrom=v27FromLabel(r.from&&r.from.time)||'read by AI'; }
+  else if(time) row.timeFrom='your words';
+  if(date){ row.dueDate=date; row.dueTime=time||''; row.dateFrom=dfrom; row.leisure=false; }
+  var night=v27NightFor(phrase); if(night && row.dueDate){ row.night=night; }
+  if(typeof r.minutes==='number' && r.minutes>0) row.minutes=Math.round(r.minutes);
+  row.mt = (chips.mt===true||chips.mt===false) ? chips.mt : ((r.multitask===true||r.multitask===false)?r.multitask:null);
+  row.la = chips.la || ((typeof r.lifeArea==='string' && _AI_AREAS[r.lifeArea])?r.lifeArea:null);
+  return row;
+}
+function v27SharedNotes(inp, facts){
+  var L=[];
+  (facts||[]).forEach(function(f){ if(f&&f.text){ var fr=v27FromLabel(f.from); L.push('• '+String(f.text).slice(0,300)+(fr?' ('+fr+')':'')); } });
+  if(inp.typed && inp.typed.length>0) L.push('\nYour words:\n'+inp.typed);
+  if(inp.note) L.push('\nContext you gave:\n'+inp.note);
+  (inp.imgs||[]).forEach(function(it,i){ var tx=(it.read&&(it.read.fullText||detailsFromRead(it.read)))||it.ocr||''; if(tx) L.push('\nRead from image'+(inp.imgs.length>1?' '+(i+1):'')+':\n'+String(tx).slice(0,1500)); });
+  return L.join('\n').trim();
+}
+function v27MergeOne(rows, overall, shared, chips){
+  var dated=rows.filter(function(r){return r.dueDate;}).sort(function(a,b){ return (a.dueDate+(a.dueTime||'23:59')) < (b.dueDate+(b.dueTime||'23:59')) ? -1 : 1; });
+  var one={title:(rows.length>1?v27CleanTitle(overall):'')||rows[0].title, titleFrom:(rows.length>1?'worked out by Chakra from everything':rows[0].titleFrom), dueDate:'', dueTime:'', dateFrom:'', timeFrom:'', leisure:false, mt:null, la:null, minutes:null, notes:'', include:true, linkNext:false, night:null};
+  if(dated.length){ var e=dated[0]; one.dueDate=e.dueDate; one.dueTime=e.dueTime; one.dateFrom=rows.length>1?('the earliest of your dates ('+e.dateFrom+')'):e.dateFrom; one.timeFrom=e.timeFrom; one.night=e.night; }
+  else one.leisure=rows.length>0 && rows.every(function(r){return r.leisure;});
+  if(rows.some(function(r){return r.mt===false;})) one.mt=false; else if(rows.every(function(r){return r.mt===true;})) one.mt=true;
+  one.la=rows.reduce(function(a,r){return a||r.la;},null);
+  one.minutes=rows.reduce(function(a,r){return Math.max(a||0,r.minutes||0);},0)||null;
+  var L=[]; if(rows.length>1) rows.forEach(function(r){ L.push('• '+r.title+(r.dueDate?' — due '+v27Fmt(r.dueDate,r.dueTime):'')+(r.notes?'\n   '+r.notes.replace(/\n/g,'\n   '):'')); }); else if(rows[0].notes) L.push(rows[0].notes);
+  if(shared) L.push(shared);
+  one.notes=L.join('\n\n').trim();
+  return one;
+}
+function v27Build(inp, j){
+  var tasksIn=(j&&Array.isArray(j.tasks)?j.tasks:[]).slice(0,V27_MAX_ROWS), rows=tasksIn.map(function(r){ return v27NormRow(r, inp.chips, inp.typed); });
+  var ai=!!(j && rows.length);
+  if(!rows.length){          // AI not reachable or unusable → ONE task from the words, by keyword rules
+    var all=[inp.typed, inp.note].filter(Boolean).join('\n');
+    var imgTxt=(inp.imgs||[]).map(function(it){ return (it.read&&(it.read.title||it.read.summary))||it.ocr||''; }).filter(Boolean).join(' ');
+    var base=inp.typed || inp.note || imgTxt || 'Review the image details';
+    var res=v27ResolveDate(all+' '+imgTxt), row={title:v27LocalTitle(base), titleFrom:'your first sentence (AI was not available)', dueDate:'', dueTime:'', dateFrom:'', timeFrom:'', leisure:parseLeisureWords(all), mt:null, la:inp.chips.la||null, minutes:null, notes:'', include:true, linkNext:false, night:null};
+    if(res){ row.dueDate=res.dueDate; row.dueTime=res.dueTime||''; row.dateFrom='read from your words by keywords — please check'; row.leisure=false; row.night=v27NightFor(all); }
+    var w=parseWeightage(inp.note)||parseWeightage(inp.typed); if(w) row.minutes=W_MIN[w];
+    var mtp=parseMultitask(inp.note); if(mtp===null) mtp=parseMultitask(inp.typed);
+    row.mt=(inp.chips.mt===true||inp.chips.mt===false)?inp.chips.mt:mtp;
+    rows=[row];
+  }
+  var shared=v27SharedNotes(inp, j&&j.facts);
+  if(j && Array.isArray(j.conflicts) && j.conflicts.length) shared='⚠ Where the image and your words differ: '+j.conflicts.join('; ')+'\n\n'+shared;
+  var sep=rows.map(function(r,i){ var c=JSON.parse(JSON.stringify(r)); if(i===0 && shared) c.notes=(c.notes?c.notes+'\n\n':'')+shared; return c; });
+  var one=v27MergeOne(rows, j&&j.overallTitle, shared, inp.chips);
+  return {ai:ai, one:one, sep:sep, summary:(j&&j.summary)||'', scheduleRequested:!!(j&&j.scheduleRequested), calendar:(j&&j.calendar)||null, many:rows.length>1};
+}
+
+// ── start ──
+function v27Start(inp){
+  if(V27.busy||V27.open) return;
+  V27.busy=true; v27Busy(true);
+  var go=function(j){
+    V27.busy=false; v27Busy(false);
+    var d=v27Build(inp,j);
+    V27.draft=d; V27.mode='one'; V27.one=d.one; V27.sep=d.sep; V27.chips=inp.chips; V27.attach=inp.attach;
+    v27Open();
+  };
+  v27Ai(v27Prompt(inp), function(txt){ var j=v27Json(txt); go(j&&Array.isArray(j.tasks)?j:null); }, function(){ go(null); });
+}
+function v27Busy(on){
+  var b=document.getElementById('v27Busy');
+  if(!b){ b=document.createElement('div'); b.id='v27Busy'; b.className='v27-busy'; b.textContent='Reading everything…'; document.body.appendChild(b); }
+  b.style.display=on?'block':'none';
+  var fab=document.getElementById('gatherFab'); if(fab){ fab.disabled=!!on; }
+}
+
+// ── the confirmation box ──
+function v27Rows(){ return V27.mode==='one' ? [V27.one] : V27.sep; }
+function v27Open(){
+  if(!document.getElementById('v27Overlay')){
+    var o=document.createElement('div'); o.id='v27Overlay'; o.className='v27-overlay'; document.body.appendChild(o);
+    o.addEventListener('input', v27OnEdit); o.addEventListener('change', v27OnEdit); o.addEventListener('click', v27OnClick);
+    var s=document.createElement('div'); s.id='v27Sched'; s.className='v27-overlay'; document.body.appendChild(s);
+    s.addEventListener('click', v27SchedClick);
+  }
+  V27.open=true; v27Render(); document.getElementById('v27Overlay').classList.add('open');
+}
+function v27Close(){ V27.open=false; var o=document.getElementById('v27Overlay'); if(o) o.classList.remove('open'); }
+function v27RowHtml(r,i){
+  var h='<div class="v27-row'+(r.include?'':' off')+'">';
+  if(V27.mode==='sep') h+='<label class="v27-inc"><input type="checkbox" data-k="include" data-i="'+i+'"'+(r.include?' checked':'')+'> Save this one</label>';
+  h+='<label class="v27-lbl">Task title</label><input class="v27-in" type="text" data-k="title" data-i="'+i+'" value="'+esc(r.title)+'"><div class="v27-from">from '+esc(r.titleFrom||'your words')+'</div>';
+  h+='<div class="v27-two"><div><label class="v27-lbl">Deadline date</label><input class="v27-in" type="date" data-k="dueDate" data-i="'+i+'" value="'+esc(r.dueDate)+'"'+(r.leisure?' disabled':'')+'></div>'
+    +'<div><label class="v27-lbl">Time (optional)</label><input class="v27-in" type="time" data-k="dueTime" data-i="'+i+'" value="'+esc(r.dueTime)+'"'+(r.leisure?' disabled':'')+'></div></div>';
+  h+='<div class="v27-from">'+(r.leisure?'no deadline — at leisure':(r.dueDate?esc(v27Fmt(r.dueDate,r.dueTime))+' · from '+esc(r.dateFrom||'you')+(r.timeFrom?' · time from '+esc(r.timeFrom):''):'<b>no deadline found</b> — pick a date, or tick at leisure'))+'</div>';
+  h+='<label class="v27-chk"><input type="checkbox" data-k="leisure" data-i="'+i+'"'+(r.leisure?' checked':'')+'> No deadline — at leisure</label>';
+  if(r.night && !r.leisure){
+    h+='<div class="v27-night"><b>🌙 A gentle check</b><div>It is '+esc(r.night.clock)+' on your phone. When you said “'+esc(r.night.word)+'”, did you mean:</div>'
+      +'<label><input type="radio" name="v27n'+i+'" data-k="night" data-i="'+i+'" value="A"'+(r.night.choice==='A'?' checked':'')+'> '+esc(r.night.A.label)+'</label>'
+      +'<label><input type="radio" name="v27n'+i+'" data-k="night" data-i="'+i+'" value="B"'+(r.night.choice==='B'?' checked':'')+'> '+esc(r.night.B.label)+'</label></div>';
+  }
+  h+='<div class="v27-two"><div><label class="v27-lbl">Can be multitasked?</label><select class="v27-in" data-k="mt" data-i="'+i+'"><option value="no"'+(r.mt!==true?' selected':'')+'>No — needs focus'+(r.mt===null?' (default)':'')+'</option><option value="yes"'+(r.mt===true?' selected':'')+'>Yes</option></select></div></div>';
+  h+='<label class="v27-lbl">Notes (saved with the task, and with the calendar event)</label><textarea class="v27-in v27-ta" data-k="notes" data-i="'+i+'" rows="5">'+esc(r.notes)+'</textarea>';
+  if(V27.mode==='sep' && i<V27.sep.length-1) h+='<label class="v27-chk"><input type="checkbox" data-k="linkNext" data-i="'+i+'"'+(r.linkNext?' checked':'')+'> 🔗 Link with the next task (they stay separate tasks)</label>';
+  return h+'</div>';
+}
+function v27Render(){
+  var o=document.getElementById('v27Overlay'); if(!o) return;
+  var d=V27.draft, h='<div class="v27-card" role="dialog" aria-label="Confirm what I understood"><div class="v27-hdr"><div class="v27-ttl">Here is what I understood</div><button class="v27-x" data-act="cancel" aria-label="Close">✕</button></div><div class="v27-body">';
+  h+='<div class="v27-sum">'+(d.ai?esc(d.summary||'I read your words, your notes and the images together.'):'<b>The AI could not be reached.</b> I made one task from your words using the keyword rules. Please check it.')+'</div>';
+  if(d.many) h+='<div class="v27-mode"><label><input type="radio" name="v27mode" data-k="mode" value="one"'+(V27.mode==='one'?' checked':'')+'> Save as <b>ONE task</b> (default)</label><label><input type="radio" name="v27mode" data-k="mode" value="sep"'+(V27.mode==='sep'?' checked':'')+'> Save as <b>separate tasks</b> ('+V27.sep.length+')</label></div>';
+  v27Rows().forEach(function(r,i){ h+=v27RowHtml(r,i); });
+  h+='</div><div class="v27-foot"><button class="v27-btn ghost" data-act="cancel">Cancel</button><button class="v27-btn go" data-act="save">Save to Chakra</button></div></div>';
+  o.innerHTML=h;
+}
+function v27OnEdit(e){
+  var el=e.target, k=el.getAttribute&&el.getAttribute('data-k'); if(!k) return;
+  if(k==='mode'){ V27.mode=el.value; v27Render(); return; }
+  var i=+el.getAttribute('data-i'), r=v27Rows()[i]; if(!r) return;
+  if(k==='title'){ r.title=el.value; r.titleFrom='you edited'; }
+  else if(k==='notes') r.notes=el.value;
+  else if(k==='dueTime'){ r.dueTime=el.value; r.timeFrom='you'; }
+  else if(k==='mt') r.mt=(el.value==='yes');
+  else if(k==='include'){ r.include=el.checked; v27Render(); }
+  else if(k==='linkNext') r.linkNext=el.checked;
+  else if(k==='leisure'){ r.leisure=el.checked; v27Render(); }
+  else if(k==='dueDate'){ r.dueDate=el.value; r.dateFrom='you'; if(r.night) r.night.choice='manual'; if(e.type==='change') v27Render(); }
+  else if(k==='night'){ r.night.choice=el.value; r.dueDate=(el.value==='A'?r.night.A.date:r.night.B.date); r.dateFrom='your answer to the night check'; v27Render(); }
+}
+function v27OnClick(e){
+  var el=e.target.closest?e.target.closest('[data-act]'):null; if(!el) return;
+  var a=el.getAttribute('data-act');
+  if(a==='cancel'){ v27Close(); }
+  else if(a==='save') v27Save();
+}
+
+// ── saving ──
+function v27Horizon(r){ if(r.dueDate){ return horizonFromDate(_ddParse(r.dueDate)); } return (V27.chips&&V27.chips.th)||null; }
+function v27Create(r, opts){
+  var id='task_'+(Date.now()+(opts.i||0)), leisure=!!r.leisure && !r.dueDate, th=leisure?null:v27Horizon(r);
+  var w=(V27.chips&&V27.chips.w) || (r.minutes?minutesToW(r.minutes):null) || 'W2';
+  var bucket=leisure?'Vishram':'Karya', now=new Date().toISOString();
+  var rec={id:id,title:r.title.trim(),shortTitle:r.title.trim(),bucket:bucket,ch:3,weightage:w,
+    timeHorizon:th,timeHorizonType:th,lifeArea:r.la||null,multitask:(r.mt===true),dependsOn:null,
+    stateHistory:[{bucket:bucket,timestamp:now}],transitionCount:0,originBucket:bucket,completed:false,entryTimestamp:now,agingDays:0,num:state.tasks.length+1};
+  if(r.minutes) rec.durationMin=r.minutes;
+  if(r.dueDate && !leisure){ var dt=_ddParse(r.dueDate); rec.timeHorizon=horizonLabel(th,dt); rec.dueDate=r.dueDate; rec.dueTime=r.dueTime||null; rec.dueDateAt=now; rec.noDateGiven=false; }
+  else if(!leisure && !th){ rec.timeHorizonType='thisWeek'; rec.timeHorizon='This week'; rec.noDateGiven=true; }
+  var notes=(r.notes||'').trim(); if(notes) rec.details=notes;
+  if(opts.contacts && opts.contacts.length) rec.contacts=JSON.parse(JSON.stringify(opts.contacts));
+  var _fo=window._followOfCommit;
+  if(opts.first && _fo && (Date.now()-_fo.at)<600000 && state.tasks.some(function(x){return x.id===_fo.id;})){ rec.followsId=_fo.id; rec.linkedTasks=[_fo.id]; window._followOfCommit=null; }
+  state.tasks.push(rec);
+  if(!leisure){
+    classifyTask(rec.title+(notes?'. '+notes.slice(0,200):''), function(result){
+      var t=state.tasks.find(function(x){return x.id===id;}); if(!t) return;
+      t.bucket=result.bucket; t.ch=result.ch; if(!t.lifeArea && result.lifeArea) t.lifeArea=result.lifeArea;
+      if(result.failed && !t.lifeArea) t.needsArea=true;
+      t.stateHistory.push({bucket:result.bucket,timestamp:new Date().toISOString()}); t.originBucket=result.bucket;
+      saveState(); renderTab(state.activeTab);
+    });
+    detectLink(rec.title, id);
+  }
+  return rec;
+}
+function v27ClearInputs(){
+  clearImg();
+  document.querySelectorAll('input[name="gmt"]').forEach(function(x){ x.checked=false; });
+  document.querySelectorAll('.fab-mt-chip').forEach(function(c){ c.classList.remove('on'); }); if(typeof _fabMt!=='undefined') _fabMt=null;
+  var ta=document.getElementById('gatherText'); if(ta){ta.value='';ta.style.height='';}
+  var note=document.getElementById('imgNote'); if(note) note.value='';
+  var fab=document.getElementById('gatherFab'); if(fab) fab.className='gather-fab';
+}
+function v27Save(){
+  var rows=v27Rows(), todo=rows.filter(function(r){return r.include;});
+  if(!todo.length){ toast('Tick at least one task to save, or press Cancel','warn',3000); return; }
+  for(var i=0;i<rows.length;i++){
+    var r=rows[i]; if(!r.include) continue;
+    if(!String(r.title||'').trim()){ toast('Give the task a title','warn',3000); return; }
+    if(r.night && !r.leisure && !r.night.choice){ toast('Please answer the 🌙 question about “'+r.night.word+'”','warn',3500); return; }
+    if(!r.dueDate && !r.leisure && !(V27.chips&&V27.chips.th)){ toast('Pick a deadline date, or tick “at leisure”','warn',3500); return; }
+  }
+  var created=[], prev=null, att=V27.attach;
+  rows.forEach(function(r,i){
+    if(!r.include){ prev=null; return; }
+    var rec=v27Create(r,{i:created.length, first:created.length===0, contacts:created.length===0&&att?att.contacts:null});
+    if(prev && V27.mode==='sep' && prev.link){ rec.linkedTasks=(rec.linkedTasks||[]).concat([prev.rec.id]); prev.rec.linkedTasks=(prev.rec.linkedTasks||[]).concat([rec.id]); }
+    created.push(rec); prev={rec:rec, link:V27.mode==='sep' && !!r.linkNext};
+  });
+  saveState(); sessionTasksAdded+=created.length;
+  v27ClearInputs(); v27Close();
+  toast('✓ '+(created.length===1?'1 task added to Chakra ＋':created.length+' tasks added to Chakra ＋'),'ok',3000);
+  renderTab(state.activeTab); updateHeader();
+  var wantSched=V27.draft?V27.draft.scheduleRequested:false, calHint=V27.draft?V27.draft.calendar:null;
+  setTimeout(function(){ v27AskSchedule(created, wantSched, calHint); }, 700);
+}
+
+// ── "Schedule it?" (an extra tap; ITC is never written to the calendar) ──
+function v27CalOf(t,hint){
+  var c=(hint==='personal'||hint==='picturizze')?hint:suggestCalendar(t);
+  if(topArea(t)==='ITC') return 'itc';
+  return c;
+}
+function v27Event(t){
+  var dur=t.durationMin||W_MIN[effW(t)]||30, base=_ddParse(t.dueDate); if(!base) return null;
+  if(t.dueTime){
+    var p=t.dueTime.split(':'), s=new Date(base.getFullYear(),base.getMonth(),base.getDate(),+p[0],+p[1]), e=new Date(s.getTime()+dur*60000);
+    var f=function(d){ return d.getFullYear()+'-'+_p2(d.getMonth()+1)+'-'+_p2(d.getDate())+'T'+_p2(d.getHours())+':'+_p2(d.getMinutes())+':00'; };
+    return {start:{dateTime:f(s),timeZone:'America/Chicago'}, end:{dateTime:f(e),timeZone:'America/Chicago'}, text:v27Fmt(t.dueDate,t.dueTime)+' for '+(dur>=60?(dur/60)+' h':dur+' min')};
+  }
+  return {start:{date:t.dueDate}, end:{date:ymdOf(addDays(base,1))}, text:v27Fmt(t.dueDate)+' (all day)'};
+}
+function v27AskSchedule(created, wantSched, calHint){
+  var rows=[], itc=0;
+  created.forEach(function(t){
+    if(!t.dueDate) return;
+    var cal=v27CalOf(t,calHint); if(cal==='itc'){ itc++; return; }
+    var ev=v27Event(t); if(ev) rows.push({t:t, cal:cal, ev:ev});
+  });
+  if(!rows.length){ if(itc) toast('ITC task saved. The ITC calendar is view-only, so nothing was scheduled.','ok',4500); return; }
+  V27.sched=rows;
+  var s=document.getElementById('v27Sched'); if(!s) return;
+  var h='<div class="v27-card sm" role="dialog" aria-label="Schedule it?"><div class="v27-hdr"><div class="v27-ttl">Put it on your calendar?</div><button class="v27-x" data-sact="no" aria-label="Close">✕</button></div><div class="v27-body"><div class="v27-sum">Tick what you want scheduled. Nothing is added unless you tick it.</div>';
+  rows.forEach(function(x,i){ h+='<label class="v27-sch"><input type="checkbox" data-si="'+i+'"'+(wantSched?' checked':'')+'><span><b>'+esc(x.t.title)+'</b><br>'+esc(x.ev.text)+' · '+esc(CAL_INFO[x.cal].name)+'</span></label>'; });
+  if(itc) h+='<div class="v27-from">An ITC task was saved too. ITC stays view-only, so it is not offered.</div>';
+  h+='</div><div class="v27-foot"><button class="v27-btn ghost" data-sact="no">No, thanks</button><button class="v27-btn go" data-sact="yes">Schedule selected</button></div></div>';
+  s.innerHTML=h; s.classList.add('open');
+}
+function v27SchedClick(e){
+  var el=e.target.closest?e.target.closest('[data-sact]'):null; if(!el) return;
+  var s=document.getElementById('v27Sched');
+  if(el.getAttribute('data-sact')==='no'){ s.classList.remove('open'); return; }
+  var pick=[]; s.querySelectorAll('input[data-si]').forEach(function(cb){ if(cb.checked) pick.push(V27.sched[+cb.getAttribute('data-si')]); });
+  s.classList.remove('open');
+  if(!pick.length) return;
+  v27Book(pick);
+}
+function v27Book(list){
+  if(!_calendarLive()){ toast('The calendar is not connected in this copy of Chakra. Tasks are saved.','warn',5000); return; }
+  window._v27Queue=list;
+  if(_googleAccessToken){ v27Flush(); return; }
+  _initGIS();
+  if(!_gisTokenClient){ toast('Google sign-in is not ready. Check your internet and try again from Utilities → Check calendar connection.','warn',6000); window._v27Queue=null; return; }
+  _gisTokenClient.requestAccessToken();
+}
+function v27Flush(){
+  var list=window._v27Queue||[]; window._v27Queue=null; var retried=false;
+  list.forEach(function(x){
+    var cal=CAL_INFO[x.cal], body={summary:x.t.title, start:x.ev.start, end:x.ev.end}, desc=[x.t.details||''].join('').slice(0,3000); if(desc) body.description=desc;
+    fetch('https://www.googleapis.com/calendar/v3/calendars/'+encodeURIComponent(cal.email)+'/events',{method:'POST',headers:{'Authorization':'Bearer '+_googleAccessToken,'Content-Type':'application/json'},body:JSON.stringify(body)})
+    .then(function(r){ return r.json().then(function(j){ j=j||{}; j._status=r.status; return j; }, function(){ return {_status:r.status}; }); })
+    .then(function(j){
+      if(j.htmlLink){ toast('✓ Added to '+cal.name+' — '+x.ev.text,'ok',3500); }
+      else{ var e=j.error||{}, reason=(e.errors&&e.errors[0]&&e.errors[0].reason)||e.status||''; if(j._status===401){ _googleAccessToken=null; } toast('Calendar did not save “'+x.t.title.slice(0,30)+'”: '+explainCalError(j._status,e.message,reason,cal.name),'warn',9000); }
+    }).catch(function(){ toast('Calendar did not save — check your internet connection.','warn',6000); });
+  });
+}
+
+// ── entry points ──
+function gatherFlow(lines, chips, note){
+  chips=chips||{}; var typed=(lines||[]).join('\n');
+  v27Start({typed:typed, note:note||'', chips:{w:chips.w||null, mt:(chips.mt===true||chips.mt===false)?chips.mt:null, th:chips.th||null, la:chips.la||null}, imgs:[], attach:null});
+}
+function gatherSave(){
+  var rawText=(document.getElementById('gatherText').value||'').trim();
+  var note=((document.getElementById('imgNote')||{}).value||'').trim();
+  var w=document.querySelector('input[name="gw"]:checked'), th=document.querySelector('input[name="gth"]:checked'), la=document.querySelector('input[name="gla"]:checked'), mt=document.querySelector('input[name="gmt"]:checked');
+  if(imgItems.some(function(x){return x.status==='reading';})){ toast('Still reading the image'+(imgItems.length>1?'s':'')+'… one moment','ok',2200); return; }
+  var usable=imgItems.filter(function(x){ return x.read||x.ocr; });
+  if(!rawText && !note && !usable.length){
+    if(imgItems.length){ var ta2=document.getElementById('gatherText'); if(ta2){ ta2.placeholder='I could not read the image. Type what you want to do, then press Add'; ta2.focus(); } toast('📷 Image not readable — type what you want to do, then press Add','warn',3500); }
+    return;
+  }
+  var chips={w:w?w.value:null, mt:mt?(mt.value==='yes'):null, th:th?th.value:null, la:la?la.value:null};
+  v27Start({typed:rawText, note:note, chips:chips, imgs:usable, attach:attachFromItems(usable)});
+}
+
+// ── chain view: tap 🔗 to see every linked task ──
+function openChain(id){
+  var seen={}, order=[], q=[id];
+  while(q.length){ var x=q.shift(); if(seen[x]) continue; seen[x]=1; var t=state.tasks.find(function(z){return z.id===x;}); if(!t) continue; order.push(t); (t.linkedTasks||[]).forEach(function(o){ if(!seen[o]) q.push(o); }); state.tasks.forEach(function(z){ if((z.linkedTasks||[]).indexOf(x)>=0 && !seen[z.id]) q.push(z.id); }); }
+  var h='<div class="fab-panel-hdr"><div class="fab-panel-title">🔗 Linked tasks ('+order.length+')</div><div class="fab-panel-close" onclick="closeTaskDetail()">✕</div></div>';
+  order.forEach(function(t){
+    var D=dueMoment(t);
+    h+='<div class="cc-row '+(t.completed?'ok':'bad')+'" style="cursor:pointer;" onclick="openTaskDetail(\''+t.id+'\')"><div class="cc-mark">'+(t.completed?'✓':'○')+'</div><div><div class="cc-t">'+esc(t.shortTitle||t.title)+(t.id===id?' (this one)':'')+'</div><div class="cc-d">'+(D?esc(v27Fmt(ymdOf(D),t.dueTime||null)):'No date')+' · '+esc(t.bucket)+'</div></div></div>';
+  });
+  document.getElementById('taskDetailBox').innerHTML=h;
+  document.getElementById('taskDetailModal').style.display='flex';
 }
 
 
