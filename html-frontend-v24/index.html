@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="Chakra">
 <meta name="theme-color" content="#F5F3EE">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Karma Kshetra™ — DK · Chakra V27</title>
+<title>Karma Kshetra™ — DK · Chakra V28</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -717,32 +717,165 @@ html,body{font-weight:500;}
 .rs-sm{font-size:11px;opacity:.75;margin-top:3px;}
 .rs-btn{width:100%;padding:11px;border-radius:10px;border:1px solid #5B3FA6;background:#5B3FA6;color:#fff;font-size:13px;font-weight:700;cursor:pointer;}
 
-/* v27 confirmation box */
+/* v28 Gather screen + Add to Chakra pill */
+.gather-wrap{padding:16px 14px 90px;}
+.g-hello{font-family:'Cormorant Garamond',serif;font-size:29px;font-weight:700;color:#1A6B5A;line-height:1.05;}
+.g-hello-s{font-size:12.5px;color:#6A6558;margin:5px 0 14px;line-height:1.5;}
+.g-card{background:#fff;border:1px solid #E6DFD2;border-radius:20px;padding:14px;margin-bottom:12px;}
+.g-card.hero{border:2px solid #1A6B5A;box-shadow:0 0 0 4px rgba(26,107,90,.10);}
+.g-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;gap:8px;}
+.g-lbl{font-size:11px;font-weight:800;letter-spacing:.09em;color:#6A6558;text-transform:uppercase;}
+.g-opt{font-size:10.5px;font-weight:700;color:#6A6558;background:#F0EDE7;border-radius:999px;padding:3px 9px;white-space:nowrap;}
+.g-main{width:100%;border:none;outline:none;resize:none;background:transparent;font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:700;line-height:1.2;min-height:84px;color:#1A1A1A;}
+.g-main::placeholder{color:#B1A892;font-weight:600;}
+.g-ctx{width:100%;border:none;outline:none;resize:none;font-family:'Montserrat',sans-serif;font-size:14px;line-height:1.5;min-height:56px;background:#F0EDE7;border-radius:12px;padding:10px 12px;color:#1A1A1A;}
+.g-ctx::placeholder{color:#8A826F;}
+.g-drop{display:block;border:2px dashed #CFC7B6;border-radius:16px;padding:16px;text-align:center;background:#FBF9F4;cursor:pointer;transition:background .1s;}
+.g-drop:active{background:#EDE7D9;}
+.g-drop input{display:none;}
+.g-drop .ic{font-size:26px;margin-bottom:4px;}
+.g-drop b{display:block;font-size:14px;font-weight:800;color:#1A6B5A;}
+.g-drop span{font-size:11.5px;color:#6A6558;}
+.img-thumbs{display:flex;flex-wrap:wrap;gap:9px;margin:0;align-items:center;}
+.img-thumb,.img-thumb img{width:62px;height:62px;border-radius:12px;}
+.img-more{width:62px;height:62px;border-radius:12px;background:#F0EDE7;border:2px dashed #CFC7B6;color:#1A6B5A;font-weight:800;font-size:22px;display:grid;place-items:center;cursor:pointer;}
+.img-more:active{background:#DDD6C6;}
+.img-scanning{font-size:12px;color:#1A6B5A;font-weight:700;margin-top:8px;}
+.img-read-info{margin-top:10px;font-size:12.5px;font-weight:700;color:#0F5A44;background:#EAF3F0;border:1px solid #BFDDD4;border-radius:12px;padding:9px 12px;line-height:1.45;}
+.img-read-info:empty{display:none;}
+.img-clear{background:none;border:none;color:#6A6558;font-size:11.5px;font-weight:700;text-decoration:underline;cursor:pointer;padding:8px 2px 0;font-family:inherit;}
+.g-seg{display:grid;grid-template-columns:1fr 1fr;background:#F0EDE7;border-radius:14px;padding:4px;gap:4px;}
+.g-segb input,.g-tile input{display:none;}
+.g-segb{cursor:pointer;}
+.g-segb span{display:block;text-align:center;border-radius:11px;padding:11px 8px;font-size:12.5px;font-weight:700;color:#6A6558;line-height:1.25;transition:background .1s,transform .1s;}
+.g-segb span small{display:block;font-weight:600;font-size:10.5px;opacity:.9;margin-top:1px;}
+.g-segb span:active{background:#DDD6C6;transform:scale(.98);}
+.g-segb input:checked + span{background:linear-gradient(180deg,#2A8A74,#1A6B5A);color:#fff;box-shadow:0 2px 0 #0F4A3D,inset 0 1px 0 rgba(255,255,255,.3);}
+.g-segb input:checked + span:active{background:linear-gradient(180deg,#14584A,#0F4A3D);box-shadow:none;transform:translateY(2px);}
+.g-note{font-size:11.5px;color:#6A6558;margin-top:8px;}
+.g-ft{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.g-ft-t{flex:1;min-width:0;}
+.g-ft-t b{display:block;font-size:14px;font-weight:800;}
+.g-ft-t span{font-size:12px;color:#6A6558;}
+.g-ft-t span.on{color:#1A6B5A;font-weight:700;}
+.g-ft-t em{font-style:normal;color:#1A6B5A;font-weight:700;}
+.g-chev{width:30px;height:30px;border-radius:50%;background:#F0EDE7;display:grid;place-items:center;font-size:12px;transition:transform .2s;flex:none;}
+.g-chev.open{transform:rotate(180deg);}
+.tags-body{display:none;margin-top:14px;border-top:1px solid #E6DFD2;padding-top:14px;}
+.tags-body.open{display:block;}
+.g-grp{margin-bottom:16px;} .g-grp:last-child{margin-bottom:0;}
+.g-glbl{font-size:11px;font-weight:800;letter-spacing:.09em;color:#6A6558;text-transform:uppercase;margin:0 0 8px;}
+.g-sub{font-size:10.5px;font-weight:700;color:#9A917D;margin:0 0 6px;letter-spacing:.04em;}
+.g-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.g-tiles.four{grid-template-columns:repeat(4,1fr);}
+.g-tile{cursor:pointer;display:block;}
+.g-tile-in{display:block;border:1.5px solid #D4CCBC;background:#fff;border-radius:14px;padding:10px 4px;text-align:center;color:#3A3A3A;transition:background .1s,transform .1s;}
+.g-tile-in b{display:block;font-size:14px;font-weight:800;}
+.g-tile-in small{display:block;font-size:10.5px;font-weight:600;color:#6A6558;margin-top:1px;}
+.g-tile-in .e{font-size:18px;display:block;margin-bottom:2px;}
+.g-tile-in:active{background:#DDD6C6;transform:scale(.97);}
+.g-tile input:checked + .g-tile-in{background:#1A6B5A;border-color:#1A6B5A;color:#fff;box-shadow:0 2px 0 #0F4A3D;}
+.g-tile input:checked + .g-tile-in small{color:#CDE8E0;}
+.g-tile input:checked + .g-tile-in:active{background:#0F4A3D;box-shadow:none;transform:translateY(2px);}
+.g-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px;}
+.g-chip{cursor:pointer;}
+.g-chip input{display:none;}
+.g-chip span{display:block;border:1.5px solid #D4CCBC;background:#fff;border-radius:999px;padding:8px 13px;font-size:12.5px;font-weight:700;color:#3A3A3A;transition:background .1s,transform .1s;}
+.g-chip span:active{background:#DDD6C6;transform:scale(.97);}
+.g-chip input:checked + span{background:#1A6B5A;border-color:#1A6B5A;color:#fff;box-shadow:0 2px 0 #0F4A3D;}
+.g-chip input:checked + span:active{background:#0F4A3D;box-shadow:none;transform:translateY(2px);}
+/* the Add to Chakra pill (deep teal with a gold rim) */
+.gather-fab{position:fixed;bottom:140px;left:50%;transform:translateX(-50%);z-index:200;border:none;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:15px;font-weight:800;letter-spacing:.04em;color:#fff;border-radius:999px;padding:15px 40px;white-space:nowrap;display:none;
+  text-shadow:0 1px 2px rgba(0,40,30,.6);
+  background:linear-gradient(180deg,#2FA088 0%,#1A6B5A 50%,#124F42 52%,#1A6B5A 100%);
+  box-shadow:0 0 0 3px #D9A93A,0 6px 0 #0B3A30,0 10px 16px rgba(10,60,48,.45),inset 0 2px 0 rgba(255,255,255,.35),inset 0 -2px 5px rgba(0,30,22,.45);transition:transform .12s,box-shadow .12s;}
+.gather-fab.visible{display:block;}
+.gather-fab:active{transform:translateX(-50%) translateY(3px);background:linear-gradient(180deg,#1C7A66 0%,#0F4A3D 50%,#0A372D 52%,#0F4A3D 100%);box-shadow:0 0 0 3px #B8892A,0 3px 0 #0B3A30,0 5px 10px rgba(10,60,48,.45),inset 0 2px 5px rgba(0,30,22,.5);}
+.gather-fab.off{background:#CFC9BB;color:#7B7568;text-shadow:none;box-shadow:0 0 0 3px #E2DCCD,0 4px 0 #B8B1A0;}
+.gather-fab.off:active{transform:translateX(-50%);background:#CFC9BB;box-shadow:0 0 0 3px #E2DCCD,0 4px 0 #B8B1A0;}
+.gather-fab:disabled{opacity:.6;cursor:not-allowed;}
+/* v28 confirmation pop-up (redesign) */
 .v27-overlay{display:none;position:fixed;inset:0;background:rgba(20,30,20,.6);z-index:1300;align-items:flex-end;justify-content:center;padding:0;}
 .v27-overlay.open{display:flex;}
-.v27-card{background:var(--surface,#fff);color:var(--text,#222);width:100%;max-width:520px;max-height:92vh;display:flex;flex-direction:column;border-radius:16px 16px 0 0;font-family:Montserrat,sans-serif;box-shadow:0 -6px 30px rgba(0,0,0,.35);}
+.v27-card{background:#F5F3EE;color:#1A1A1A;width:100%;max-width:520px;max-height:94vh;display:flex;flex-direction:column;border-radius:24px 24px 0 0;font-family:Montserrat,sans-serif;box-shadow:0 -6px 30px rgba(0,0,0,.35);}
 .v27-card.sm{max-height:70vh;}
-.v27-hdr{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border,#ddd);}
-.v27-ttl{font-weight:700;font-size:16px;}
-.v27-x{border:0;background:transparent;font-size:20px;min-width:44px;min-height:44px;cursor:pointer;color:inherit;}
-.v27-body{overflow:auto;padding:10px 14px;flex:1;}
-.v27-sum{font-size:13px;margin-bottom:10px;line-height:1.4;}
-.v27-mode{display:flex;flex-direction:column;gap:6px;margin:6px 0 12px;padding:9px;border:1px solid var(--border,#ccc);border-radius:10px;font-size:13px;}
-.v27-row{border:1px solid var(--border,#ddd);border-radius:12px;padding:10px;margin-bottom:12px;}
-.v27-row.off{opacity:.55;}
-.v27-lbl{display:block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin:8px 0 3px;opacity:.75;}
-.v27-in{width:100%;box-sizing:border-box;padding:10px;border:1px solid var(--border,#bbb);border-radius:8px;font-size:15px;background:transparent;color:inherit;font-family:inherit;}
-.v27-ta{resize:vertical;font-size:13px;}
-.v27-two{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.v27-from{font-size:11px;opacity:.7;margin-top:3px;}
-.v27-chk,.v27-inc{display:flex;gap:8px;align-items:center;font-size:13px;margin:8px 0;min-height:34px;}
-.v27-night{background:#EFEAFB;border-left:4px solid #5B3FA6;border-radius:8px;padding:9px;margin:8px 0;font-size:13px;}
-.v27-night label{display:flex;gap:8px;align-items:flex-start;margin-top:6px;}
-.v27-foot{display:flex;gap:8px;padding:10px 14px 16px;border-top:1px solid var(--border,#ddd);}
-.v27-btn{flex:1;padding:13px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;border:1px solid #1A6B5A;min-height:46px;}
-.v27-btn.go{background:#1A6B5A;color:#fff;}
-.v27-btn.ghost{background:transparent;color:inherit;border-color:var(--border,#aaa);}
-.v27-sch{display:flex;gap:10px;align-items:flex-start;padding:9px;border:1px solid var(--border,#ddd);border-radius:10px;margin-bottom:8px;font-size:13px;}
+.v27-grab{width:42px;height:5px;border-radius:3px;background:#CFC7B6;margin:9px auto 0;flex:none;}
+.v27-hdr{display:flex;justify-content:space-between;align-items:center;padding:10px 18px 4px;flex:none;}
+.v27-ttl{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:27px;color:#1A6B5A;line-height:1.05;}
+.v27-x{width:36px;height:36px;border-radius:50%;background:#F0EDE7;border:1px solid #E6DFD2;font-size:16px;cursor:pointer;color:#3A3A3A;display:grid;place-items:center;transition:background .1s;}
+.v27-x:active{background:#DDD6C6;}
+.v27-body{overflow:auto;padding:8px 14px 12px;flex:1;-webkit-overflow-scrolling:touch;}
+.v27-banner{display:flex;gap:10px;align-items:flex-start;border-radius:14px;padding:11px 13px;font-size:12.5px;line-height:1.45;margin-bottom:12px;}
+.v27-banner .ic{font-size:18px;line-height:1.1;}
+.v27-banner.ok{background:#EAF3F0;border:1px solid #BFDDD4;color:#0F4A3D;}
+.v27-banner.warn{background:#FFF4DC;border:1px solid #F0D79A;color:#6B4500;}
+.v27-sum{font-size:12px;margin:-4px 2px 10px;line-height:1.45;color:#6A6558;}
+.v27-group{margin-bottom:14px;}
+.v27-group.off{opacity:.5;}
+.v27-ghead{display:flex;align-items:center;justify-content:space-between;margin:0 2px 8px;font-size:12px;font-weight:800;color:#1A6B5A;letter-spacing:.06em;text-transform:uppercase;}
+.v27-c{background:#fff;border:1px solid #E6DFD2;border-radius:18px;padding:14px;margin-bottom:11px;}
+.v27-c.need{border:2px solid #D9A93A;box-shadow:0 0 0 4px rgba(217,169,58,.18);}
+.v27-ctop{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px;}
+.v27-clbl{font-size:11px;font-weight:800;letter-spacing:.09em;color:#6A6558;text-transform:uppercase;}
+.v27-tag{font-size:10.5px;font-weight:700;border-radius:999px;padding:3px 9px;white-space:nowrap;}
+.v27-tag.words{background:#EAF3F0;color:#0F5A44;}
+.v27-tag.img{background:#E8F0F8;color:#1A4F80;}
+.v27-tag.calc{background:#FFF4DC;color:#7A5200;}
+.v27-tag.need{background:#D9A93A;color:#3A2600;}
+.v27-in{width:100%;box-sizing:border-box;padding:10px;border:1px solid #D4CCBC;border-radius:10px;font-size:15px;background:#fff;color:#1A1A1A;font-family:inherit;}
+.v27-title{width:100%;border:none;background:transparent;font-family:'Cormorant Garamond',serif;font-size:25px;font-weight:700;color:#1A1A1A;line-height:1.15;resize:none;outline:none;padding:0;}
+.v27-title:focus{background:#FBF9F4;border-radius:8px;}
+.v27-hint{font-size:11.5px;color:#6A6558;margin-top:7px;line-height:1.4;}
+.v27-when{display:grid;grid-template-columns:1.35fr 1fr;gap:9px;}
+.v27-big{position:relative;border:1.5px solid #D4CCBC;border-radius:14px;background:#fff;padding:10px 12px;display:flex;gap:10px;align-items:center;min-height:56px;cursor:pointer;overflow:hidden;}
+.v27-big:active{background:#EDE7D9;border-color:#1A6B5A;}
+.v27-big.dis{opacity:.45;pointer-events:none;}
+.v27-big .em{font-size:20px;}
+.v27-big small{display:block;font-size:10px;font-weight:700;letter-spacing:.08em;color:#6A6558;text-transform:uppercase;}
+.v27-big .v{font-size:15px;font-weight:800;color:#1A1A1A;}
+.v27-big.empty .v{color:#A39B88;font-weight:600;}
+.v27-nat{position:absolute;inset:0;width:100%;height:100%;opacity:0;font-size:16px;cursor:pointer;border:0;}
+.v27-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;}
+.v27-chip{border:1.5px solid #D4CCBC;background:#fff;border-radius:999px;padding:8px 13px;font-family:inherit;font-size:12.5px;font-weight:700;color:#3A3A3A;cursor:pointer;transition:background .1s,transform .1s;}
+.v27-chip:active{background:#DDD6C6;transform:scale(.97);}
+.v27-chip.on{background:#1A6B5A;border-color:#1A6B5A;color:#fff;box-shadow:0 2px 0 #0F4A3D;}
+.v27-chip.on:active{background:#0F4A3D;box-shadow:none;transform:translateY(2px);}
+.v27-chip.lz.on{background:#5A5A7A;border-color:#5A5A7A;box-shadow:0 2px 0 #3A3A55;}
+.v27-seg{display:grid;grid-template-columns:1fr 1fr;background:#F0EDE7;border-radius:14px;padding:4px;gap:4px;}
+.v27-seg button{border:none;background:transparent;border-radius:11px;padding:11px 8px;font-family:inherit;font-size:12.5px;font-weight:700;color:#6A6558;cursor:pointer;line-height:1.25;transition:background .1s,transform .1s;}
+.v27-seg button small{display:block;font-weight:600;font-size:10.5px;opacity:.9;margin-top:1px;}
+.v27-seg button:active{background:#DDD6C6;transform:scale(.98);}
+.v27-seg button.on{background:linear-gradient(180deg,#2A8A74,#1A6B5A);color:#fff;box-shadow:0 2px 0 #0F4A3D,inset 0 1px 0 rgba(255,255,255,.3);}
+.v27-seg button.on:active{background:linear-gradient(180deg,#14584A,#0F4A3D);box-shadow:none;transform:translateY(2px);}
+.v27-row{display:flex;gap:11px;align-items:center;}
+.v27-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#2FA088,#1A6B5A);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px;flex:none;}
+.v27-rmain{flex:1;min-width:0;}
+.v27-rmain b{display:block;font-size:13.5px;font-weight:800;}
+.v27-rmain span{font-size:12px;color:#6A6558;}
+.v27-ta{width:100%;font-family:inherit;font-size:13px;line-height:1.55;color:#3A3A3A;border:none;background:transparent;resize:none;outline:none;padding:0;max-height:5em;overflow:hidden;}
+.v27-ta.open{max-height:none;min-height:11em;overflow:auto;background:#FBF9F4;border-radius:8px;padding:6px;}
+.v27-more{margin-top:8px;font-size:12px;font-weight:800;color:#1A6B5A;cursor:pointer;background:none;border:none;font-family:inherit;padding:0;}
+.v27-sw{width:50px;height:30px;border-radius:999px;background:#CFC7B6;position:relative;cursor:pointer;flex:none;transition:background .15s;border:none;}
+.v27-sw::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .15s;}
+.v27-sw.on{background:#1A6B5A;}
+.v27-sw.on::after{left:23px;}
+.v27-night{background:#EFEAFB;border-left:4px solid #5B3FA6;border-radius:12px;padding:11px;margin-bottom:11px;font-size:13px;}
+.v27-night label{display:flex;gap:8px;align-items:flex-start;margin-top:8px;}
+.v27-mode{margin-bottom:12px;}
+.v27-foot{position:relative;display:grid;grid-template-columns:.8fr 1.6fr;gap:11px;align-items:center;padding:16px 14px 14px;background:linear-gradient(rgba(245,243,238,0),#F5F3EE 26%);flex:none;}
+.v27-btn{border-radius:999px;font-family:'Montserrat',sans-serif;cursor:pointer;}
+.v27-btn.ghost{border:1.5px solid #D4CCBC;background:#fff;padding:15px 10px;font-size:14px;font-weight:700;color:#3A3A3A;transition:background .1s,transform .1s;}
+.v27-btn.ghost:active{background:#DDD6C6;border-color:#B8B09C;transform:translateY(2px);}
+.v27-btn.go{border:none;font-size:15px;font-weight:800;letter-spacing:.04em;color:#fff;padding:15px 12px;text-shadow:0 1px 2px rgba(0,40,30,.6);
+  background:linear-gradient(180deg,#2FA088 0%,#1A6B5A 50%,#124F42 52%,#1A6B5A 100%);
+  box-shadow:0 0 0 3px #D9A93A,0 6px 0 #0B3A30,0 10px 16px rgba(10,60,48,.45),inset 0 2px 0 rgba(255,255,255,.35),inset 0 -2px 5px rgba(0,30,22,.45);transition:transform .12s,box-shadow .12s;}
+.v27-btn.go:active{transform:translateY(3px);background:linear-gradient(180deg,#1C7A66 0%,#0F4A3D 50%,#0A372D 52%,#0F4A3D 100%);box-shadow:0 0 0 3px #B8892A,0 3px 0 #0B3A30,0 5px 10px rgba(10,60,48,.45),inset 0 2px 5px rgba(0,30,22,.5);}
+.v27-btn.go.off{background:#CFC9BB;color:#7B7568;text-shadow:none;box-shadow:0 0 0 3px #E2DCCD,0 4px 0 #B8B1A0;cursor:not-allowed;}
+.v27-btn.go.off:active{transform:none;}
+.v27-fnote{grid-column:1/-1;text-align:center;font-size:11.5px;color:#6A6558;margin-top:-2px;min-height:14px;}
+.v27-fnote b{color:#7A5200;}
+.v27-sch{display:flex;gap:10px;align-items:flex-start;padding:9px;border:1px solid #D4CCBC;border-radius:10px;margin-bottom:8px;font-size:13px;background:#fff;}
+.loc-q{font-size:11px;font-weight:700;color:#5B3FA6;background:#EFEAFB;border-radius:999px;padding:2px 8px;white-space:nowrap;}
 .v27-busy{display:none;position:fixed;left:50%;top:70px;transform:translateX(-50%);background:#1A6B5A;color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;font-weight:600;z-index:1400;box-shadow:0 3px 12px rgba(0,0,0,.3);}
 </style>
 </head>
@@ -905,7 +1038,7 @@ html,body{font-weight:500;}
 
 <script>
 // v14: the ONE place the app version lives. Title, header, login footer and the backup file all read it.
-var APP_VERSION = 27;
+var APP_VERSION = 28;
 (function(){ function stamp(){ document.title='Karma Kshetra™ — DK · Chakra V'+APP_VERSION; document.querySelectorAll('.app-ver').forEach(function(e){ e.textContent=APP_VERSION; }); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',stamp); else stamp(); })();
 // ======================================================
@@ -1352,9 +1485,10 @@ function buildTabBar(){
 function updateFab(){
   var fab = document.getElementById('gatherFab');
   if(!fab) return;
-  var ta = document.getElementById('gatherText');
-  var hasText = ta && ta.value.trim().length > 0;
-  fab.className = 'gather-fab' + (hasText ? ' visible' : '');
+  if(state.activeTab!=='gather'){ fab.className='gather-fab'; return; }
+  var ta = document.getElementById('gatherText'), note=document.getElementById('imgNote');
+  var has = (ta && ta.value.trim().length>0) || (note && note.value.trim().length>0) || (typeof imgItems!=='undefined' && imgItems.length>0);
+  fab.className = 'gather-fab visible' + (has ? '' : ' off');
 }
 
 function switchTab(id){
@@ -1367,6 +1501,7 @@ function switchTab(id){
   if(pane){ pane.classList.add('active'); pane.scrollTop=0; window.scrollTo(0,0); }
   buildTabBar();
   renderTab(id);
+  updateFab();
 }
 
 function renderTab(id){
@@ -2149,54 +2284,58 @@ function renderGather(){
   var p=document.getElementById('pane-gather');
   var tasks=state.tasks.filter(function(t){return !t.completed;});
   var recent=tasks.slice(-6).reverse();
-
+  function tile(name,val,main,sub,emoji){ return '<label class="g-tile"><input type="radio" name="'+name+'" value="'+val+'" onclick="gTog(this)"><span class="g-tile-in">'+(emoji?'<span class="e">'+emoji+'</span>':'')+'<b'+(emoji?' style="font-size:12px"':'')+'>'+main+'</b>'+(sub?'<small>'+sub+'</small>':'')+'</span></label>'; }
+  function chip(val,lbl){ return '<label class="g-chip"><input type="radio" name="gth" value="'+val+'" onclick="gTog(this)"><span>'+lbl+'</span></label>'; }
   var tagsHtml=''
-    +'<div class="tag-group"><div class="tag-lbl">Weightage</div><div class="tag-opts">'
-    +['W1','W2','W3','W4','W5','W6'].map(function(w,i){
-      return '<label><input type="radio" name="gw" value="'+w+'"><span class="tag-chip">'+w+' · '+['5m','30m','1h','½d','Day','30d'][i]+'</span></label>';
-    }).join('')+'</div></div>'
-    +'<div class="tag-group"><div class="tag-lbl">Time Horizon</div><div class="tag-opts">'
-    +[['today','Today'],['thisWeek','This week'],['nextWeek','Next week'],['thisMonth','Next month'],['Q3','Q3 2026'],['Q4','Q4 2026'],['thisYear','This year'],['1year','1–2 years'],['2years','2+ years'],['parkingLot','Parking lot']].map(function(o){
-      return '<label><input type="radio" name="gth" value="'+o[0]+'"><span class="tag-chip">'+o[1]+'</span></label>';
-    }).join('')+'</div></div>'
-    +'<div class="tag-group"><div class="tag-lbl">Life Area</div><div class="tag-opts">'
-    +[['Personal/Family','Personal'],['Work/Employment','Work'],['Picturizze','Picturizze'],['Other','Other']].map(function(o){
-      return '<label><input type="radio" name="gla" value="'+o[0]+'"><span class="tag-chip">'+o[1]+'</span></label>';
-    }).join('')+'</div></div>'
-    ;
+    +'<div class="g-grp"><div class="g-glbl">How long will it take?</div><div class="g-tiles">'
+    +[['W1','5 min'],['W2','30 min'],['W3','1 hour'],['W4','Half day'],['W5','Full day'],['W6','30 days']].map(function(o){ return tile('gw',o[0],o[1],o[0]); }).join('')+'</div></div>'
+    +'<div class="g-grp"><div class="g-glbl">When should it get done?</div>'
+    +'<div class="g-sub">SOON</div><div class="g-chips">'+[['today','Today'],['thisWeek','This week'],['nextWeek','Next week']].map(function(o){ return chip(o[0],o[1]); }).join('')+'</div>'
+    +'<div class="g-sub">LATER</div><div class="g-chips">'+[['thisMonth','Next month'],['Q3','Q3 2026'],['Q4','Q4 2026'],['thisYear','This year']].map(function(o){ return chip(o[0],o[1]); }).join('')+'</div>'
+    +'<div class="g-sub">FAR OFF</div><div class="g-chips">'+[['1year','1 to 2 years'],['2years','2+ years'],['parkingLot','Parking lot']].map(function(o){ return chip(o[0],o[1]); }).join('')+'</div></div>'
+    +'<div class="g-grp"><div class="g-glbl">Life area</div><div class="g-tiles four">'
+    +[['Personal/Family','Personal','🏡'],['Work/Employment','Work','💼'],['Picturizze','Picturizze','📸'],['Other','Other','✦']].map(function(o){ return tile('gla',o[0],o[1],'',o[2]); }).join('')+'</div></div>';
 
   var html='<div class="gather-wrap">'
-    +'<div class="gather-card">'
-    +'<div class="gather-prompt">What is the task?</div>'
-    +'<textarea class="gather-textarea" id="gatherText" placeholder="One task per line — type or paste from photo" rows="3" oninput="updateFab()"></textarea>'
-    +'<div class="img-section">'
-    +'<div class="img-section-lbl">📷 Upload photos or screenshots (up to 6)</div>'
-    +'<label class="img-upload-btn"><input type="file" id="imgInput" accept="image/*" multiple onchange="handleImg(this)">📷 Choose images</label>'
-    +'<div class="img-preview-row">'
+    +'<div class="g-hello">What is on your mind?</div>'
+    +'<div class="g-hello-s">Type it, paste it, or add photos. I will turn it into a task and show you what I understood before anything is saved.</div>'
+    +'<div class="g-card hero"><div class="g-top"><div class="g-lbl">✍️ The task</div></div>'
+    +'<textarea class="g-main" id="gatherText" placeholder="Type or paste here. Several lines make one task, unless you choose separate tasks later." rows="3" oninput="updateFab()"></textarea></div>'
+    +'<div class="g-card"><div class="g-top"><div class="g-lbl">📷 Photos or screenshots</div><span class="g-opt" id="imgCount">optional · up to 6</span></div>'
+    +'<label class="g-drop" id="imgDrop"><input type="file" id="imgInput" accept="image/*" multiple onchange="handleImg(this)"><div class="ic">📷</div><b>Add photos</b><span>Business card, text message, to-do list, ad. I read the whole picture.</span></label>'
     +'<div id="imgThumbs" class="img-thumbs"></div>'
-    +'<div><div id="imgScan" class="img-scanning">⟳ Reading images...</div>'
-    +'<button id="imgClear" class="img-clear" onclick="clearImg()">✕ Clear all images</button></div>'
-    +'</div>'
+    +'<div id="imgScan" class="img-scanning"></div>'
     +'<div id="imgReadInfo" class="img-read-info"></div>'
-    +'<textarea id="imgNote" class="img-commentary" placeholder="Context (optional): duration, multitask, urgency..." rows="2"></textarea>'
-    +'</div>'
-    +'<div class="mt-req"><div class="mt-req-lbl">🔀 CAN I DO THIS WHILE MULTITASKING? <span>default: No</span></div><div class="tag-opts">'
-    +'<label><input type="radio" name="gmt" value="yes"><span class="tag-chip">Yes — walk, drive, meal, call</span></label>'
-    +'<label><input type="radio" name="gmt" value="no"><span class="tag-chip">No — needs full focus</span></label>'
-    +'</div></div>'
-    +'<div class="tags-toggle" onclick="toggleTags()">'
-    +'<span class="tags-toggle-lbl">Tags &amp; Options</span>'
-    +'<span class="tags-chevron" id="tagsChev">▼</span>'
-    +'</div>'
-    +'<div class="tags-body" id="tagsBody">'+tagsHtml+'</div>'
-    +'</div>';
-
+    +'<button id="imgClear" class="img-clear" onclick="clearImg()">Clear all photos</button></div>'
+    +'<div class="g-card"><div class="g-top"><div class="g-lbl">💬 Extra context</div><span class="g-opt">optional</span></div>'
+    +'<textarea id="imgNote" class="g-ctx" placeholder="For example: 30 minutes, urgent, do it while driving, put it on my calendar." rows="2"></textarea></div>'
+    +'<div class="g-card"><div class="g-top"><div class="g-lbl">🔀 Can I do this while multitasking?</div></div><div class="g-seg">'
+    +'<label class="g-segb"><input type="radio" name="gmt" value="yes" onclick="gTog(this)"><span>Yes<small>walk, drive, meal, call</small></span></label>'
+    +'<label class="g-segb"><input type="radio" name="gmt" value="no" onclick="gTog(this)"><span>No<small>needs full focus</small></span></label></div>'
+    +'<div class="g-note">Skip this and I will assume No.</div></div>'
+    +'<div class="g-card"><div class="g-ft" onclick="toggleTags()"><div style="font-size:22px">🎛</div><div class="g-ft-t"><b>Fine-tune</b><span id="ftSum">Weight, time horizon, life area. <em>Optional.</em></span></div><div class="g-chev" id="tagsChev">▼</div></div>'
+    +'<div class="tags-body" id="tagsBody">'+tagsHtml+'</div></div>';
   if(recent.length>0){
     html+='<div class="sec-hdr"><span class="sec-title">Recent entries</span><span class="sec-count">'+tasks.length+' active</span></div>';
     recent.forEach(function(t){html+=renderCard(t);});
   }
   html+=footer()+'</div>';
   p.innerHTML=html;
+  renderImgThumbs(); updateFab();
+}
+// tap a chosen option again to un-choose it; keep the Fine-tune summary current
+function gTog(el){
+  var was=el._was; document.querySelectorAll('input[name="'+el.name+'"]').forEach(function(x){ x._was=false; });
+  if(was){ el.checked=false; el._was=false; } else el._was=true;
+  gUpdateFt();
+}
+function gUpdateFt(){
+  var s=document.getElementById('ftSum'); if(!s) return;
+  var parts=[], w=document.querySelector('input[name="gw"]:checked'), th=document.querySelector('input[name="gth"]:checked'), la=document.querySelector('input[name="gla"]:checked');
+  if(th) parts.push(th.parentNode.querySelector('span').textContent);
+  if(la) parts.push(la.parentNode.querySelector('b').textContent);
+  if(w) parts.push(w.parentNode.querySelector('b').textContent);
+  if(parts.length){ s.className='on'; s.textContent=parts.join(' · '); } else { s.className=''; s.innerHTML='Weight, time horizon, life area. <em>Optional.</em>'; }
 }
 
 function toggleTags(){
@@ -2541,8 +2680,11 @@ function renderImgThumbs(){
     box.innerHTML=imgItems.map(function(it){
       var mark=it.status==='reading'?'⟳':(it.status==='done'?'✓':(it.status==='ocr'?'T':'⚠'));
       return '<div class="img-thumb"><img src="'+it.thumb+'" alt="image"><span class="img-thumb-st '+it.status+'">'+mark+'</span><button class="img-thumb-x" aria-label="Remove this image" onclick="removeImg('+it.id+')">✕</button></div>';
-    }).join('');
+    }).join('')+((imgItems.length>0 && imgItems.length<MAX_IMGS)?'<label for="imgInput" class="img-more" aria-label="Add another photo">＋</label>':'');
   }
+  var drop=document.getElementById('imgDrop'); if(drop) drop.style.display=imgData?'none':'block';
+  var cnt=document.getElementById('imgCount'); if(cnt) cnt.textContent=imgItems.length?(imgItems.length+' of '+MAX_IMGS):'optional · up to '+MAX_IMGS;
+  updateFab();
   if(info){
     var reads=imgItems.filter(function(x){return x.read;});
     if(!reads.length){ info.innerHTML=''; return; }
@@ -2892,8 +3034,7 @@ function commitTasks(tasks,useW,useMT,useTH,useLA,isLeisure,opts){
   document.querySelectorAll('.fab-mt-chip').forEach(function(c){ c.classList.remove('on'); }); _fabMt=null;
   var ta=document.getElementById('gatherText'); if(ta){ta.value='';ta.style.height='';}
   var note=document.getElementById('imgNote'); if(note) note.value='';
-  // Hide FAB — text was cleared
-  var fab=document.getElementById('gatherFab'); if(fab) fab.className='gather-fab';
+  updateFab();
   toast('✓ '+(tasks.length===1?'1 task added to Chakra ＋':''+tasks.length+' tasks added to Chakra ＋'),'ok', 3000);
   // Offer calendar scheduling for single tasks
   if(tasks.length===1 && !(opts && opts.skipCalOffer)){
@@ -4441,7 +4582,7 @@ var REMINDER_LIST_CAP=12;                       // rows shown before "Show more"
 var LOC_MIN_MOVE_M=150, LOC_MIN_INTERVAL_S=30;  // look up again only after this much movement and time
 var HOME_WORK_RADIUS_M=150;                     // quiet radius around home and work
 var LOC_NEARBY_RADIUS_M=150;                    // how far Google Places looks for stores
-var LOC_MAX_AI_TASKS=60;                        // most open tasks sent to the AI per check
+var LOC_MAX_AI_TASKS=80; var LOC_NOTE_CHARS=140;                        // most open tasks sent to the AI per check
 var LOC_FAST_MPS=4.5;                           // about 10 mph: faster than this shows only a banner
 var BANNER_SECONDS=12;
 
@@ -4650,40 +4791,65 @@ function locPlacesNearby(lat,lng,key){
 function locReverse(lat,lng,key){
   return fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lng+'&key='+encodeURIComponent(key)).then(function(r){ if(!r.ok) throw new Error('Geocode '+r.status); return r.json(); }).then(function(j){
     if(j.status && j.status!=='OK' && j.status!=='ZERO_RESULTS') throw new Error('Geocode '+j.status);
-    var r0=(j.results&&j.results[0])||null, o={city:'',county:'',state:'',addr:r0?r0.formatted_address:''};
+    var r0=(j.results&&j.results[0])||null, o={city:'',county:'',state:'',hood:'',addr:r0?r0.formatted_address:''};
     ((r0&&r0.address_components)||[]).forEach(function(c){
       var t=c.types||[];
       if(t.indexOf('locality')>=0) o.city=c.long_name; else if(!o.city && (t.indexOf('postal_town')>=0||t.indexOf('sublocality')>=0)) o.city=c.long_name;
+      if(t.indexOf('neighborhood')>=0 && !o.hood) o.hood=c.long_name;
       if(t.indexOf('administrative_area_level_2')>=0) o.county=c.long_name;
       if(t.indexOf('administrative_area_level_1')>=0) o.state=c.long_name;
     });
     return o;
   });
 }
-function locTaskList(){
-  var list=sortTasks(state.tasks.filter(function(t){ return !t.completed && t.bucket!=='Tyaga' && t.bucket!=='Prarabdha'; })).slice(0,LOC_MAX_AI_TASKS);
-  return list;
+// ── v28: matching tasks to a place. Chakra's own code first, then the AI decides the rest ──
+function locNorm(s){ return ' '+String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim()+' '; }
+var LOC_STOP={the:1,and:1,inc:1,llc:1,store:1,shop:1,center:1,centre:1,near:1,for:1,at:1,of:1,in:1,on:1,corp:1,co:1};
+function locWords(place){
+  var raw=[];
+  (place.nearby||[]).forEach(function(p){ if(p.name){ raw.push(p.name); String(p.name).split(/\s+/).forEach(function(w){ raw.push(w); }); } });
+  [place.cityName, place.hood, place.county].forEach(function(x){ if(x) raw.push(x); });
+  if(!place.cityName && place.city) raw.push(String(place.city).split(',')[0]);
+  if(place.pretend) String(place.pretend).split(/[,;]+/).forEach(function(x){ raw.push(x); String(x).split(/\s+/).forEach(function(w){ raw.push(w); }); });
+  var seen={}, out=[];
+  raw.forEach(function(w){
+    var n=locNorm(w).trim(); var compact=String(w).toLowerCase().replace(/[^a-z0-9]/g,'');
+    [n, compact].forEach(function(k){ if(k && k.length>=3 && !LOC_STOP[k] && !seen[k]){ seen[k]=1; out.push(k); } });
+  });
+  return out;
 }
+function locTaskText(t){ return String(t.title||'')+' \n '+String(t.details||''); }
+function locHit(t, words){
+  var tx=locNorm(locTaskText(t));
+  for(var i=0;i<words.length;i++){ if(tx.indexOf(' '+words[i]+' ')>=0) return words[i]; }
+  return null;
+}
+function locTaskList(place){
+  var all=sortTasks(state.tasks.filter(function(t){ return !t.completed && t.bucket!=='Tyaga' && t.bucket!=='Prarabdha'; }));
+  var words=place?locWords(place):[], hits=[], rest=[];
+  all.forEach(function(t){ (words.length && locHit(t,words) ? hits : rest).push(t); });
+  return hits.concat(rest).slice(0,LOC_MAX_AI_TASKS);
+}
+function locNote(t){ var n=String(t.details||'').replace(/\s+/g,' ').trim(); return n?n.slice(0,LOC_NOTE_CHARS):''; }
 function locBuildPrompt(place, tasks){
   var h='DK has Chakra open on his phone and his position was just looked up. Decide which of his open tasks belong to where he is, or to a store he is near.\n\n';
   if(place.pretend) h+='WHERE HE IS (he typed it): '+place.pretend+'\n';
   else{
     h+='NEARBY PLACES (name, type, metres away):\n'+(place.nearby.length?place.nearby.map(function(p){ return '- '+p.name+' ('+(p.type||'place')+')'+(p.m!==null?', '+p.m+' m':''); }).join('\n'):'- none found')+'\n';
-    h+='CITY: '+(place.city||'unknown')+(place.county?', '+place.county:'')+(place.state?', '+place.state:'')+'\n';
+    h+='NEIGHBOURHOOD: '+(place.hood||'unknown')+'\nCITY: '+(place.city||'unknown')+(place.county?', '+place.county:'')+(place.state?', '+place.state:'')+'\n';
   }
-  h+='\nOPEN TASKS (id | text):\n'+tasks.map(function(t){ return t.id+' | '+String(t.title||'').replace(/\s+/g,' ').slice(0,140); }).join('\n')+'\n\n';
-  h+='Answer with ONLY raw JSON, no markdown:\n{"area":"short label of where he is, for example HEB or McKinney (Dallas area)","matches":[{"id":"task id exactly as given","level":"here or nearby or city or metro","why":"short reason","tip":"at most 12 words: the quickest way to close this task from here"}]}\n';
-  h+='Rules:\n- here = the task names this place, or is clearly something to do in this store.\n- nearby = one of the nearby stores very likely sells or serves what the task needs (toys: a toy store or Target); say which store in why.\n- city or metro = the task names this city or any place in the same metropolitan area. Treat a metro as one whole area, suburbs included, in both directions: a task that says Dallas matches in Plano, Frisco or McKinney, and a task that says McKinney matches anywhere in the Dallas metro area. Milwaukee and its suburbs work the same way.\n- Leave out tasks about a different city or region, and tasks that only share a person name.\n- At most 8 matches, most useful first. If nothing fits, return an empty matches list.';
+  h+='\nOPEN TASKS (id | title || start of the notes):\n'+tasks.map(function(t){ var n=locNote(t); return t.id+' | '+String(t.title||'').replace(/\s+/g,' ').slice(0,140)+(n?' || '+n:''); }).join('\n')+'\n\n';
+  h+='Answer with ONLY raw JSON, no markdown:\n{"area":"short label of where he is, for example HEB or McKinney (Dallas area)","matches":[{"id":"task id exactly as given","level":"here or nearby or city or metro","quote":"the exact word or phrase copied from THAT task’s title or notes that ties it to where he is","why":"short reason","tip":"at most 12 words: the quickest way to close this task from here"}]}\n';
+  h+='Rules:\n- Read each task and its notes for their meaning, and use only what they say about where things happen now.\n- Match only on what the title or notes actually say. Never assume or add a city, store or place that the task does not mention. A task that names no place and needs no store is not a match.\n- Every match MUST carry a quote copied exactly from that task’s title or notes. No quote, no match.\n- here = the task names this place, or is clearly something to do in this store.\n- nearby = one of the nearby stores very likely sells or serves what the task needs (toys: a toy store or Target); say which store in why.\n- city or metro = the task names this city or a place in the same metropolitan area. Treat a metro as one whole area, suburbs included, in both directions: a task that says Dallas matches in Plano, Frisco or McKinney, and a task that says McKinney matches anywhere in the Dallas metro area. Milwaukee and its suburbs work the same way.\n- Different metropolitan areas are different places. Austin, Houston, Dallas and San Antonio are four separate areas. Leave out tasks about a different city or region, and tasks that only share a person name.\n- At most 8 matches, most useful first. If nothing fits, return an empty matches list.';
   return h;
 }
 function locLocalMatch(place, tasks){
-  var names=[]; (place.nearby||[]).forEach(function(p){ names.push([p.name,'here']); }); if(place.city) names.push([place.city,'city']); if(place.pretend) place.pretend.split(/[,;\s]+/).forEach(function(w){ w=w.trim(); if(w.length>2 && !/^(the|and|near|for)$/i.test(w)) names.push([w,'here']); });
-  var out=[]; tasks.forEach(function(t){
-    var tx=(t.title||'').toLowerCase();
-    for(var i=0;i<names.length;i++){ var n=String(names[i][0]).toLowerCase(); if(n.length>2 && tx.indexOf(n)>=0){ out.push({id:t.id, level:names[i][1], why:'The task mentions '+names[i][0], tip:''}); break; } }
-  });
+  var words=locWords(place), out=[];
+  tasks.forEach(function(t){ var w=locHit(t,words); if(w) out.push({id:t.id, level:'here', why:'The task mentions “'+w+'”', quote:w, tip:''}); });
   return out.slice(0,8);
 }
+// The AI must quote a word that is really in the task. If it is not there, the match is dropped.
+function locVerified(m, t){ var q=locNorm(m&&m.quote).trim(); if(!q||q.length<2||!t) return false; return locNorm(locTaskText(t)).indexOf(' '+q+' ')>=0; }
 function locLookup(force){
   if(LOC.busy) return;
   if(!force && !locCapOk()){ locSetStatus('Hourly lookup limit reached ('+(SETTINGS.capPerHour||60)+'). Tap Check my location now to look anyway.'); return; }
@@ -4695,7 +4861,7 @@ function locLookup(force){
   LOC.busy=true; LOC.calls.push(Date.now()); LOC.lookupAt=Date.now(); LOC.lookupLat=LOC.lat; LOC.lookupLng=LOC.lng;
   locSetStatus('Looking up the place…');
   var fin=function(place){
-    var tasks=locTaskList();
+    var tasks=locTaskList(place);
     var sig=pretend?('p:'+pretend.toLowerCase()):((place.nearby.map(function(p){return p.name;}).sort().join('|'))+'#'+place.city);
     var tsig=tasks.map(function(t){return t.id;}).join(',');
     if(!force && sig===LOC.sig && tsig===LOC.tsig){ LOC.busy=false; locSetStatus('Still near '+(LOC.area||'the same place')+'.'); return; }
@@ -4703,7 +4869,7 @@ function locLookup(force){
       LOC.busy=false; var changedPlace=(sig!==LOC.sig); if(changedPlace) LOC.notNow={}; LOC.sig=sig; LOC.tsig=tsig;
       var okIds={}; tasks.forEach(function(t){okIds[t.id]=true;});
       var lv={here:1,nearby:1,city:1,metro:1};
-      LOC.matches=(res.matches||[]).filter(function(m){return m && okIds[m.id];}).map(function(m){ return {id:m.id, level:lv[m.level]?m.level:'here', why:String(m.why||'').slice(0,160), tip:String(m.tip||'').slice(0,120)}; }).slice(0,8);
+      LOC.matches=(res.matches||[]).filter(function(m){ if(!m||!okIds[m.id]) return false; var tk=tasks.find(function(x){return x.id===m.id;}); return locVerified(m,tk); }).map(function(m){ return {id:m.id, level:lv[m.level]?m.level:'here', why:String(m.why||'').slice(0,160), quote:String(m.quote||'').slice(0,80), tip:String(m.tip||'').slice(0,120)}; }).slice(0,8);
       LOC.area=String(res.area||place.pretend||place.city||'this place').slice(0,60);
       locSetStatus((LOC.matches.length?LOC.matches.length+' task'+(LOC.matches.length===1?'':'s')+' near ':'Nothing for ')+LOC.area+(viaAI?'':' (matched by words only; AI was not reachable)')+'.');
       locUpdatePill(); locRender();
@@ -4719,7 +4885,7 @@ function locLookup(force){
   };
   if(pretend){ fin({pretend:pretend, nearby:[], city:''}); return; }
   Promise.all([locPlacesNearby(LOC.lat,LOC.lng,SETTINGS.mapsKey), locReverse(LOC.lat,LOC.lng,SETTINGS.mapsKey)]).then(function(r){
-    fin({nearby:r[0], city:[r[1].city,r[1].county&&!r[1].city?r[1].county:'',r[1].state].filter(Boolean).join(', '), county:r[1].county, state:r[1].state});
+    fin({nearby:r[0], city:[r[1].city,r[1].county&&!r[1].city?r[1].county:'',r[1].state].filter(Boolean).join(', '), cityName:r[1].city, hood:r[1].hood, county:r[1].county, state:r[1].state});
   }).catch(function(e){ LOC.busy=false; locSetStatus('Lookup failed: '+(e&&e.message?e.message:'network')+'. Check the Google key and that Places and Geocoding are enabled.'); });
 }
 function openTaskById(id){ return state.tasks.some(function(t){ return t.id===id && !t.completed; }); }
@@ -4755,7 +4921,7 @@ function locRender(){
   var shown=_locShowAll?vis:vis.slice(0,REMINDER_LIST_CAP);
   shown.forEach(function(m){
     var t=state.tasks.find(function(x){return x.id===m.id;}); if(!t) return;
-    h+=remRowHtml(t,'<div class="loc-why"><span class="loc-lvl">'+_LVL[m.level]+'</span> '+esc(m.why)+'</div>'+(m.tip?'<div class="loc-tip">💡 '+esc(m.tip)+'</div>':''), true);
+    h+=remRowHtml(t,'<div class="loc-why"><span class="loc-lvl">'+_LVL[m.level]+'</span> '+esc(m.why)+(m.quote?' <span class="loc-q">matched on “'+esc(m.quote)+'”</span>':'')+'</div>'+(m.tip?'<div class="loc-tip">💡 '+esc(m.tip)+'</div>':''), true);
   });
   if(vis.length>shown.length) h+='<button class="rem-more" data-act="lmore">Show '+(vis.length-shown.length)+' more</button>';
   document.getElementById('locList').innerHTML=h;
@@ -4866,7 +5032,7 @@ function remInit(){
 //   • After saving, an extra tap asks whether to put it on the calendar. ITC tasks are saved but never written to the calendar.
 // ═══════════════════════════════════════════════════════════════════════════
 var V27_MAX_ROWS=12, V27_TITLE_MAX=100;
-var V27={open:false, mode:'one', draft:null, one:null, sep:[], chips:null, attach:null, busy:false};
+var V27={open:false, mode:'one', draft:null, one:null, sep:[], chips:null, attach:null, busy:false, cal:false, nimg:0};
 
 // ── dates ──
 function v27PhoneNow(){ if(window.__PHONE_HOUR!==undefined){ var d=new Date(); d.setHours(window.__PHONE_HOUR,window.__PHONE_MIN||0,0,0); return d; } return new Date(); }
@@ -5010,7 +5176,7 @@ function v27Start(inp){
   var go=function(j){
     V27.busy=false; v27Busy(false);
     var d=v27Build(inp,j);
-    V27.draft=d; V27.mode='one'; V27.one=d.one; V27.sep=d.sep; V27.chips=inp.chips; V27.attach=inp.attach;
+    V27.draft=d; V27.mode='one'; V27.one=d.one; V27.sep=d.sep; V27.chips=inp.chips; V27.attach=inp.attach; V27.cal=!!d.scheduleRequested; V27.nimg=(inp.imgs||[]).length;
     v27Open();
   };
   v27Ai(v27Prompt(inp), function(txt){ var j=v27Json(txt); go(j&&Array.isArray(j.tasks)?j:null); }, function(){ go(null); });
@@ -5031,55 +5197,129 @@ function v27Open(){
     var s=document.createElement('div'); s.id='v27Sched'; s.className='v27-overlay'; document.body.appendChild(s);
     s.addEventListener('click', v27SchedClick);
   }
-  V27.open=true; v27Render(); document.getElementById('v27Overlay').classList.add('open');
+  V27.open=true; document.getElementById('v27Overlay').classList.add('open'); v27Render();
 }
 function v27Close(){ V27.open=false; var o=document.getElementById('v27Overlay'); if(o) o.classList.remove('open'); }
-function v27RowHtml(r,i){
-  var h='<div class="v27-row'+(r.include?'':' off')+'">';
-  if(V27.mode==='sep') h+='<label class="v27-inc"><input type="checkbox" data-k="include" data-i="'+i+'"'+(r.include?' checked':'')+'> Save this one</label>';
-  h+='<label class="v27-lbl">Task title</label><input class="v27-in" type="text" data-k="title" data-i="'+i+'" value="'+esc(r.title)+'"><div class="v27-from">from '+esc(r.titleFrom||'your words')+'</div>';
-  h+='<div class="v27-two"><div><label class="v27-lbl">Deadline date</label><input class="v27-in" type="date" data-k="dueDate" data-i="'+i+'" value="'+esc(r.dueDate)+'"'+(r.leisure?' disabled':'')+'></div>'
-    +'<div><label class="v27-lbl">Time (optional)</label><input class="v27-in" type="time" data-k="dueTime" data-i="'+i+'" value="'+esc(r.dueTime)+'"'+(r.leisure?' disabled':'')+'></div></div>';
-  h+='<div class="v27-from">'+(r.leisure?'no deadline — at leisure':(r.dueDate?esc(v27Fmt(r.dueDate,r.dueTime))+' · from '+esc(r.dateFrom||'you')+(r.timeFrom?' · time from '+esc(r.timeFrom):''):'<b>no deadline found</b> — pick a date, or tick at leisure'))+'</div>';
-  h+='<label class="v27-chk"><input type="checkbox" data-k="leisure" data-i="'+i+'"'+(r.leisure?' checked':'')+'> No deadline — at leisure</label>';
-  if(r.night && !r.leisure){
-    h+='<div class="v27-night"><b>🌙 A gentle check</b><div>It is '+esc(r.night.clock)+' on your phone. When you said “'+esc(r.night.word)+'”, did you mean:</div>'
-      +'<label><input type="radio" name="v27n'+i+'" data-k="night" data-i="'+i+'" value="A"'+(r.night.choice==='A'?' checked':'')+'> '+esc(r.night.A.label)+'</label>'
-      +'<label><input type="radio" name="v27n'+i+'" data-k="night" data-i="'+i+'" value="B"'+(r.night.choice==='B'?' checked':'')+'> '+esc(r.night.B.label)+'</label></div>';
+
+// ---- small helpers for the redesigned pop-up ----
+var V27_MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], V27_DN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+function v27BoxDate(ymd){ var d=_ddParse(ymd); return d?(V27_DN[d.getDay()]+', '+V27_MN[d.getMonth()]+' '+d.getDate()):''; }
+function v27BoxTime(hm){ if(!hm) return ''; var p=hm.split(':'); return fmtClock(new Date(2000,0,1,+p[0],+p[1])); }
+function v27Tag(from){
+  var f=String(from||'').toLowerCase();
+  if(!f) return {cls:'calc',txt:'worked out by Chakra'};
+  if(/image/.test(f)) return {cls:'img',txt:'from the image'};
+  if(/you picked/.test(f)) return {cls:'words',txt:'you picked this'};
+  if(/you edited|^you$|your answer/.test(f)) return {cls:'words',txt:'you set this'};
+  if(/context/.test(f)) return {cls:'words',txt:'from your context box'};
+  if(/first sentence|worked out|chakra/.test(f)) return {cls:'calc',txt:/first sentence/.test(f)?'your first sentence':'worked out by Chakra'};
+  if(/read by ai|ai/.test(f) && !/your words/.test(f)) return {cls:'calc',txt:'read by the AI'};
+  return {cls:'words',txt:'from your words'};
+}
+function v27ChipDates(){
+  var today=startOfDay(nowWall()), res=null;
+  try{ res=v27ResolveDate('next week'); }catch(e){}
+  var nw=(res&&res.dueDate)?res.dueDate:ymdOf(addDays(today, ((8-today.getDay())%7)||7));
+  return {today:ymdOf(today), tomorrow:ymdOf(addDays(today,1)), weekend:ymdOf(saturdayOfWeek(today)), nextweek:nw};
+}
+function v27Valid(){
+  var rows=v27Rows(), any=false;
+  for(var i=0;i<rows.length;i++){
+    var r=rows[i]; if(!r.include) continue; any=true;
+    if(!String(r.title||'').trim()) return 'Give the task a title';
+    if(r.night && !r.leisure && !r.night.choice) return 'Answer the 🌙 question';
+    if(!r.dueDate && !r.leisure && !(V27.chips&&V27.chips.th)) return 'Pick a date or “At leisure”';
   }
-  h+='<div class="v27-two"><div><label class="v27-lbl">Can be multitasked?</label><select class="v27-in" data-k="mt" data-i="'+i+'"><option value="no"'+(r.mt!==true?' selected':'')+'>No — needs focus'+(r.mt===null?' (default)':'')+'</option><option value="yes"'+(r.mt===true?' selected':'')+'>Yes</option></select></div></div>';
-  h+='<label class="v27-lbl">Notes (saved with the task, and with the calendar event)</label><textarea class="v27-in v27-ta" data-k="notes" data-i="'+i+'" rows="5">'+esc(r.notes)+'</textarea>';
-  if(V27.mode==='sep' && i<V27.sep.length-1) h+='<label class="v27-chk"><input type="checkbox" data-k="linkNext" data-i="'+i+'"'+(r.linkNext?' checked':'')+'> 🔗 Link with the next task (they stay separate tasks)</label>';
+  return any?'':'Turn on at least one task to save';
+}
+function v27UpdateFoot(){
+  var o=document.getElementById('v27Overlay'); if(!o) return;
+  var b=o.querySelector('[data-act="save"]'), n=o.querySelector('.v27-fnote'), m=v27Valid(); if(!b||!n) return;
+  if(m){ b.classList.add('off'); n.innerHTML='<b>'+esc(m)+'</b> to turn on Save.'; } else { b.classList.remove('off'); n.textContent='All set. Press Save to Chakra.'; }
+}
+
+function v27RowHtml(r,i){
+  var h='<div class="v27-group'+(r.include?'':' off')+'">';
+  if(V27.mode==='sep') h+='<div class="v27-ghead"><span>Task '+(i+1)+' of '+V27.sep.length+'</span><button class="v27-sw'+(r.include?' on':'')+'" data-act="inc" data-i="'+i+'" aria-label="Save this task"></button></div>';
+  var tt=v27Tag(r.titleFrom);
+  h+='<div class="v27-c"><div class="v27-ctop"><div class="v27-clbl">📝 Task</div><span class="v27-tag '+tt.cls+'">'+esc(tt.txt)+'</span></div>'
+    +'<textarea class="v27-title" rows="3" data-k="title" data-i="'+i+'">'+esc(r.title)+'</textarea><div class="v27-hint">✏️ Tap the title to rewrite it.</div></div>';
+  var needDate=(!r.dueDate && !r.leisure), dt=r.dueDate?v27Tag(r.dateFrom):null, cd=v27ChipDates();
+  h+='<div class="v27-c'+(needDate?' need':'')+'"><div class="v27-ctop"><div class="v27-clbl">📅 When is it due?</div>'
+    +(needDate?'<span class="v27-tag need">Needed to save</span>':(r.leisure?'<span class="v27-tag words">you chose at leisure</span>':'<span class="v27-tag '+dt.cls+'">'+esc(dt.txt)+'</span>'))+'</div>'
+    +'<div class="v27-when">'
+    +'<label class="v27-big'+(r.leisure?' dis':'')+(r.dueDate?'':' empty')+'"><span class="em">📅</span><span><small>Date</small><span class="v">'+(r.leisure?'At leisure':(r.dueDate?esc(v27BoxDate(r.dueDate)):'Pick a date'))+'</span></span><input class="v27-nat" type="date" data-k="dueDate" data-i="'+i+'" value="'+esc(r.dueDate)+'"></label>'
+    +'<label class="v27-big'+(r.leisure?' dis':'')+(r.dueTime?'':' empty')+'"><span class="em">🕗</span><span><small>Time (optional)</small><span class="v">'+(r.dueTime?esc(v27BoxTime(r.dueTime)):'Any time')+'</span></span><input class="v27-nat" type="time" data-k="dueTime" data-i="'+i+'" value="'+esc(r.dueTime)+'"></label></div>'
+    +'<div class="v27-chips">'
+    +[['today','Today'],['tomorrow','Tomorrow'],['weekend','This weekend'],['nextweek','Next week']].map(function(c){ return '<button class="v27-chip'+((!r.leisure && r.dueDate===cd[c[0]])?' on':'')+'" data-act="chip" data-v="'+c[0]+'" data-i="'+i+'">'+c[1]+'</button>'; }).join('')
+    +'<button class="v27-chip lz'+(r.leisure?' on':'')+'" data-act="chip" data-v="leisure" data-i="'+i+'">At leisure</button></div>'
+    +'<div class="v27-hint">'+(r.leisure?'💡 No deadline. This goes to your leisure list.':(r.dueDate?'💡 '+esc(v27Fmt(r.dueDate,r.dueTime))+' · '+esc(r.dateFrom||'you')+(r.timeFrom?' · time from '+esc(r.timeFrom):'')+'. Tap a box to change it.':'💡 No date found. Pick one above, or choose “At leisure” if there is no deadline.'))+'</div></div>';
+  if(r.night && !r.leisure){
+    h+='<div class="v27-night"><b>🌙 A gentle check</b><div style="margin-top:4px">It is '+esc(r.night.clock)+' on your phone. When you said “'+esc(r.night.word)+'”, did you mean:</div>'
+      +'<label><input type="radio" name="v27n'+i+'" data-k="night" data-i="'+i+'" value="A"'+(r.night.choice==='A'?' checked':'')+'> <span>'+esc(r.night.A.label)+'</span></label>'
+      +'<label><input type="radio" name="v27n'+i+'" data-k="night" data-i="'+i+'" value="B"'+(r.night.choice==='B'?' checked':'')+'> <span>'+esc(r.night.B.label)+'</span></label></div>';
+  }
+  h+='<div class="v27-c"><div class="v27-ctop"><div class="v27-clbl">🔀 Can I do this while multitasking?</div></div><div class="v27-seg">'
+    +'<button class="'+(r.mt===true?'on':'')+'" data-act="mt" data-v="yes" data-i="'+i+'">Yes<small>walk, drive, meal, call</small></button>'
+    +'<button class="'+(r.mt===false?'on':'')+'" data-act="mt" data-v="no" data-i="'+i+'">No<small>needs full focus</small></button></div>'
+    +(r.mt===null?'<div class="v27-hint">Not chosen, so I will assume No.</div>':'')+'</div>';
+  if(i===0 && V27.attach && V27.attach.contacts && V27.attach.contacts.length){
+    h+='<div class="v27-c"><div class="v27-ctop"><div class="v27-clbl">👤 Found in your image</div><span class="v27-tag img">from the image</span></div>';
+    V27.attach.contacts.slice(0,3).forEach(function(c){
+      var nm=c.name||c.org||'Contact', ini=nm.split(/\s+/).slice(0,2).map(function(w){return w.charAt(0).toUpperCase();}).join('');
+      h+='<div class="v27-row" style="margin-bottom:6px"><div class="v27-av">'+esc(ini)+'</div><div class="v27-rmain"><b>'+esc(nm)+'</b><span>'+esc([c.org&&c.name?c.org:'', (c.phones&&c.phones[0])||''].filter(Boolean).join(' · '))+'</span></div></div>';
+    });
+    h+='<div class="v27-hint">Attached to this task. You can save it to Contacts from the task later.</div></div>';
+  }
+  h+='<div class="v27-c"><div class="v27-ctop"><div class="v27-clbl">🗒 Notes</div><span class="v27-tag calc">all details kept</span></div>'
+    +'<textarea class="v27-ta'+(r._nx?' open':'')+'" rows="3" data-k="notes" data-i="'+i+'">'+esc(r.notes)+'</textarea>'
+    +'<button class="v27-more" data-act="nx" data-i="'+i+'">'+(r._nx?'Show fewer ▴':'Show all notes ▾')+'</button>'
+    +'<div class="v27-hint">Saved with the task, and with the calendar event if you add one.</div></div>';
+  if(V27.mode==='sep' && i<V27.sep.length-1) h+='<div class="v27-c"><div class="v27-row"><div style="font-size:22px">🔗</div><div class="v27-rmain"><b>Link with the next task</b><span>They stay separate tasks.</span></div><button class="v27-sw'+(r.linkNext?' on':'')+'" data-act="link" data-i="'+i+'" aria-label="Link with the next task"></button></div></div>';
   return h+'</div>';
 }
 function v27Render(){
   var o=document.getElementById('v27Overlay'); if(!o) return;
-  var d=V27.draft, h='<div class="v27-card" role="dialog" aria-label="Confirm what I understood"><div class="v27-hdr"><div class="v27-ttl">Here is what I understood</div><button class="v27-x" data-act="cancel" aria-label="Close">✕</button></div><div class="v27-body">';
-  h+='<div class="v27-sum">'+(d.ai?esc(d.summary||'I read your words, your notes and the images together.'):'<b>The AI could not be reached.</b> I made one task from your words using the keyword rules. Please check it.')+'</div>';
-  if(d.many) h+='<div class="v27-mode"><label><input type="radio" name="v27mode" data-k="mode" value="one"'+(V27.mode==='one'?' checked':'')+'> Save as <b>ONE task</b> (default)</label><label><input type="radio" name="v27mode" data-k="mode" value="sep"'+(V27.mode==='sep'?' checked':'')+'> Save as <b>separate tasks</b> ('+V27.sep.length+')</label></div>';
+  var old=o.querySelector('.v27-body'), st=old?old.scrollTop:0;
+  var d=V27.draft, h='<div class="v27-card" role="dialog" aria-label="Confirm what I understood"><div class="v27-grab"></div><div class="v27-hdr"><div class="v27-ttl">Here is what I understood</div><button class="v27-x" data-act="cancel" aria-label="Close">✕</button></div><div class="v27-body">';
+  if(d.ai) h+='<div class="v27-banner ok"><div class="ic">✨</div><div><b>Read '+(V27.nimg?V27.nimg+' image'+(V27.nimg===1?' and ':'s and '):'')+'your words.</b> Check the details below. Tap anything to change it. Nothing is saved until you press Save.</div></div>'+(d.summary?'<div class="v27-sum">'+esc(d.summary)+'</div>':'');
+  else h+='<div class="v27-banner warn"><div class="ic">⚠️</div><div><b>The AI could not be reached.</b> I made one simple task from your first sentence. Please check it, and tell me when it is due.</div></div>';
+  if(d.many) h+='<div class="v27-c v27-mode"><div class="v27-ctop"><div class="v27-clbl">How should I save this?</div></div><div class="v27-seg"><button class="'+(V27.mode==='one'?'on':'')+'" data-act="mode" data-v="one">ONE task<small>default</small></button><button class="'+(V27.mode==='sep'?'on':'')+'" data-act="mode" data-v="sep">Separate tasks<small>'+V27.sep.length+' tasks</small></button></div></div>';
   v27Rows().forEach(function(r,i){ h+=v27RowHtml(r,i); });
-  h+='</div><div class="v27-foot"><button class="v27-btn ghost" data-act="cancel">Cancel</button><button class="v27-btn go" data-act="save">Save to Chakra</button></div></div>';
+  var dated=v27Rows().some(function(r){ return r.include && r.dueDate && !r.leisure; });
+  if(dated) h+='<div class="v27-c"><div class="v27-row"><div style="font-size:24px">🗓</div><div class="v27-rmain"><b>Also put it on my calendar</b><span>Chakra picks Personal or Picturizze. ITC is never added.</span></div><button class="v27-sw'+(V27.cal?' on':'')+'" data-act="cal" aria-label="Put it on my calendar"></button></div></div>';
+  h+='</div><div class="v27-foot"><button class="v27-btn ghost" data-act="cancel">Cancel</button><button class="v27-btn go" data-act="save">Save to Chakra</button><div class="v27-fnote"></div></div></div>';
   o.innerHTML=h;
+  var nb=o.querySelector('.v27-body'); if(nb) nb.scrollTop=st;
+  o.querySelectorAll('.v27-title').forEach(function(t){ t.style.height='auto'; t.style.height=Math.min(t.scrollHeight,150)+'px'; });
+  v27UpdateFoot();
 }
 function v27OnEdit(e){
   var el=e.target, k=el.getAttribute&&el.getAttribute('data-k'); if(!k) return;
-  if(k==='mode'){ V27.mode=el.value; v27Render(); return; }
   var i=+el.getAttribute('data-i'), r=v27Rows()[i]; if(!r) return;
-  if(k==='title'){ r.title=el.value; r.titleFrom='you edited'; }
+  if(k==='title'){ r.title=el.value; r.titleFrom='you edited'; el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,150)+'px'; v27UpdateFoot(); }
   else if(k==='notes') r.notes=el.value;
-  else if(k==='dueTime'){ r.dueTime=el.value; r.timeFrom='you'; }
-  else if(k==='mt') r.mt=(el.value==='yes');
-  else if(k==='include'){ r.include=el.checked; v27Render(); }
-  else if(k==='linkNext') r.linkNext=el.checked;
-  else if(k==='leisure'){ r.leisure=el.checked; v27Render(); }
-  else if(k==='dueDate'){ r.dueDate=el.value; r.dateFrom='you'; if(r.night) r.night.choice='manual'; if(e.type==='change') v27Render(); }
+  else if(k==='dueTime'){ r.dueTime=el.value; r.timeFrom='you'; if(e.type==='change') v27Render(); }
+  else if(k==='dueDate'){ r.dueDate=el.value; r.dateFrom='you'; r.leisure=false; if(r.night) r.night.choice='manual'; if(e.type==='change'||!el.value) v27Render(); else v27UpdateFoot(); }
   else if(k==='night'){ r.night.choice=el.value; r.dueDate=(el.value==='A'?r.night.A.date:r.night.B.date); r.dateFrom='your answer to the night check'; v27Render(); }
 }
 function v27OnClick(e){
   var el=e.target.closest?e.target.closest('[data-act]'):null; if(!el) return;
-  var a=el.getAttribute('data-act');
+  var a=el.getAttribute('data-act'), i=+el.getAttribute('data-i'), v=el.getAttribute('data-v'), r=v27Rows()[i];
   if(a==='cancel'){ v27Close(); }
-  else if(a==='save') v27Save();
+  else if(a==='save'){ var m=v27Valid(); if(m){ toast(m,'warn',3000); return; } v27Save(); }
+  else if(a==='mode'){ V27.mode=v; v27Render(); }
+  else if(a==='inc' && r){ r.include=!r.include; v27Render(); }
+  else if(a==='link' && r){ r.linkNext=!r.linkNext; v27Render(); }
+  else if(a==='cal'){ V27.cal=!V27.cal; v27Render(); }
+  else if(a==='nx' && r){ r._nx=!r._nx; v27Render(); }
+  else if(a==='mt' && r){ r.mt=(v==='yes'); v27Render(); }
+  else if(a==='chip' && r){
+    var cd=v27ChipDates();
+    if(v==='leisure'){ r.leisure=!r.leisure; if(r.leisure){ r.dueDate=''; r.dueTime=''; r.dateFrom='you picked: at leisure'; r.night=null; } }
+    else { r.leisure=false; r.dueDate=cd[v]; r.dateFrom='you picked: '+el.textContent; r.night=null; }
+    v27Render();
+  }
 }
 
 // ── saving ──
@@ -5117,17 +5357,10 @@ function v27ClearInputs(){
   document.querySelectorAll('.fab-mt-chip').forEach(function(c){ c.classList.remove('on'); }); if(typeof _fabMt!=='undefined') _fabMt=null;
   var ta=document.getElementById('gatherText'); if(ta){ta.value='';ta.style.height='';}
   var note=document.getElementById('imgNote'); if(note) note.value='';
-  var fab=document.getElementById('gatherFab'); if(fab) fab.className='gather-fab';
+  updateFab();
 }
 function v27Save(){
-  var rows=v27Rows(), todo=rows.filter(function(r){return r.include;});
-  if(!todo.length){ toast('Tick at least one task to save, or press Cancel','warn',3000); return; }
-  for(var i=0;i<rows.length;i++){
-    var r=rows[i]; if(!r.include) continue;
-    if(!String(r.title||'').trim()){ toast('Give the task a title','warn',3000); return; }
-    if(r.night && !r.leisure && !r.night.choice){ toast('Please answer the 🌙 question about “'+r.night.word+'”','warn',3500); return; }
-    if(!r.dueDate && !r.leisure && !(V27.chips&&V27.chips.th)){ toast('Pick a deadline date, or tick “at leisure”','warn',3500); return; }
-  }
+  var rows=v27Rows(), msg=v27Valid(); if(msg){ toast(msg,'warn',3000); return; }
   var created=[], prev=null, att=V27.attach;
   rows.forEach(function(r,i){
     if(!r.include){ prev=null; return; }
@@ -5139,8 +5372,20 @@ function v27Save(){
   v27ClearInputs(); v27Close();
   toast('✓ '+(created.length===1?'1 task added to Chakra ＋':created.length+' tasks added to Chakra ＋'),'ok',3000);
   renderTab(state.activeTab); updateHeader();
-  var wantSched=V27.draft?V27.draft.scheduleRequested:false, calHint=V27.draft?V27.draft.calendar:null;
-  setTimeout(function(){ v27AskSchedule(created, wantSched, calHint); }, 700);
+  var wantCal=!!V27.cal, calHint=V27.draft?V27.draft.calendar:null;
+  if(wantCal) setTimeout(function(){ v27ScheduleDirect(created, calHint); }, 700);
+}
+// The calendar switch in the pop-up is the consent. No second question. ITC is never written.
+function v27ScheduleDirect(created, calHint){
+  var rows=[], itc=0;
+  created.forEach(function(t){
+    if(!t.dueDate) return;
+    var cal=v27CalOf(t,calHint); if(cal==='itc'){ itc++; return; }
+    var ev=v27Event(t); if(ev) rows.push({t:t, cal:cal, ev:ev});
+  });
+  if(!rows.length){ if(itc) toast('ITC task saved. The ITC calendar is view-only, so nothing was scheduled.','ok',4500); return; }
+  if(itc) toast('An ITC task was saved too. ITC is never added to the calendar.','ok',3500);
+  v27Book(rows);
 }
 
 // ── "Schedule it?" (an extra tap; ITC is never written to the calendar) ──
@@ -5217,6 +5462,7 @@ function gatherSave(){
   var usable=imgItems.filter(function(x){ return x.read||x.ocr; });
   if(!rawText && !note && !usable.length){
     if(imgItems.length){ var ta2=document.getElementById('gatherText'); if(ta2){ ta2.placeholder='I could not read the image. Type what you want to do, then press Add'; ta2.focus(); } toast('📷 Image not readable — type what you want to do, then press Add','warn',3500); }
+    else toast('Type something or add a photo first','warn',2500);
     return;
   }
   var chips={w:w?w.value:null, mt:mt?(mt.value==='yes'):null, th:th?th.value:null, la:la?la.value:null};
