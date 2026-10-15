@@ -344,9 +344,10 @@
         if (done) return;
         done = true;
         bad();
-      }, 25000);
-      // V29: the AI answers for every shortlisted task (up to 80), so it needs 2200 tokens and up to 25 s.
-      request('POST', '/llm/parse', { prompt: String(content), max_tokens: 2200 }).then(function (res) {
+      }, 45000);
+      // V29: the AI answers for every shortlisted task (up to 80). The page asks for 2200 tokens, but a live
+      // test cut the answer off after 70 of 80 tasks (broken JSON -> word matching), so allow 4000 and 45 s.
+      request('POST', '/llm/parse', { prompt: String(content), max_tokens: 4000 }).then(function (res) {
         if (done) return;
         done = true; clearTimeout(timer);
         if (typeof res.text !== 'string') { bad(); return; }

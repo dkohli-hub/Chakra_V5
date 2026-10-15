@@ -35,9 +35,9 @@ async def claude_generate(prompt: str, max_tokens: int = 700, image: dict | None
         # The page waits 28 s for a photo; one longer attempt fits inside that.
         client = client.with_options(timeout=25.0, max_retries=0)
     elif max_tokens > 1000:
-        # Long text answers (V27 confirmation box, V29 Location AI) take longer than 15 s;
-        # those pages wait 25-35 s, so give one longer attempt instead of two short ones.
-        client = client.with_options(timeout=28.0, max_retries=0)
+        # Long text answers (V27 confirmation box, V29 Location AI for up to 80 tasks) take
+        # 20-40 s; the V24 site waits up to 45 s, so give one long attempt instead of two short ones.
+        client = client.with_options(timeout=45.0, max_retries=0)
     try:
         response = await client.messages.create(
             model=settings.ANTHROPIC_MODEL,
