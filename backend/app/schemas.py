@@ -133,7 +133,8 @@ class LLMImage(BaseModel):
 
 class LLMRequest(BaseModel):
     prompt: str
-    max_tokens: int = Field(default=700, ge=1, le=2000)
+    # V29 Location AI asks for 2200 and V27's confirmation box / photo reading for 2600.
+    max_tokens: int = Field(default=700, ge=1, le=4000)
     image: Optional[LLMImage] = None
 
 

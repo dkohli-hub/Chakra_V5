@@ -322,8 +322,8 @@
       if (onError) onError(new Error('AI timeout'));
     }, image ? 28000 : 9000);
     var body = { prompt: String(content) };
-    // V27 asks for the full text of a photo (2600 tokens); the backend allows up to 2000.
-    if (image) { body.image = image; body.max_tokens = 2000; }
+    // V27+ asks for the full text of a photo (2600 tokens); the backend allows up to 4000.
+    if (image) { body.image = image; body.max_tokens = 2600; }
     request('POST', '/llm/parse', body).then(function (res) {
       if (done) return;
       done = true; clearTimeout(timer);
@@ -344,8 +344,9 @@
         if (done) return;
         done = true;
         bad();
-      }, 15000);
-      request('POST', '/llm/parse', { prompt: String(content), max_tokens: 1200 }).then(function (res) {
+      }, 25000);
+      // V29: the AI answers for every shortlisted task (up to 80), so it needs 2200 tokens and up to 25 s.
+      request('POST', '/llm/parse', { prompt: String(content), max_tokens: 2200 }).then(function (res) {
         if (done) return;
         done = true; clearTimeout(timer);
         if (typeof res.text !== 'string') { bad(); return; }
@@ -371,7 +372,7 @@
         bad();
       };
       var timer = setTimeout(fail, 35000);
-      request('POST', '/llm/parse', { prompt: String(content), max_tokens: 2000 }).then(function (res) {
+      request('POST', '/llm/parse', { prompt: String(content), max_tokens: 2600 }).then(function (res) {
         if (done) return;
         if (typeof res.text !== 'string') { fail(); return; }
         done = true; clearTimeout(timer);

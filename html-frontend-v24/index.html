@@ -875,7 +875,39 @@ html,body{font-weight:500;}
 .v27-fnote{grid-column:1/-1;text-align:center;font-size:11.5px;color:#6A6558;margin-top:-2px;min-height:14px;}
 .v27-fnote b{color:#7A5200;}
 .v27-sch{display:flex;gap:10px;align-items:flex-start;padding:9px;border:1px solid #D4CCBC;border-radius:10px;margin-bottom:8px;font-size:13px;background:#fff;}
-.loc-q{font-size:11px;font-weight:700;color:#5B3FA6;background:#EFEAFB;border-radius:999px;padding:2px 8px;white-space:nowrap;}
+.loc-q{font-size:11px;font-weight:700;color:#5B3FA6;background:#EFEAFB;border-radius:10px;padding:2px 8px;white-space:normal;overflow-wrap:anywhere;display:inline-block;max-width:100%;}
+/* v29 location pop-up: groups, tap for details, speed badge */
+.loc-grp{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#5B3FA6;margin:8px 2px 5px;}
+.loc-grp.nudge{color:#8B3A00;background:#FFF1DC;border-radius:8px;padding:5px 8px;}
+.rem-main[data-act="detail"]{cursor:pointer;}
+.loc-banner.sticky{top:auto;bottom:176px;left:14px;transform:none;font-size:12px;padding:8px 12px;max-width:80vw;}
+.rem-det{color:#5B3FA6;font-weight:700;}
+.hdr-right{display:flex;align-items:center;gap:8px;}
+.spd{width:46px;height:46px;border-radius:50%;border:0;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;color:#fff;cursor:pointer;font-family:'Montserrat',sans-serif;box-shadow:0 2px 6px rgba(0,0,0,.18);}
+.spd .n{font-size:15px;font-weight:800;}
+.spd .u{font-size:7px;font-weight:700;letter-spacing:.06em;opacity:.9;margin-top:1px;}
+.spd.still{background:#9A958A;}
+.spd.move{background:linear-gradient(180deg,#2FA088,#1A6B5A);}
+.spd.fast{background:linear-gradient(180deg,#F0A030,#C77A0A);}
+.spd.pulse{animation:spdpl 1.6s ease-in-out infinite;}
+@keyframes spdpl{0%,100%{box-shadow:0 2px 6px rgba(0,0,0,.18),0 0 0 0 rgba(26,107,90,.35);}50%{box-shadow:0 2px 6px rgba(0,0,0,.18),0 0 0 6px rgba(26,107,90,0);}}
+.ld-overlay{display:none;position:fixed;inset:0;background:rgba(20,30,20,.55);z-index:1300;align-items:center;justify-content:center;padding:14px;}
+.ld-overlay.open{display:flex;}
+.ld-card{background:var(--surface,#fff);color:var(--text,#222);width:100%;max-width:460px;max-height:80vh;display:flex;flex-direction:column;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.4);overflow:hidden;font-family:Montserrat,sans-serif;}
+.ld-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 8px 8px 16px;border-bottom:1px solid var(--border,#ddd);background:#EFEAFB;}
+.ld-ttl{font-weight:700;font-size:14px;}
+.ld-body{overflow:auto;padding:12px 16px;flex:1;}
+.ld-title{font-size:15px;font-weight:700;line-height:1.35;overflow-wrap:anywhere;}
+.ld-meta{font-size:11px;opacity:.75;margin:4px 0 8px;}
+.ld-lbl{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#5B3FA6;margin:10px 0 4px;}
+.ld-p{font-size:13px;line-height:1.5;margin-bottom:5px;overflow-wrap:anywhere;}
+.ld-ul{margin:2px 0 6px 18px;}
+.ld-ul li{font-size:13px;line-height:1.5;margin-bottom:3px;overflow-wrap:anywhere;}
+.ld-none{font-size:12px;opacity:.65;margin-top:6px;}
+.ld-ct{font-size:13px;margin-bottom:4px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.ld-ct a{color:#1A6B5A;font-weight:600;}
+.ld-foot{display:flex;gap:8px;padding:8px 12px 12px;border-top:1px solid var(--border,#ddd);}
+.ld-foot .rem-done{flex:1;}
 .v27-busy{display:none;position:fixed;left:50%;top:70px;transform:translateX(-50%);background:#1A6B5A;color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;font-weight:600;z-index:1400;box-shadow:0 3px 12px rgba(0,0,0,.3);}
 </style>
 </head>
@@ -1019,7 +1051,7 @@ html,body{font-weight:500;}
       <div class="page-title">Karma Kshetra™</div>
       <div class="page-sub">Version <span class="app-ver">15</span> &nbsp;·&nbsp; Your mind, structured. &nbsp;·&nbsp; <span id="syncLbl" style="font-size:11px;color:var(--teal2);">⟳ loading...</span><span id="hdrCounts" class="hdr-counts"></span></div>
     </div>
-    <div class="hdr-stats"><div class="stat-row" id="statRow"></div></div>
+    <div class="hdr-right"><div class="hdr-stats"><div class="stat-row" id="statRow"></div></div><button class="spd still" id="spdBadge" data-act="pill" style="display:none" aria-label="Speed"><span class="n">0</span><span class="u">MPH</span></button></div>
   </div>
   <div class="tab-bar" id="tabBar"></div>
   </div>
@@ -1038,7 +1070,7 @@ html,body{font-weight:500;}
 
 <script>
 // v14: the ONE place the app version lives. Title, header, login footer and the backup file all read it.
-var APP_VERSION = 28;
+var APP_VERSION = 29;
 (function(){ function stamp(){ document.title='Karma Kshetra™ — DK · Chakra V'+APP_VERSION; document.querySelectorAll('.app-ver').forEach(function(e){ e.textContent=APP_VERSION; }); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',stamp); else stamp(); })();
 // ======================================================
@@ -2076,7 +2108,7 @@ function openTaskDetail(id){
   document.getElementById('taskDetailBox').innerHTML=html;
   document.getElementById('taskDetailModal').style.display='flex';
 }
-function closeTaskDetail(){ document.getElementById('taskDetailModal').style.display='none'; window._panelReopen=null; }
+function closeTaskDetail(){ document.getElementById('taskDetailModal').style.display='none'; window._panelReopen=null; try{ if(typeof locRefresh==='function') locRefresh(); if(remIsOpen()) remRender(); }catch(e){} }
 // v22: a list opened as a pop-up (multitask, Tamas, Not in your hands) redraws after a task is ticked, so a closed task leaves the list at once.
 function refreshOpenPanel(){
   var m=document.getElementById('taskDetailModal'), box=document.getElementById('taskDetailBox');
@@ -4639,8 +4671,8 @@ function remStateLabel(t){
 }
 function remRowHtml(t, extra, notNow){
   var col=tcol(t);
-  return '<div class="rem-row" style="border-left-color:'+col+'"><div class="rem-main"><div class="rem-title">'+esc(t.shortTitle||t.title)+'</div>'
-    +'<div class="rem-meta"><span class="rem-st" style="color:'+col+'">'+remStateLabel(t)+'</span> · '+esc(remDueText(t))+' · '+effW(t)+' '+esc(wLabelShort(effW(t)))+' · '+TOP_ICON[topArea(t)]+'</div>'
+  return '<div class="rem-row" style="border-left-color:'+col+'"><div class="rem-main" data-act="detail" data-id="'+esc(t.id)+'"><div class="rem-title">'+esc(t.shortTitle||t.title)+'</div>'
+    +'<div class="rem-meta"><span class="rem-st" style="color:'+col+'">'+remStateLabel(t)+'</span> · '+esc(remDueText(t))+' · '+effW(t)+' '+esc(wLabelShort(effW(t)))+' · '+TOP_ICON[topArea(t)]+((t.details||(t.contacts&&t.contacts.length))?' · <span class="rem-det">details ›</span>':'')+'</div>'
     +(extra||'')+'</div><div class="rem-btns"><button class="rem-done" data-act="done" data-id="'+esc(t.id)+'">✓ Done</button>'+(notNow?'<button class="rem-notnow" data-act="notnow" data-id="'+esc(t.id)+'">Not now</button>':'')+'</div></div>';
 }
 
@@ -4652,7 +4684,7 @@ function remBuildDom(){
   d.innerHTML='<div class="rem-card" role="dialog" aria-label="Reminders"><div class="rem-hdr"><div class="rem-ttl">🔔 Reminders</div><button class="rem-x" data-act="close" aria-label="Close reminders">✕</button></div><div class="rem-chips" id="remChips" role="radiogroup" aria-label="Show"></div><div class="rem-list" id="remList"></div></div>';
   document.body.appendChild(d);
   var l=document.createElement('div'); l.id='locOverlay'; l.className='rem-overlay loc';
-  l.innerHTML='<div class="rem-card loc" role="dialog" aria-label="Near you"><div class="rem-hdr loc"><div class="rem-ttl" id="locTtl">📍 Near you</div><button class="rem-x" data-act="lclose" aria-label="Close location reminders">✕</button></div><div class="rem-sub" id="locSub"></div><div class="rem-list" id="locList"></div><div class="rem-foot"><button class="rem-btn" data-act="lcheck">📍 Check my location now</button></div></div>';
+  l.innerHTML='<div class="rem-card loc" role="dialog" aria-label="Near you"><div class="rem-hdr loc"><div class="rem-ttl" id="locTtl">📍 Near you</div><button class="rem-x" data-act="lclose" aria-label="Close location reminders">✕</button></div><div class="rem-sub" id="locSub"></div><div class="rem-chips" id="locChips" role="radiogroup" aria-label="Show"></div><div class="rem-list" id="locList"></div><div class="rem-foot"><button class="rem-btn" data-act="lcheck">📍 Check my location now</button></div></div>';
   document.body.appendChild(l);
   var bell=document.createElement('button'); bell.id='remBell'; bell.className='rem-bell'; bell.setAttribute('aria-label','Open reminders'); bell.setAttribute('data-act','bell'); bell.innerHTML='🔔<span id="remBellN" class="rem-bellN" style="display:none"></span>'; bell.style.display='none'; document.body.appendChild(bell);
   var pill=document.createElement('button'); pill.id='locPill'; pill.className='loc-pill'; pill.setAttribute('aria-label','Open location reminders'); pill.setAttribute('data-act','pill'); pill.style.display='none'; document.body.appendChild(pill);
@@ -4663,6 +4695,7 @@ function remBuildDom(){
 function remChange(e){
   var t=e.target; if(!t) return;
   if(t.name==='remchip'){ _remChip=t.value; _remShowAll=false; remRender(); }
+  if(t.name==='locchip'){ LOC.chip=t.value; _locShowAll=false; locRender(); }
 }
 function remClick(e){
   var el=e.target && e.target.closest ? e.target.closest('[data-act]') : null; if(!el) return;
@@ -4672,7 +4705,11 @@ function remClick(e){
   else if(a==='bell') remOpen('now');
   else if(a==='pill'){ var b=document.getElementById('locBanner'); if(b) b.style.display='none'; locOpen(); }
   else if(a==='done'){ remDone(id); }
-  else if(a==='notnow'){ LOC.notNow[id]=true; locRender(); locUpdatePill(); if(!locVisible().length) locClose(); }
+  else if(a==='detail'){ locDetailOpen(id); }
+  else if(a==='dclose'){ locDetailClose(); }
+  else if(a==='dedit'){ locDetailClose(); openTaskDetail(id); }
+  else if(a==='ddone'){ locDetailClose(); remDone(id); }
+  else if(a==='notnow'){ LOC.notNow[id]=true; locRender(); locUpdatePill(); var _v=locBuildView(); if(!(_v.place.length+_v.personal.length+_v.itc.length+_v.nudge.length)) locClose(); }
   else if(a==='more'){ _remShowAll=true; remRender(); }
   else if(a==='lmore'){ _locShowAll=true; locRender(); }
   else if(a==='lcheck'){ locCheckNow(true); }
@@ -4720,6 +4757,7 @@ function remAnyModalOpen(){
 function remTick(){
   try{
     if(!state.tasks.length) return;
+    try{ locNudgeCheck(); }catch(e){}                                  // a task with a time nudges 1 hour before, wherever DK is
     if(remSilentNow() || remAnyModalOpen()) return;
     if(Date.now()-(SETTINGS.remLast||0) < REMINDER_REPEAT_MIN*60000) return;
     if(!remLists().now.length) return;
@@ -4728,8 +4766,23 @@ function remTick(){
   }catch(e){}
 }
 
-// ═══════════ LOCATION AI MODE ═══════════
-var LOC={watch:null, lat:null, lng:null, acc:null, speed:null, at:0, quiet:null, perm:'unknown', status:'GPS is off.', area:'', matches:[], sig:'', lookupAt:0, lookupLat:null, lookupLng:null, calls:[], shown:{}, notNow:{}, busy:false};
+// ═══════════ LOCATION AI MODE (v29, rebuilt: "where would DK physically be when he does this task?") ═══════════
+// ORDER, as DK set it on 15 Oct 2026:
+//   1  Utilities: are reminders on?            (silent at home and work / silent all / on everywhere)
+//   2  Where is DK, and is he still, moving or driving?   (GPS, home and work addresses, a 1 and 2 minute movement check)
+//   3  Chakra shortlists, with plain code and no AI: open, not let go / in motion / waiting on someone, overdue or due within 7 days or undated
+//   4  The AI reads the shortlist and says where each task is done (a place, home, work, or from anywhere), and quotes the place words
+//   5  Chakra decides what to show:
+//        at home or work, standing still  → Personal pill and ITC pill (tasks done at that spot or from anywhere)
+//        anywhere else, or on the move     → tasks for that place, plus tasks marked multitask, grouped under the Personal and ITC pills
+//        a task with a time                → nudges 1 hour before it starts, wherever DK is
+// PARKED (DK, 15 Oct 2026): task weight (W1 to W6) and the free time in DK's calendar are NOT used yet. A later build can add them in locTaskList and locBuildView.
+var LOC_MOVE_M=40, LOC_NOTICE_S=60, LOC_CONFIRM_S=120;   // moved this far in 1 minute = moving; stayed inside it for 2 minutes = still
+var LOC_WINDOW_DAYS=7;                                   // a dated task shows from 7 days before it is due, and stays once overdue
+var LOC_NUDGE_MIN=60;                                    // a task with a time nudges this many minutes before it starts
+var LOC_QUOTE_WORDS=8;                                   // the AI's quote can be at most this many words
+var LOC={watch:null, tick:null, lat:null, lng:null, acc:null, speed:null, at:0, quiet:null, perm:'unknown', status:'GPS is off.', area:'', place:null, cls:{}, clsSig:'', matches:[], sig:'', lookupAt:0, lookupLat:null, lookupLng:null, calls:[], shown:{}, notNow:{}, busy:false, hist:[], motion:'still', mph:0, ai:null, chip:'', nudged:{}};
+function locNowMs(){ return (typeof window.__LOC_NOW==='number') ? window.__LOC_NOW : Date.now(); }
 function locHav(a,b,c,d){ var R=6371000, r=Math.PI/180, dl=(c-a)*r, dn=(d-b)*r, x=Math.sin(dl/2)*Math.sin(dl/2)+Math.cos(a*r)*Math.cos(c*r)*Math.sin(dn/2)*Math.sin(dn/2); return 2*R*Math.asin(Math.sqrt(x)); }
 function locIsOpen(){ var o=document.getElementById('locOverlay'); return !!(o && o.classList.contains('open')); }
 function locSetStatus(s){ LOC.status=s; var el=document.getElementById('locStatus'); if(el) el.textContent=s; }
@@ -4739,14 +4792,17 @@ function locStart(){
   locSetStatus('Asking the phone for your location…');
   try{
     LOC.watch=navigator.geolocation.watchPosition(locOnPos, locOnErr, {enableHighAccuracy:true, maximumAge:15000, timeout:25000});
+    if(!LOC.tick) LOC.tick=setInterval(locMotionTick, 30000);
   }catch(e){ locSetStatus('Could not start location: '+e.message); }
 }
 function locStop(){
   if(LOC.watch!==null){ try{ navigator.geolocation.clearWatch(LOC.watch); }catch(e){} LOC.watch=null; }
-  LOC.quiet=null; LOC.matches=[]; LOC.area=''; LOC.notNow={}; locUpdatePill(); locSetStatus('GPS is off.');
+  if(LOC.tick){ clearInterval(LOC.tick); LOC.tick=null; }
+  LOC.quiet=null; LOC.cls={}; LOC.clsSig=''; LOC.matches=[]; LOC.area=''; LOC.notNow={}; LOC.hist=[]; LOC.motion='still'; LOC.mph=0; LOC.lat=null; LOC.lng=null;
+  locBadgeUpdate(); locBannerSync(); locUpdatePill(); locSetStatus('GPS is off.');
 }
 function locOnErr(err){
-  if(err && err.code===1){ LOC.perm='denied'; locSetStatus('Location is not allowed for Chakra. On the iPhone: Settings, Privacy, Location Services, then the browser or Chakra, choose While Using.'); locStop(); LOC.status='Location is not allowed for Chakra. On the iPhone: Settings, Privacy, Location Services, then the browser or Chakra, choose While Using.'; locSetStatus(LOC.status); SETTINGS.gps=false; saveSettings(); }
+  if(err && err.code===1){ LOC.perm='denied'; locStop(); LOC.status='Location is not allowed for Chakra. On the iPhone: Settings, Privacy, Location Services, then the browser or Chakra, choose While Using.'; locSetStatus(LOC.status); SETTINGS.gps=false; saveSettings(); }
   else if(LOC.lat===null){ if(err && err.code===2) locSetStatus('The phone could not find your position right now.'); else locSetStatus('Waiting for the phone to answer…'); }
 }
 function locZone(lat,lng){
@@ -4754,15 +4810,47 @@ function locZone(lat,lng){
   [['home',SETTINGS.home],['work',SETTINGS.work]].forEach(function(p){ if(p[1] && typeof p[1].lat==='number' && locHav(lat,lng,p[1].lat,p[1].lng)<=HOME_WORK_RADIUS_M) z=p[0]; });
   return z;
 }
+
+// ── movement: still, moving or driving. Moving is noticed after 1 minute; still is confirmed after 2 minutes. ──
+function locMotionStep(lat,lng,spd){
+  var now=locNowMs(); LOC.hist.push({t:now,lat:lat,lng:lng});
+  var cut=now-6*60000; LOC.hist=LOC.hist.filter(function(h){ return h.t>=cut; });
+  var back=function(sec){ var best=null; for(var i=0;i<LOC.hist.length;i++){ if(now-LOC.hist[i].t>=sec*1000) best=LOC.hist[i]; } return best; };
+  var h1=back(LOC_NOTICE_S), h2=back(LOC_CONFIRM_S);
+  var d1=h1?locHav(lat,lng,h1.lat,h1.lng):0, d2=h2?locHav(lat,lng,h2.lat,h2.lng):0;
+  var mps=(typeof spd==='number' && spd>=0)?spd:null;
+  if(mps===null && h1){ var dt=(now-h1.t)/1000; if(dt>0) mps=d1/dt; }
+  var prev=LOC.motion, next=prev;
+  if(mps!==null && mps>=LOC_FAST_MPS) next='driving';
+  else if(d1>=LOC_MOVE_M || (mps!==null && mps>=1.2)) next='moving';
+  else if(prev!=='still' && h2 && d2<LOC_MOVE_M && (mps===null || mps<0.6)) next='still';
+  LOC.motion=next; LOC.mph=(next==='still')?0:Math.round((mps||0)*2.23694);
+}
+// when the phone sends nothing new, DK is probably standing still: take another sample at the last known spot
+function locMotionTick(){
+  try{
+    if(LOC.lat===null || document.visibilityState==='hidden') return;
+    if(locNowMs()-LOC.at<20000) return;
+    var was=LOC.motion; locMotionStep(LOC.lat,LOC.lng,0); locBadgeUpdate();
+    if(was!==LOC.motion) locRefresh();
+  }catch(e){}
+}
 function locOnPos(pos){
-  var c=pos.coords; LOC.perm='granted'; LOC.lat=c.latitude; LOC.lng=c.longitude; LOC.acc=c.accuracy; LOC.speed=(typeof c.speed==='number'&&c.speed>=0)?c.speed:null; LOC.at=Date.now();
-  var q=locZone(LOC.lat,LOC.lng), was=LOC.quiet; LOC.quiet=q;
-  if(q){ locSetStatus('You are at '+q+'. Quiet mode.'); if(!was){ LOC.matches=[]; LOC.notNow={}; locUpdatePill(); locClose(); } return; }
-  if(SETTINGS.remMode==='all'){ locSetStatus('Reminders are silent. Tap Check my location now to look up this place.'); return; }
+  var c=pos.coords; LOC.perm='granted'; LOC.lat=c.latitude; LOC.lng=c.longitude; LOC.acc=c.accuracy; LOC.speed=(typeof c.speed==='number'&&c.speed>=0)?c.speed:null; LOC.at=locNowMs();
+  var wasMotion=LOC.motion; locMotionStep(LOC.lat,LOC.lng,LOC.speed);
+  var z=locZone(LOC.lat,LOC.lng), was=LOC.quiet; LOC.quiet=z;
+  locBadgeUpdate();
+  if(SETTINGS.remMode==='all'){ locSetStatus('Reminders are silent. Tap Check my location now to look up this place.'); locRefresh(); return; }
+  if(z){
+    if(SETTINGS.remMode==='hw'){ locSetStatus('You are at '+z+'. Quiet mode.'); if(was!==z){ LOC.notNow={}; locClose(); } locRefresh(); return; }
+    locSetStatus('You are at '+z+'.');
+    if(was!==z){ LOC.notNow={}; LOC.chip=''; }
+    locLookup(false); return;
+  }
   var moved = LOC.lookupLat===null ? Infinity : locHav(LOC.lat,LOC.lng,LOC.lookupLat,LOC.lookupLng);
-  var since = (Date.now()-LOC.lookupAt)/1000;
-  if(moved>=LOC_MIN_MOVE_M && since>=LOC_MIN_INTERVAL_S) locLookup(false);
-  else if(!LOC.area) locSetStatus('Position found. Looking up the place…');
+  var since = (locNowMs()-LOC.lookupAt)/1000;
+  if(was || (moved>=LOC_MIN_MOVE_M && since>=LOC_MIN_INTERVAL_S)) locLookup(false);
+  else{ if(!LOC.area) locSetStatus('Position found. Looking up the place…'); if(wasMotion!==LOC.motion) locRefresh(); else locBadgeUpdate(); }
 }
 function locCapOk(){
   var cut=Date.now()-3600000; LOC.calls=LOC.calls.filter(function(x){return x>cut;});
@@ -4773,10 +4861,10 @@ function locCheckNow(manual){
   if(!navigator.geolocation){ locSetStatus('This browser cannot read your location.'); return; }
   locSetStatus('Checking where you are…');
   navigator.geolocation.getCurrentPosition(function(pos){
-    var c=pos.coords; LOC.lat=c.latitude; LOC.lng=c.longitude; LOC.speed=null; LOC.at=Date.now();
+    var c=pos.coords; LOC.lat=c.latitude; LOC.lng=c.longitude; LOC.at=locNowMs();
     var q=locZone(LOC.lat,LOC.lng); LOC.quiet=q;
-    if(q && !manual){ locSetStatus('You are at '+q+'. Quiet mode.'); return; }
-    locLookup(true);
+    if(q && SETTINGS.remMode!=='on'){ locSetStatus('You are at '+q+'. Quiet mode.'); locBadgeUpdate(); if(manual){ locOpen(); } return; }
+    locBadgeUpdate(); locLookup(true);
   }, locOnErr, {enableHighAccuracy:true, maximumAge:0, timeout:20000});
 }
 function locJsonFrom(txt){ var m=/\{[\s\S]*\}/.exec(txt||''); if(!m) return null; try{ return JSON.parse(m[0]); }catch(e){ return null; } }
@@ -4802,14 +4890,17 @@ function locReverse(lat,lng,key){
     return o;
   });
 }
-// ── v28: matching tasks to a place. Chakra's own code first, then the AI decides the rest ──
+
+// ── step 3: the shortlist. Plain code, no AI. ──
 function locNorm(s){ return ' '+String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim()+' '; }
 var LOC_STOP={the:1,and:1,inc:1,llc:1,store:1,shop:1,center:1,centre:1,near:1,for:1,at:1,of:1,in:1,on:1,corp:1,co:1};
-function locWords(place){
+function locWords(place, storesOnly){
   var raw=[];
   (place.nearby||[]).forEach(function(p){ if(p.name){ raw.push(p.name); String(p.name).split(/\s+/).forEach(function(w){ raw.push(w); }); } });
-  [place.cityName, place.hood, place.county].forEach(function(x){ if(x) raw.push(x); });
-  if(!place.cityName && place.city) raw.push(String(place.city).split(',')[0]);
+  if(!storesOnly){
+    [place.cityName, place.hood, place.county].forEach(function(x){ if(x) raw.push(x); });
+    if(!place.cityName && place.city) raw.push(String(place.city).split(',')[0]);
+  }
   if(place.pretend) String(place.pretend).split(/[,;]+/).forEach(function(x){ raw.push(x); String(x).split(/\s+/).forEach(function(w){ raw.push(w); }); });
   var seen={}, out=[];
   raw.forEach(function(w){
@@ -4824,110 +4915,329 @@ function locHit(t, words){
   for(var i=0;i<words.length;i++){ if(tx.indexOf(' '+words[i]+' ')>=0) return words[i]; }
   return null;
 }
+function locKey(t){ var s=locTaskText(t), h=5381; for(var i=0;i<s.length;i++){ h=((h<<5)+h+s.charCodeAt(i))|0; } return String(h); }
+function locInWindow(t){
+  var D=dueMoment(t); if(!D) return true;                                            // no date: not held back by date
+  return D.getTime() < addDays(startOfDay(nowWall()), LOC_WINDOW_DAYS+1).getTime();    // overdue, today, or due within 7 days
+}
+function locEligible(t){ return !t.completed && t.bucket!=='Tyaga' && t.bucket!=='Prarabdha' && t.bucket!=='Dhairya' && locInWindow(t); }
+function locWhen(t){
+  var D=dueMoment(t); if(!D) return 'open';
+  var dd=startOfDay(D).getTime(), td=startOfDay(nowWall()).getTime();
+  return dd<td ? 'over' : (dd===td ? 'today' : 'week');
+}
+function locPill(t){ return topArea(t)==='ITC' ? 'itc' : 'personal'; }     // Personal pill = Personal/Family + Picturizze + other. ITC pill = ITC only.
 function locTaskList(place){
-  var all=sortTasks(state.tasks.filter(function(t){ return !t.completed && t.bucket!=='Tyaga' && t.bucket!=='Prarabdha'; }));
-  var words=place?locWords(place):[], hits=[], rest=[];
+  var all=sortTasks(state.tasks.filter(locEligible));
+  var words=(place && !place.kind)?locWords(place):[], hits=[], rest=[];
   all.forEach(function(t){ (words.length && locHit(t,words) ? hits : rest).push(t); });
   return hits.concat(rest).slice(0,LOC_MAX_AI_TASKS);
 }
+
+// ── step 4: the AI prompt (written whole, around one question) ──
 function locNote(t){ var n=String(t.details||'').replace(/\s+/g,' ').trim(); return n?n.slice(0,LOC_NOTE_CHARS):''; }
+function locStateText(place){
+  var mv=LOC.motion==='driving'?'driving':(LOC.motion==='moving'?'on the move (walking)':'standing still');
+  if(place.kind==='home') return 'at his HOME, '+mv;
+  if(place.kind==='work') return 'at his ITC OFFICE, '+mv;
+  return mv;
+}
 function locBuildPrompt(place, tasks){
-  var h='DK has Chakra open on his phone and his position was just looked up. Decide which of his open tasks belong to where he is, or to a store he is near.\n\n';
+  var h='You help DK decide which of his open tasks to show him right now. For EACH task below, decide where DK would physically be when he does it.\n\n';
+  h+='DK IS NOW: '+locStateText(place)+'\n';
   if(place.pretend) h+='WHERE HE IS (he typed it): '+place.pretend+'\n';
-  else{
-    h+='NEARBY PLACES (name, type, metres away):\n'+(place.nearby.length?place.nearby.map(function(p){ return '- '+p.name+' ('+(p.type||'place')+')'+(p.m!==null?', '+p.m+' m':''); }).join('\n'):'- none found')+'\n';
+  else if(!place.kind){
+    h+='NEARBY PLACES (number, name, type, metres away):\n'+(place.nearby.length?place.nearby.map(function(p,i){ return (i+1)+'. '+p.name+' ('+(p.type||'place')+')'+(p.m!==null?', '+p.m+' m':''); }).join('\n'):'none found')+'\n';
     h+='NEIGHBOURHOOD: '+(place.hood||'unknown')+'\nCITY: '+(place.city||'unknown')+(place.county?', '+place.county:'')+(place.state?', '+place.state:'')+'\n';
   }
-  h+='\nOPEN TASKS (id | title || start of the notes):\n'+tasks.map(function(t){ var n=locNote(t); return t.id+' | '+String(t.title||'').replace(/\s+/g,' ').slice(0,140)+(n?' || '+n:''); }).join('\n')+'\n\n';
-  h+='Answer with ONLY raw JSON, no markdown:\n{"area":"short label of where he is, for example HEB or McKinney (Dallas area)","matches":[{"id":"task id exactly as given","level":"here or nearby or city or metro","quote":"the exact word or phrase copied from THAT task’s title or notes that ties it to where he is","why":"short reason","tip":"at most 12 words: the quickest way to close this task from here"}]}\n';
-  h+='Rules:\n- Read each task and its notes for their meaning, and use only what they say about where things happen now.\n- Match only on what the title or notes actually say. Never assume or add a city, store or place that the task does not mention. A task that names no place and needs no store is not a match.\n- Every match MUST carry a quote copied exactly from that task’s title or notes. No quote, no match.\n- here = the task names this place, or is clearly something to do in this store.\n- nearby = one of the nearby stores very likely sells or serves what the task needs (toys: a toy store or Target); say which store in why.\n- city or metro = the task names this city or a place in the same metropolitan area. Treat a metro as one whole area, suburbs included, in both directions: a task that says Dallas matches in Plano, Frisco or McKinney, and a task that says McKinney matches anywhere in the Dallas metro area. Milwaukee and its suburbs work the same way.\n- Different metropolitan areas are different places. Austin, Houston, Dallas and San Antonio are four separate areas. Leave out tasks about a different city or region, and tasks that only share a person name.\n- At most 8 matches, most useful first. If nothing fits, return an empty matches list.';
+  h+='\nTASKS (id | title || start of the notes | due):\n'+tasks.map(function(t){ var n=locNote(t); return t.id+' | '+String(t.title||'').replace(/\s+/g,' ').slice(0,140)+(n?' || '+n:'')+' | '+remDueText(t); }).join('\n')+'\n\n';
+  h+='For each task give "at", which is where the doing happens:\n';
+  h+='- place = he must be at a particular place outside, or a kind of place: a store, clinic, bank, a named town or city.\n';
+  h+='- home = hands-on work that has to be done at his home.\n';
+  h+='- work = work that has to be done at his ITC office.\n';
+  h+='- desk = he can do it from wherever he stands, with a phone or laptop: calls, texts, emails, bookings, planning, paperwork, and getting ready for something that comes later.\n\n';
+  h+='How to decide:\n';
+  h+='- A place word in a task is not where the task is done. A delivery or billing address, a place he is travelling to later, or another person’s home or office does not make it a place task. "Before I leave for Austin" means getting ready now: that is desk or home, not place.\n';
+  h+='- A call, text or email is desk, unless the task says it must be done at a particular place.\n';
+  h+='- Read the title and the notes for what they mean. Use only what they say. Never add a place, store or city the task does not mention.\n';
+  h+='- Austin, Houston, Dallas and San Antonio are four separate areas. Suburbs belong to their own metropolitan area.\n';
+  h+='- For at=place only, also give: level = here (the task names the place or town he is at now), nearby (the task names, or clearly needs, one of the NEARBY PLACES: give its number in "near"), or city (the task names this city or its metro area and the doing happens there). And "say" = the shortest exact words copied from the title or notes that name the place, at most '+LOC_QUOTE_WORDS+' words, never the whole title. And "tip" = at most 12 words on the quickest way to finish it from here.\n\n';
+  h+='Answer with ONLY raw JSON, no markdown, one entry for every task:\n{"area":"short label of where he is, for example HEB or McKinney (Dallas area)","tasks":[{"id":"task id exactly as given","at":"place or home or work or desk","level":"here or nearby or city","near":2,"say":"exact words","tip":"short"}]}\n';
+  h+='Leave out level, near, say and tip when at is not place.';
   return h;
 }
+// When the AI cannot be reached, only the names of the stores around DK are matched, never the city: a city word often sits in a delivery address or a trip.
 function locLocalMatch(place, tasks){
-  var words=locWords(place), out=[];
-  tasks.forEach(function(t){ var w=locHit(t,words); if(w) out.push({id:t.id, level:'here', why:'The task mentions “'+w+'”', quote:w, tip:''}); });
+  var words=locWords(place,true), out=[];
+  tasks.forEach(function(t){ var w=locHit(t,words); if(w) out.push({id:t.id, at:'place', level:'here', say:w, tip:''}); });
   return out.slice(0,8);
 }
-// The AI must quote a word that is really in the task. If it is not there, the match is dropped.
-function locVerified(m, t){ var q=locNorm(m&&m.quote).trim(); if(!q||q.length<2||!t) return false; return locNorm(locTaskText(t)).indexOf(' '+q+' ')>=0; }
+// The quote must really be in the task, and must be short.
+function locVerified(m, t){
+  var q=locNorm(m&&m.quote).trim(); if(!q||q.length<2||!t) return false;
+  if(q.split(' ').length>LOC_QUOTE_WORDS) return false;
+  return locNorm(locTaskText(t)).indexOf(' '+q+' ')>=0;
+}
+function locParse(res, tasks, place, viaAI){
+  var byId={}, out={}, lvOk={here:1,nearby:1,city:1,metro:1}, atOk={place:1,home:1,work:1,desk:1};
+  tasks.forEach(function(t){ byId[t.id]=t; });
+  (res.tasks||res.matches||[]).forEach(function(m){
+    if(!m || !byId[m.id]) return;
+    var t=byId[m.id], c={at:'unknown', k:locKey(t)};
+    var at=viaAI===false ? 'place' : String(m.at||'').toLowerCase();
+    if(atOk[at]){
+      c.at=at;
+      if(at==='place'){
+        var lv=lvOk[m.level]?m.level:'here', q=m.say||m.quote;
+        if(!locVerified({quote:q},t)) c.at='unknown';                       // no verified quote, no place match
+        else{
+          c.level=lv; c.say=String(q).slice(0,80); c.tip=String(m.tip||'').slice(0,120);
+          if(lv==='nearby'){
+            var ix=parseInt(m.near,10), p=(place.nearby||[])[ix-1];
+            if(!p) c.at='unknown'; else{ c.nearName=p.name; c.nearM=p.m; }
+          }
+        }
+      }
+    }
+    out[m.id]=c;
+  });
+  tasks.forEach(function(t){ if(!out[t.id]) out[t.id]={at:'unknown', k:locKey(t)}; });
+  return out;
+}
+
+// ── the lookup: Google (only when he is not at home or work), then the AI, then show ──
 function locLookup(force){
   if(LOC.busy) return;
-  if(!force && !locCapOk()){ locSetStatus('Hourly lookup limit reached ('+(SETTINGS.capPerHour||60)+'). Tap Check my location now to look anyway.'); return; }
   var pretend=(SETTINGS.pretend||'').trim();
+  var zone=(!pretend && LOC.quiet && SETTINGS.remMode==='on')?LOC.quiet:null;
+  if(zone){ locFinish({kind:zone, nearby:[], city:''}, force); return; }
+  if(!force && !locCapOk()){ locSetStatus('Hourly lookup limit reached ('+(SETTINGS.capPerHour||60)+'). Tap Check my location now to look anyway.'); return; }
   if(!pretend){
     if(!SETTINGS.mapsKey){ locSetStatus('Add your Google Maps key in Utilities to look up places.'); return; }
     if(LOC.lat===null){ locSetStatus('Waiting for the phone to find your position…'); return; }
   }
-  LOC.busy=true; LOC.calls.push(Date.now()); LOC.lookupAt=Date.now(); LOC.lookupLat=LOC.lat; LOC.lookupLng=LOC.lng;
+  LOC.busy=true; LOC.calls.push(Date.now()); LOC.lookupAt=locNowMs(); LOC.lookupLat=LOC.lat; LOC.lookupLng=LOC.lng;
   locSetStatus('Looking up the place…');
-  var fin=function(place){
-    var tasks=locTaskList(place);
-    var sig=pretend?('p:'+pretend.toLowerCase()):((place.nearby.map(function(p){return p.name;}).sort().join('|'))+'#'+place.city);
-    var tsig=tasks.map(function(t){return t.id;}).join(',');
-    if(!force && sig===LOC.sig && tsig===LOC.tsig){ LOC.busy=false; locSetStatus('Still near '+(LOC.area||'the same place')+'.'); return; }
-    var apply=function(res, viaAI){
-      LOC.busy=false; var changedPlace=(sig!==LOC.sig); if(changedPlace) LOC.notNow={}; LOC.sig=sig; LOC.tsig=tsig;
-      var okIds={}; tasks.forEach(function(t){okIds[t.id]=true;});
-      var lv={here:1,nearby:1,city:1,metro:1};
-      LOC.matches=(res.matches||[]).filter(function(m){ if(!m||!okIds[m.id]) return false; var tk=tasks.find(function(x){return x.id===m.id;}); return locVerified(m,tk); }).map(function(m){ return {id:m.id, level:lv[m.level]?m.level:'here', why:String(m.why||'').slice(0,160), quote:String(m.quote||'').slice(0,80), tip:String(m.tip||'').slice(0,120)}; }).slice(0,8);
-      LOC.area=String(res.area||place.pretend||place.city||'this place').slice(0,60);
-      locSetStatus((LOC.matches.length?LOC.matches.length+' task'+(LOC.matches.length===1?'':'s')+' near ':'Nothing for ')+LOC.area+(viaAI?'':' (matched by words only; AI was not reachable)')+'.');
-      locUpdatePill(); locRender();
-      var fresh=LOC.matches.filter(function(m){ return !LOC.shown[m.id+'@'+LOC.area] && openTaskById(m.id); });
-      if(fresh.length){ fresh.forEach(function(m){ LOC.shown[m.id+'@'+LOC.area]=true; }); locAnnounce(fresh.length, force); }
-      else if(force) locOpen();
-    };
-    var prompt=locBuildPrompt(place,tasks);
-    locAiCall(prompt, function(txt){
-      var j=locJsonFrom(txt);
-      if(j && Array.isArray(j.matches)) apply(j,true); else apply({area:place.pretend||place.city, matches:locLocalMatch(place,tasks)},false);
-    }, function(){ apply({area:place.pretend||place.city, matches:locLocalMatch(place,tasks)},false); });
-  };
-  if(pretend){ fin({pretend:pretend, nearby:[], city:''}); return; }
+  if(pretend){ locFinish({pretend:pretend, nearby:[], city:''}, force); return; }
   Promise.all([locPlacesNearby(LOC.lat,LOC.lng,SETTINGS.mapsKey), locReverse(LOC.lat,LOC.lng,SETTINGS.mapsKey)]).then(function(r){
-    fin({nearby:r[0], city:[r[1].city,r[1].county&&!r[1].city?r[1].county:'',r[1].state].filter(Boolean).join(', '), cityName:r[1].city, hood:r[1].hood, county:r[1].county, state:r[1].state});
+    locFinish({nearby:r[0], city:[r[1].city,r[1].county&&!r[1].city?r[1].county:'',r[1].state].filter(Boolean).join(', '), cityName:r[1].city, hood:r[1].hood, county:r[1].county, state:r[1].state}, force);
   }).catch(function(e){ LOC.busy=false; locSetStatus('Lookup failed: '+(e&&e.message?e.message:'network')+'. Check the Google key and that Places and Geocoding are enabled.'); });
+}
+function locFinish(place, force){
+  LOC.busy=true; LOC.place=place;
+  var pretend=place.pretend||'';
+  var sig=place.kind?('z:'+place.kind):(pretend?('p:'+pretend.toLowerCase()):((place.nearby.map(function(p){return p.name;}).sort().join('|'))+'#'+place.city));
+  var all=locTaskList(place), changedPlace=(sig!==LOC.clsSig);
+  var todo=all.filter(function(t){ var c=LOC.cls[t.id]; return changedPlace || !c || c.k!==locKey(t); });
+  if(force && !todo.length) todo=all;
+  if(changedPlace){ LOC.notNow={}; LOC.cls={}; }
+  LOC.area=place.kind ? (place.kind==='home'?'home':'work') : String(pretend||place.cityName||place.city||'this place').slice(0,60);
+  if(!todo.length){
+    LOC.busy=false; LOC.clsSig=sig; LOC.sig=sig;
+    locSetStatus(all.length?('Still at '+LOC.area+'.'):('No open tasks to check at '+LOC.area+'.'));
+    locRefresh(); if(force) locOpen(); return;
+  }
+  var apply=function(res, viaAI){
+    LOC.busy=false; LOC.clsSig=sig; LOC.sig=sig; LOC.ai=viaAI;
+    var got=locParse(res, todo, place, viaAI);
+    for(var id in got){ LOC.cls[id]=got[id]; }
+    if(!place.kind) LOC.area=String(res.area||pretend||place.city||'this place').slice(0,60);
+    var v=locBuildView(), n=v.place.length+v.personal.length+v.itc.length;
+    locSetStatus((n?n+' task'+(n===1?'':'s')+' for ':'Nothing for ')+LOC.area+(viaAI?'':' (matched by words only; AI was not reachable)')+'.');
+    locRefresh(); locAnnounceFresh(force);
+  };
+  locAiCall(locBuildPrompt(place,todo), function(txt){
+    var j=locJsonFrom(txt);
+    if(j && (Array.isArray(j.tasks)||Array.isArray(j.matches))) apply(j,true); else apply({area:pretend||place.city, tasks:place.kind?[]:locLocalMatch(place,todo)},false);
+  }, function(){ apply({area:pretend||place.city, tasks:place.kind?[]:locLocalMatch(place,todo)},false); });
 }
 function openTaskById(id){ return state.tasks.some(function(t){ return t.id===id && !t.completed; }); }
 function locAiCall(content, ok, bad){
   if(!AI_PROXY_URL){ bad(); return; }
-  var ctl=(typeof AbortController!=='undefined')?new AbortController():null, to=setTimeout(function(){ try{ if(ctl) ctl.abort(); }catch(e){} },15000);
-  fetch(AI_PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:content,max_tokens:1200}),signal:ctl?ctl.signal:undefined})
+  var ctl=(typeof AbortController!=='undefined')?new AbortController():null, to=setTimeout(function(){ try{ if(ctl) ctl.abort(); }catch(e){} },25000);
+  fetch(AI_PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:content,max_tokens:2200}),signal:ctl?ctl.signal:undefined})
   .then(function(r){ if(!r.ok) throw new Error('http '+r.status); return r.json(); })
   .then(function(d){ clearTimeout(to); var txt=d && (typeof d.text==='string'?d.text:(d.content&&d.content[0]&&d.content[0].text)); if(typeof txt!=='string') throw new Error('bad reply'); ok(txt); })
   .catch(function(){ clearTimeout(to); bad(); });
 }
-// ── showing the matches ──
-function locAnnounce(n, force){
-  if(remSilentNow() && !force) return;
-  var fast = (LOC.speed!==null && LOC.speed>=LOC_FAST_MPS);
-  if(force || (!fast && !remAnyModalOpen())) { locOpen(); return; }
-  var b=document.getElementById('locBanner'); if(!b) return;
-  b.textContent='📍 '+n+' reminder'+(n===1?'':'s')+' near '+(LOC.area||'you'); b.style.display='block';
-  clearTimeout(b._t); b._t=setTimeout(function(){ b.style.display='none'; }, BANNER_SECONDS*1000);
+
+// ── a task with a time nudges 1 hour before it starts, wherever DK is ──
+function locNudgeTasks(){
+  var n=nowWall().getTime();
+  return state.tasks.filter(function(t){
+    if(t.completed || t.bucket==='Tyaga' || t.bucket==='Prarabdha' || !t.dueTime) return false;
+    var D=dueMoment(t); if(!D) return false;
+    var diff=D.getTime()-n; return diff>=0 && diff<=LOC_NUDGE_MIN*60000;
+  }).sort(function(a,b){ return dueMoment(a).getTime()-dueMoment(b).getTime(); });
 }
-function locVisible(){ return LOC.matches.filter(function(m){ return openTaskById(m.id) && !LOC.notNow[m.id]; }); }
+function locNudgeCheck(){
+  if(SETTINGS.remMode==='all') return;
+  var fresh=locNudgeTasks().filter(function(t){ return !LOC.nudged[t.id+'|'+(t.dueDate||'')+'|'+(t.dueTime||'')]; });
+  if(!fresh.length || remAnyModalOpen()) return;
+  fresh.forEach(function(t){ LOC.nudged[t.id+'|'+(t.dueDate||'')+'|'+(t.dueTime||'')]=true; });
+  locOpen();
+}
+
+// ── step 5: what to show right now ──
+function locView(){ return locBuildView(); }
+function locBuildView(){
+  var mode=SETTINGS.remMode, zone=LOC.quiet, v={place:[], personal:[], itc:[], nudge:[], off:false, zone:zone||null};
+  if(mode==='all') { v.off=true; return v; }
+  v.nudge=locNudgeTasks();
+  if(mode==='hw' && zone){ v.off=true; return v; }
+  var seen={};
+  sortTasks(state.tasks.filter(locEligible)).forEach(function(t){
+    if(LOC.notNow[t.id]) return;
+    var c=LOC.cls[t.id]; if(c && c.k!==locKey(t)) c=null;
+    var known=c && c.at!=='unknown', item={t:t, c:c, why:''};
+    if(zone){
+      if(known && (c.at==='desk' || c.at===zone)){ item.why=(c.at==='desk')?'desk':zone; v[locPill(t)].push(item); }
+      else if(!known && t.multitask===true){ item.why='multi'; v[locPill(t)].push(item); }
+    }else{
+      if(known && c.at==='place'){ v.place.push(item); }
+      else if(t.multitask===true && (!known || c.at==='desk')){ item.why='multi'; v[locPill(t)].push(item); }
+    }
+  });
+  return v;
+}
+function locVisible(){ var v=locBuildView(); return v.place.concat(v.personal, v.itc).map(function(i){ return {id:i.t.id}; }); }
 function locUpdatePill(){
   var p=document.getElementById('locPill'); if(!p) return;
-  var n=LOC.quiet?0:locVisible().length;
+  var v=locBuildView(), n=v.place.length+v.personal.length+v.itc.length+v.nudge.length;
   if(n>0){ p.textContent='📍 '+n; p.style.display='block'; } else p.style.display='none';
 }
-var _LVL={here:'📍 here',nearby:'🛒 near you',city:'🏙 this city',metro:'🏙 metro area'};
-function locRender(){
-  var vis=locVisible(), h='';
-  var ttl=document.getElementById('locTtl'); if(!ttl) return;
-  ttl.textContent='📍 '+(LOC.area?('You are at '+LOC.area):'Near you');
-  document.getElementById('locSub').textContent=vis.length?('These open tasks fit where you are. Mark Done to strike them off, or close this and bring it back with the 📍 button.'):'Nothing in your open tasks fits this place.';
-  var shown=_locShowAll?vis:vis.slice(0,REMINDER_LIST_CAP);
-  shown.forEach(function(m){
-    var t=state.tasks.find(function(x){return x.id===m.id;}); if(!t) return;
-    h+=remRowHtml(t,'<div class="loc-why"><span class="loc-lvl">'+_LVL[m.level]+'</span> '+esc(m.why)+(m.quote?' <span class="loc-q">matched on “'+esc(m.quote)+'”</span>':'')+'</div>'+(m.tip?'<div class="loc-tip">💡 '+esc(m.tip)+'</div>':''), true);
-  });
-  if(vis.length>shown.length) h+='<button class="rem-more" data-act="lmore">Show '+(vis.length-shown.length)+' more</button>';
-  document.getElementById('locList').innerHTML=h;
+// speed badge in the header (option B, DK 15 Oct 2026)
+function locBadgeUpdate(){
+  var b=document.getElementById('spdBadge'); if(!b) return;
+  var on=!!(SETTINGS.gps && LOC.watch!==null && LOC.lat!==null);
+  b.style.display=on?'flex':'none'; if(!on) return;
+  b.className='spd '+(LOC.motion==='driving'?'fast':(LOC.motion==='moving'?'move pulse':'still'));
+  b.querySelector('.n').textContent=String(LOC.mph||0);
+  b.setAttribute('aria-label','Speed '+(LOC.mph||0)+' miles per hour, '+LOC.motion);
 }
-function locOpen(){ remBuildDom(); _locShowAll=false; locRender(); document.getElementById('locOverlay').classList.add('open'); var b=document.getElementById('locBanner'); if(b) b.style.display='none'; }
-function locClose(){ var o=document.getElementById('locOverlay'); if(o) o.classList.remove('open'); }
+// while driving the small banner stays, so a pop-up closed by accident can be opened again
+function locBannerSync(){
+  var b=document.getElementById('locBanner'); if(!b) return;
+  if(LOC.motion==='driving' && !locIsOpen()){
+    var v=locBuildView(), n=v.off?v.nudge.length:(v.place.length+v.personal.length+v.itc.length+v.nudge.length);
+    if(n>0){ b.textContent='🚗 '+n+' task'+(n===1?'':'s')+' for the road · tap to open'; b.classList.add('sticky'); b.style.display='block'; b._sticky=true; clearTimeout(b._t); return; }
+  }
+  if(b._sticky){ b.style.display='none'; b._sticky=false; b.classList.remove('sticky'); }
+}
+function locRefresh(){
+  try{ locBadgeUpdate(); locUpdatePill(); if(locIsOpen()) locRender(); locBannerSync(); }catch(e){}
+}
+function locAnnounceFresh(force){
+  var v=locBuildView(), day=(function(d){ return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); })(nowWall()), fresh=[];
+  v.place.forEach(function(i){ var k='p|'+i.t.id+'@'+LOC.area+'@'+day; if(!LOC.shown[k]) fresh.push(k); });
+  v.personal.concat(v.itc).forEach(function(i){ var k='l|'+i.t.id+'@'+(v.zone||'out')+'@'+day; if(!LOC.shown[k]) fresh.push(k); });
+  if(fresh.length){ fresh.forEach(function(k){ LOC.shown[k]=true; }); locAnnounce(fresh.length, force); }
+  else if(force) locOpen();
+}
+function locAnnounce(n, force){
+  if(remSilentNow() && !force) return;
+  if(force || !remAnyModalOpen()){ locOpen(); return; }
+  var b=document.getElementById('locBanner'); if(!b) return;
+  b.textContent='📍 '+n+' reminder'+(n===1?'':'s')+' near '+(LOC.area||'you'); b.classList.remove('sticky'); b.style.display='block'; b._sticky=false;
+  clearTimeout(b._t); b._t=setTimeout(function(){ b.style.display='none'; }, BANNER_SECONDS*1000);
+}
+var _LVL={here:'📍 here',nearby:'🛒 near you',city:'🏙 this city',metro:'🏙 metro area'};
+var _WHYTAG={multi:'🔀 multitask',desk:'💻 from anywhere',home:'🏠 at home',work:'🏢 at work'};
+var _WHEN_LBL={over:'Overdue',today:'Today',week:'Next 7 days',open:'No date'};
+function locRowExtra(i){
+  var c=i.c;
+  if(c && c.at==='place' && !i.why){
+    // wording is fixed by Chakra. The AI only supplies the type, the quote and the number of the nearby place.
+    var s='Task says “'+esc(c.say)+'”'+((c.level==='nearby' && c.nearName)?' · '+esc(c.nearName)+(typeof c.nearM==='number'?', '+c.nearM+' m away':''):'');
+    return '<div class="loc-why"><span class="loc-lvl">'+_LVL[c.level||'here']+'</span> <span class="loc-q">'+s+'</span></div>'+(c.tip?'<div class="loc-tip">💡 '+esc(c.tip)+'</div>':'');
+  }
+  return '<div class="loc-why"><span class="loc-lvl">'+(_WHYTAG[i.why]||'')+'</span></div>';
+}
+function locGroupHtml(items, cap){
+  var order=['over','today','week','open'], groups={over:[],today:[],week:[],open:[]}, h='', shown=0;
+  items.forEach(function(i){ groups[locWhen(i.t)].push(i); });
+  order.forEach(function(k){
+    var g=groups[k]; if(!g.length) return;
+    var part='';
+    g.forEach(function(i){ if(shown>=cap) return; shown++; part+=remRowHtml(i.t, locRowExtra(i), true); });
+    if(part) h+='<div class="loc-grp">'+_WHEN_LBL[k]+' · '+g.length+'</div>'+part;
+  });
+  if(items.length>shown) h+='<button class="rem-more" data-act="lmore">Show '+(items.length-shown)+' more</button>';
+  return h;
+}
+function locRender(){
+  var ttl=document.getElementById('locTtl'); if(!ttl) return;
+  var v=locBuildView(), z=v.zone, h='';
+  var noLoc=(LOC.lat===null && !z && !SETTINGS.pretend);          // no position yet (GPS off or still searching): only the 1-hour nudge can show
+  var where = z ? ('You are at '+z) : (LOC.motion==='driving' ? '🚗 Driving' : (LOC.motion==='moving' ? 'On the move' : (LOC.area?('You are at '+LOC.area):'Near you')));
+  ttl.textContent='📍 '+where+((!z && LOC.motion!=='still' && LOC.area)?' · near '+LOC.area:'');
+  var chips=[]; if(!z) chips.push(['place','At this place',v.place]); chips.push(['personal','Personal',v.personal]); chips.push(['itc','ITC',v.itc]);
+  var cur=LOC.chip; if(!chips.some(function(c){return c[0]===cur;})) cur='';
+  if(!cur){ var f=chips.filter(function(c){return c[2].length;})[0]; cur=(f||chips[0])[0]; }
+  LOC.chip=cur;
+  var sub=document.getElementById('locSub'), list=document.getElementById('locList'), cb=document.getElementById('locChips');
+  if(noLoc){
+    ttl.textContent=v.nudge.length?'⏰ Coming up soon':'📍 Near you';
+    sub.textContent=v.nudge.length?'These tasks start within the hour.':'Chakra does not know where you are yet. Switch GPS on in Utilities.';
+  }else if(v.off){
+    sub.textContent=(SETTINGS.remMode==='all')?'Reminders are silent. Switch them on in Utilities to see tasks here.':'Quiet at '+z+'. To see Personal and ITC tasks here, choose “Reminders on everywhere” in Utilities.';
+  }else if(z){ sub.textContent='You are at '+z+'. These open tasks can be done here or from anywhere. Mark Done to strike them off.'; }
+  else if(LOC.motion!=='still'){ sub.textContent='You are moving. Tasks for the places you pass, and tasks you can do while moving.'; }
+  else sub.textContent='These open tasks fit where you are. Mark Done to strike them off, or close this and bring it back with the 📍 button.';
+  if(v.nudge.length){
+    h+='<div class="loc-grp nudge">⏰ Starting within 1 hour · '+v.nudge.length+'</div>'+v.nudge.map(function(t){ return remRowHtml(t,'',false); }).join('');
+  }
+  var noChips=(v.off||noLoc);
+  cb.innerHTML=noChips?'':chips.map(function(c){ return '<label class="rem-chip'+(cur===c[0]?' on':'')+'"><input type="radio" name="locchip" value="'+c[0]+'"'+(cur===c[0]?' checked':'')+'>'+c[1]+' <b>'+c[2].length+'</b></label>'; }).join('');
+  cb.style.display=noChips?'none':'flex';
+  if(!noChips){
+    var sel=chips.filter(function(c){return c[0]===cur;})[0][2];
+    if(sel.length) h+=locGroupHtml(sel, _locShowAll?9999:REMINDER_LIST_CAP);
+    else h+='<div class="rem-empty">'+(cur==='place'?'Nothing for this place.':'Nothing here right now.')+'</div>';
+  }else if(!v.nudge.length) h+='<div class="rem-empty">Nothing to show.</div>';
+  list.innerHTML=h;
+}
+function locOpen(){ remBuildDom(); _locShowAll=false; locRender(); document.getElementById('locOverlay').classList.add('open'); var b=document.getElementById('locBanner'); if(b){ b.style.display='none'; b._sticky=false; b.classList.remove('sticky'); } }
+function locClose(){ var o=document.getElementById('locOverlay'); if(o) o.classList.remove('open'); locBannerSync(); }
+
+// ── tap a task to read its details. The sheet sits above the list; its cross returns to the list. ──
+function locDetailBuild(){
+  if(document.getElementById('ldOverlay')) return;
+  var d=document.createElement('div'); d.id='ldOverlay'; d.className='ld-overlay';
+  d.innerHTML='<div class="ld-card" role="dialog" aria-label="Task details"><div class="ld-hdr"><div class="ld-ttl">Task details</div><button class="rem-x" data-act="dclose" aria-label="Close details">✕</button></div><div class="ld-body" id="ldBody"></div><div class="ld-foot" id="ldFoot"></div></div>';
+  document.body.appendChild(d);
+}
+function locDetailHtml(t){
+  var D=dueMoment(t), lines=String(t.details||'').split(/\r?\n/).map(function(x){return x.trim();}).filter(Boolean), h='', inList=false;
+  h+='<div class="ld-title">'+esc(t.title)+'</div>';
+  h+='<div class="ld-meta">'+esc(remDueText(t))+' · '+esc(t.bucket||'')+' · '+esc(areaLabel(t))+' · '+effW(t)+(t.multitask===true?' · 🔀 multitask':'')+'</div>';
+  if(lines.length){
+    h+='<div class="ld-lbl">Notes</div>';
+    lines.forEach(function(l){
+      var m=/^([-•*·–]|\d+[.)])\s+(.*)$/.exec(l);
+      if(m){ if(!inList){ h+='<ul class="ld-ul">'; inList=true; } h+='<li>'+esc(m[2])+'</li>'; }
+      else{ if(inList){ h+='</ul>'; inList=false; } h+='<p class="ld-p">'+esc(l)+'</p>'; }
+    });
+    if(inList) h+='</ul>';
+  }else h+='<div class="ld-none">No notes on this task.</div>';
+  var cs=(t.contacts||[]);
+  if(cs.length){
+    h+='<div class="ld-lbl">Contacts</div>';
+    cs.forEach(function(c){
+      var nm=[c.name,c.org].filter(Boolean).map(esc).join(' · ');
+      h+='<div class="ld-ct">'+(nm?'<b>'+nm+'</b>':'')+(c.phones||[]).map(function(p){ return '<a href="tel:'+esc(String(p).replace(/[^+\d]/g,''))+'">'+esc(p)+'</a>'; }).join(' ')+'</div>';
+    });
+  }
+  return h;
+}
+function locDetailOpen(id){
+  var t=state.tasks.find(function(x){return x.id===id;}); if(!t) return;
+  locDetailBuild();
+  document.getElementById('ldBody').innerHTML=locDetailHtml(t);
+  document.getElementById('ldFoot').innerHTML='<button class="rem-done" data-act="dedit" data-id="'+esc(id)+'">✎ Edit task</button>'+(t.completed?'':'<button class="rem-done" data-act="ddone" data-id="'+esc(id)+'">✓ Done</button>');
+  document.getElementById('ldOverlay').classList.add('open');
+}
+function locDetailClose(){ var o=document.getElementById('ldOverlay'); if(o) o.classList.remove('open'); }
 
 // ── Utilities: Reminders and location ──
 function locSettingsHtml(){
@@ -4939,7 +5249,7 @@ function locSettingsHtml(){
     +'<label class="rs-opt"><input type="radio" name="rsmode" value="hw"'+g('hw')+' onchange="rsMode(this.value)"> Silent at home and work</label>'
     +'<label class="rs-opt"><input type="radio" name="rsmode" value="all"'+g('all')+' onchange="rsMode(this.value)"> Silent all reminders</label>'
     +'<label class="rs-opt"><input type="radio" name="rsmode" value="on"'+g('on')+' onchange="rsMode(this.value)"> Reminders on everywhere</label>'
-    +'<div class="rs-sm">Silent at home and work needs GPS on, so Chakra knows where you are. The 🔔 button always opens the list.</div>'
+    +'<div class="rs-sm">Silent at home and work needs GPS on, so Chakra knows where you are. “Reminders on everywhere” also shows your Personal and ITC tasks when you are at home or at work. The 🔔 button always opens the list.</div>'
     +'<div class="rs-sub">Location</div>'
     +'<label class="rs-opt"><input type="checkbox" id="rsGps"'+(s.gps?' checked':'')+' onchange="rsGps(this.checked)"> GPS on (off by default)</label>'
     +'<div class="rs-sm" id="locStatus">'+esc(LOC.status)+'</div>'
@@ -4984,7 +5294,7 @@ function rsMode(v){ SETTINGS.remMode=v; saveSettings(); }
 function rsGps(on){ SETTINGS.gps=!!on; saveSettings(); if(on){ locStart(); } else { locStop(); } }
 function rsKey(v){ SETTINGS.mapsKey=String(v||'').trim(); saveSettings(); }
 function rsCap(v){ var n=parseInt(v,10); SETTINGS.capPerHour=(n>0&&n<=500)?n:60; saveSettings(); }
-function rsPretend(v){ SETTINGS.pretend=String(v||'').trim(); saveSettings(); if(!SETTINGS.pretend){ LOC.sig=''; LOC.matches=[]; LOC.area=''; locUpdatePill(); } renderUtilities(); }
+function rsPretend(v){ SETTINGS.pretend=String(v||'').trim(); saveSettings(); if(!SETTINGS.pretend){ LOC.sig=''; LOC.clsSig=''; LOC.cls={}; LOC.matches=[]; LOC.area=''; locUpdatePill(); } renderUtilities(); }
 function rsTryPretend(){ var el=document.getElementById('rsPretend'); if(el) SETTINGS.pretend=el.value.trim(); saveSettings(); if(!SETTINGS.pretend){ toast('Type a place first','warn',2500); return; } LOC.sig=''; locLookup(true); }
 function rsZoneHere(k){
   if(!navigator.geolocation){ toast('This browser cannot read your location','warn',3000); return; }
