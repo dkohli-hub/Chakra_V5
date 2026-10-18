@@ -880,6 +880,19 @@ html,body{font-weight:500;}
 .loc-q{font-size:11px;font-weight:700;color:#5B3FA6;background:#EFEAFB;border-radius:10px;padding:2px 8px;white-space:normal;overflow-wrap:anywhere;display:inline-block;max-width:100%;}
 /* v29 location pop-up: groups, tap for details, speed badge */
 .loc-grp{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#5B3FA6;margin:8px 2px 5px;}
+.hrs-chips{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 8px;}
+.hrs-chips .rem-chip{background:transparent;font:inherit;font-size:12px;color:inherit;}
+.hrs-chips .rem-chip.on{color:#fff;}
+.hrs-t{display:flex;gap:8px;align-items:center;margin-top:4px;}
+.hrs-t .rs-in{flex:1;min-width:0;}
+#bmWrap{display:flex;justify-content:center;padding:0 14px;}
+#bmWrap:empty{display:none;}
+.bm-pill{margin:10px 0 4px;cursor:pointer;display:inline-flex;flex-direction:column;align-items:center;gap:2px;padding:10px 26px;border-radius:999px;border:1px solid rgba(160,120,40,.55);
+ background:linear-gradient(135deg,#FFF3D6 0%,#FFE2A8 45%,#F7C873 100%);animation:bmglow 4.5s ease-in-out infinite;}
+.bm-jsk{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:#6B4A0C;letter-spacing:.5px;line-height:1.1;}
+.bm-time{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8A6416;}
+@keyframes bmglow{0%,100%{box-shadow:0 0 0 4px rgba(247,200,115,.18),0 0 18px 4px rgba(247,190,90,.45),0 0 40px 10px rgba(247,190,90,.2);}50%{box-shadow:0 0 0 6px rgba(247,200,115,.26),0 0 28px 9px rgba(247,190,90,.65),0 0 56px 18px rgba(247,190,90,.32);}}
+@media (prefers-reduced-motion:reduce){.bm-pill{animation:none;box-shadow:0 0 0 4px rgba(247,200,115,.18),0 0 22px 6px rgba(247,190,90,.5);}}
 .loc-fresh{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;border-radius:8px;padding:2px 7px;margin-left:4px;color:#fff;}
 .loc-fresh.new{background:#B87800;}
 .loc-fresh.aging{background:#C62828;}
@@ -1062,6 +1075,7 @@ html,body{font-weight:500;}
   <div class="tab-bar" id="tabBar"></div>
   </div>
 <div id="hdrSpacer"></div>
+<div id="bmWrap"></div>
 
 <div id="pane-today"  class="view-pane active"></div>
 <div id="pane-gather" class="view-pane"></div>
@@ -1076,7 +1090,7 @@ html,body{font-weight:500;}
 
 <script>
 // v14: the ONE place the app version lives. Title, header, login footer and the backup file all read it.
-var APP_VERSION = 30;
+var APP_VERSION = 31;
 (function(){ function stamp(){ document.title='Karma Kshetra™ — DK · Chakra V'+APP_VERSION; document.querySelectorAll('.app-ver').forEach(function(e){ e.textContent=APP_VERSION; }); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',stamp); else stamp(); })();
 // ======================================================
@@ -4620,6 +4634,7 @@ function renderUtilities(){
   }
   p.innerHTML='<div class="util-wrap"><div class="util-title">Utilities</div>'
     +'<div class="util-sub">File and setup tools.</div>'
+    +'<div id="hrsCard">'+hrsCardHtml()+'</div>'
     +btn('⬇','Backup JSON','Download all your tasks as a file.','','exportData()')
     +'<label class="util-btn"><span class="util-ic">⬆</span><span class="util-tx"><b>Restore JSON</b><i>Load tasks back from a backup file.</i></span>'
       +'<input type="file" id="importFileInput" accept=".json" onchange="importData(this)" style="display:none;"></label>'
@@ -4638,13 +4653,13 @@ function renderUtilities(){
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',pre); else pre(); })();
 
 // ── v23 settings you can tune (DK, 11 Oct 2026) ──
-var ITC_BLOCK_START_H=8, ITC_BLOCK_END_H=17;   // ITC hours, weekdays, 8 AM to 5 PM
+// v31: ITC, Picturizze and Quiet hours now come from My hours in Utilities (no fixed hours in the code).
 var REMINDER_REPEAT_MIN=60;                     // pop-up repeats hourly while Chakra is open
 var REMINDER_LIST_CAP=12;                       // rows shown before "Show more"
 var LOC_MIN_MOVE_M=150, LOC_MIN_INTERVAL_S=30;  // look up again only after this much movement and time
 var HOME_WORK_RADIUS_M=150;                     // quiet radius around home and work
 var LOC_NEARBY_RADIUS_M=150;                    // how far Google Places looks for stores
-var LOC_MAX_AI_TASKS=130; var LOC_CHUNK=40; var LOC_NOTE_CHARS=140;                        // most open tasks sent to the AI per check
+var LOC_MAX_AI_TASKS=240; var LOC_CHUNK=40; var LOC_NOTE_CHARS=140;                        // most open tasks sent to the AI per check
 var LOC_FAST_MPS=4.5;                           // about 10 mph: faster than this shows only a banner
 var BANNER_SECONDS=12;
 
@@ -4656,35 +4671,87 @@ var BANNER_SECONDS=12;
 //   (a store, a city or a whole metro area), and shows them in a separately coloured pop-up. Nothing is stored in a list of stores.
 // Quiet at home and work. AI suggests, DK decides.
 // ═══════════════════════════════════════════════════════
-var _SET_DEFAULT={remMode:'hw', gps:false, mapsKey:'', visionKey:'', home:null, work:null, capPerHour:60, pretend:'', remLast:0};
+var _SET_DEFAULT={remMode:'hw', gps:false, mapsKey:'', visionKey:'', hours:null, home:null, work:null, capPerHour:60, pretend:'', remLast:0};
 var SETTINGS={};
 function settingsKey(){ return String(DB_KEY||'chakra_dk_tasks_v1').replace('_tasks_v1','_settings_v1'); }
 function loadSettings(){
   var s=null; try{ s=JSON.parse(localStorage.getItem(settingsKey())||'null'); }catch(e){ s=null; }
   SETTINGS=JSON.parse(JSON.stringify(_SET_DEFAULT)); if(s) for(var k in s){ SETTINGS[k]=s[k]; }
   SETTINGS.gps = !!(s && s.gps===true);
+  HRS_DRAFT=null;
 }
 function saveSettings(){ try{ localStorage.setItem(settingsKey(), JSON.stringify(SETTINGS)); }catch(e){} }
 
 // ── clock helpers ──
-function remInItcBlock(n){ n=n||nowWall(); var d=n.getDay(); return d>=1 && d<=5 && n.getHours()>=ITC_BLOCK_START_H && n.getHours()<ITC_BLOCK_END_H; }
+// ═══════════ v31 — MY HOURS (DK, 17 Oct 2026) ═══════════
+// One week grid in Utilities, saved on this phone only. Per day: ITC hours (one window), Picturizze hours (one window) and Quiet hours (may cross midnight).
+// Personal is everything else. When windows overlap the order is: Quiet, ITC, Picturizze, Personal.
+// Brahma Muhurta is quiet too. It is worked out from sunrise at Home: it starts 96 minutes before sunrise and ends 48 minutes before sunrise.
+var HRS_DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], HRS_DAYS_LONG=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+var HRS_VIEW=1, HRS_DRAFT=null;
+var BM_START_BEFORE_MIN=96, BM_END_BEFORE_MIN=48;
+// until DK saves his own hours: the old rules, so nothing changes by surprise (ITC weekdays 8 to 5, night 11 PM to 5 AM)
+function hrsDefault(){ var d=[]; for(var i=0;i<7;i++) d.push({itc:(i>=1&&i<=5)?[480,1020]:null, pic:null, quiet:[1380,300]}); return d; }
+function hrsDays(){ var h=SETTINGS&&SETTINGS.hours; return (h && Array.isArray(h.days) && h.days.length===7) ? h.days : hrsDefault(); }
+function hrsOn(kind, n){
+  n=n||nowWall(); var days=hrsDays(), d=n.getDay(), m=n.getHours()*60+n.getMinutes();
+  var w=days[d][kind], pw=days[(d+6)%7][kind];
+  if(w){ if(w[0]<w[1]){ if(m>=w[0] && m<w[1]) return true; } else if(w[0]>w[1]){ if(m>=w[0]) return true; } }   // a window that crosses midnight: the evening part
+  if(pw && pw[0]>pw[1] && m<pw[1]) return true;                                                                     // ...and the morning part, from the day before
+  return false;
+}
+function hrsQuietNow(n){ return hrsOn('quiet',n); }
+function hrsBlock(n){ if(hrsOn('quiet',n)) return 'quiet'; if(hrsOn('itc',n)) return 'itc'; if(hrsOn('pic',n)) return 'pic'; return 'personal'; }
+function hrsDayHasPic(n){ n=n||nowWall(); return !!hrsDays()[n.getDay()].pic; }
+// Sunrise (NOAA / Almanac method). Returns UTC milliseconds, or null where the sun does not rise.
+function sunriseMs(y,mo,d,lat,lng){
+  var D2R=Math.PI/180, R2D=180/Math.PI, zenith=90.833;
+  var N1=Math.floor(275*mo/9), N2=Math.floor((mo+9)/12), N3=(1+Math.floor((y-4*Math.floor(y/4)+2)/3)), N=N1-(N2*N3)+d-30;
+  var lngHour=lng/15, t=N+((6-lngHour)/24), M=(0.9856*t)-3.289;
+  var L=M+(1.916*Math.sin(M*D2R))+(0.020*Math.sin(2*M*D2R))+282.634; L=((L%360)+360)%360;
+  var RA=R2D*Math.atan(0.91764*Math.tan(L*D2R)); RA=((RA%360)+360)%360;
+  RA=(RA+(Math.floor(L/90)*90-Math.floor(RA/90)*90))/15;
+  var sinDec=0.39782*Math.sin(L*D2R), cosDec=Math.cos(Math.asin(sinDec));
+  var cosH=(Math.cos(zenith*D2R)-(sinDec*Math.sin(lat*D2R)))/(cosDec*Math.cos(lat*D2R));
+  if(cosH>1 || cosH<-1) return null;
+  var H=(360-R2D*Math.acos(cosH))/15, T=H+RA-(0.06571*t)-6.622, UT=(((T-lngHour)%24)+24)%24;
+  return Date.UTC(y,mo-1,d)+UT*3600000;
+}
+function hrsHome(){ var h=SETTINGS&&SETTINGS.home; if(h && typeof h.lat==='number') return h; if(LOC.lat!==null && LOC.lng!==null) return {lat:LOC.lat,lng:LOC.lng}; return null; }
+function hrsBM(n){
+  n=n||nowWall(); var H=hrsHome(); if(!H) return null;
+  var ms=sunriseMs(n.getFullYear(), n.getMonth()+1, n.getDate(), H.lat, H.lng); if(ms===null) return null;
+  var sr=chiWall(new Date(ms)), s=new Date(sr.getTime()-BM_START_BEFORE_MIN*60000), e=new Date(sr.getTime()-BM_END_BEFORE_MIN*60000);
+  return {start:s, end:e, sunrise:sr, now:(n.getTime()>=s.getTime() && n.getTime()<e.getTime())};
+}
+function hrsSilentNow(n){ var b=null; try{ b=hrsBM(n); }catch(e){} return hrsQuietNow(n) || !!(b && b.now); }
+function remInItcBlock(n){ return hrsBlock(n)==='itc'; }
 function remMedical(t){ return /\b(doctor|medical|clinic|hospital|dentist|physician|specialist|lab work|blood work)\b/i.test((t.title||'')+' '+(t.shortTitle||'')); }
-function remBlockOk(t){ return remInItcBlock() ? (topArea(t)==='ITC' || remMedical(t)) : (topArea(t)!=='ITC'); }
+// v31: what belongs to this hour. ITC hours: ITC tasks. Picturizze hours: Picturizze tasks. Personal hours: Personal tasks (and Picturizze when the day has no Picturizze hours). Medical tasks always. Quiet: nothing is pushed.
+function remBlockOk(t){
+  var b=hrsBlock(), a=topArea(t);
+  if(b==='quiet') return false;
+  if(b==='itc') return a==='ITC' || remMedical(t);
+  if(b==='pic') return a==='Picturizze' || remMedical(t);
+  return a==='Personal' || (a==='Picturizze' && !hrsDayHasPic());
+}
 function remOpenKarya(){ return state.tasks.filter(function(t){ return !t.completed && t.bucket==='Karya'; }); }
 function remDueDay(t){ var D=dueMoment(t); return D?startOfDay(D):null; }
 function remLists(){
-  var n=nowWall(), today=startOfDay(n), now=[], later=[], over=[];
+  var n=nowWall(), today=startOfDay(n), now=[], later=[], over=[], week=[], wkEnd=addDays(today,LOC_WINDOW_DAYS);
   remOpenKarya().forEach(function(t){
     var D=dueMoment(t); if(!D) return;
     var dd=startOfDay(D);
     if(dd.getTime()<today.getTime()) over.push(t);
+    else if(dd.getTime()>today.getTime()){ if(dd.getTime()<=wkEnd.getTime()) week.push(t); }                                    // v31: due in the next 7 days
     else if(dd.getTime()===today.getTime()){
       if(t.dueTime){ if(D.getTime()<=n.getTime()) now.push(t); else later.push(t); }          // a timed task shows when its time arrives
       else if(remBlockOk(t)) now.push(t); else later.push(t);                                  // untimed: only in the right hours block
     }
   });
   var all=state.tasks.filter(function(t){ return !t.completed; });
-  return {now:sortTasks(now), today:sortTasks(later), over:sortTasks(over), all:sortTasks(all)};
+  week.sort(function(a,b){ return dueMoment(a).getTime()-dueMoment(b).getTime(); });
+  return {now:sortTasks(now), today:sortTasks(later), week:week, over:sortTasks(over), all:sortTasks(all)};
 }
 function remDueText(t){
   var D=dueMoment(t); if(!D) return 'No date';
@@ -4733,6 +4800,8 @@ function remClick(e){
   var a=el.getAttribute('data-act'), id=el.getAttribute('data-id');
   if(a==='close') remClose();
   else if(a==='lclose') locClose();
+  else if(a==='bmopen') bmOpen();
+  else if(a==='bmclose') bmClose();
   else if(a==='bell') remOpen('now');
   else if(a==='pill'){ var b=document.getElementById('locBanner'); if(b) b.style.display='none'; locOpen(); }
   else if(a==='done'){ remDone(id); }
@@ -4740,7 +4809,7 @@ function remClick(e){
   else if(a==='dclose'){ locDetailClose(); }
   else if(a==='dedit'){ locDetailClose(); openTaskDetail(id); }
   else if(a==='ddone'){ locDetailClose(); remDone(id); }
-  else if(a==='notnow'){ LOC.notNow[id]=true; locRender(); locUpdatePill(); var _v=locBuildView(); if(!(_v.place.length+_v.personal.length+_v.itc.length+_v.nudge.length)) locClose(); }
+  else if(a==='notnow'){ LOC.notNow[id]=true; locRender(); locUpdatePill(); var _v=locBuildView(); if(!(_v.place.length+_v.personal.length+_v.pic.length+_v.itc.length+_v.nudge.length)) locClose(); }
   else if(a==='more'){ _remShowAll=true; remRender(); }
   else if(a==='lmore'){ _locShowAll=true; locRender(); }
   else if(a==='lcheck'){ locCheckNow(true); }
@@ -4749,8 +4818,43 @@ function remClick(e){
 function remDone(id){
   var t=state.tasks.find(function(x){return x.id===id;}); if(!t || t.completed) return;
   toggle(id);                       // same path as the circle: saves, redraws, and creates any dictated follow-up
-  remRender(); locRender(); locUpdatePill(); remUpdateBell();
+  remRender(); locRender(); locUpdatePill(); remUpdateBell(); try{ bmRender(); }catch(e){}
 }
+// ── v31: the Brahma Muhurta pill. It shows only inside the window. Tap it for a quiet list of Manan and Manthan tasks. ──
+function bmTimeText(b){
+  var a=fmtClock(b.start), z=fmtClock(b.end);
+  if(a.slice(-2)===z.slice(-2)) a=a.slice(0,-3);
+  return a+' – '+z;
+}
+function bmUpdate(){
+  var w=document.getElementById('bmWrap'); if(!w) return;
+  var b=null; try{ b=hrsBM(); }catch(e){}
+  if(!(b && b.now)){ if(w.innerHTML) w.innerHTML=''; w.removeAttribute('data-sig'); return; }
+  var sig=String(b.start.getTime());
+  if(w.getAttribute('data-sig')===sig && w.innerHTML) return;
+  w.setAttribute('data-sig',sig);
+  w.innerHTML='<button class="bm-pill" data-act="bmopen" aria-label="Brahma Muhurta. Tap to see your Manan and Manthan tasks"><span class="bm-jsk">🙏 Jai Shri Krishna</span><span class="bm-time">Brahma Muhurta · '+esc(bmTimeText(b))+'</span></button>';
+}
+function bmBuildDom(){
+  if(document.getElementById('bmOverlay')) return;
+  var d=document.createElement('div'); d.id='bmOverlay'; d.className='rem-overlay';
+  d.innerHTML='<div class="rem-card" role="dialog" aria-label="Manan and Manthan"><div class="rem-hdr"><div class="rem-ttl">🙏 Manan and Manthan</div><button class="rem-x" data-act="bmclose" aria-label="Close">✕</button></div><div class="rem-sub" id="bmSub"></div><div class="rem-list" id="bmList"></div></div>';
+  document.body.appendChild(d);
+}
+function bmRender(){
+  var l=document.getElementById('bmList'); if(!l) return;
+  var open=state.tasks.filter(function(t){ return !t.completed; });
+  var man=sortTasks(open.filter(function(t){ return t.bucket==='Manan'; })), mth=sortTasks(open.filter(function(t){ return t.bucket==='Manthan'; }));
+  var b=null; try{ b=hrsBM(); }catch(e){}
+  document.getElementById('bmSub').textContent='A quiet hour for thinking.'+(b?' Brahma Muhurta, '+bmTimeText(b)+'.':'');
+  var h='';
+  if(man.length) h+='<div class="loc-grp">Manan · think first · '+man.length+'</div>'+man.map(function(t){ return remRowHtml(t,'',false); }).join('');
+  if(mth.length) h+='<div class="loc-grp">Manthan · two pulls to resolve · '+mth.length+'</div>'+mth.map(function(t){ return remRowHtml(t,'',false); }).join('');
+  if(!h) h='<div class="rem-empty">No Manan or Manthan tasks right now.</div>';
+  l.innerHTML=h;
+}
+function bmOpen(){ bmBuildDom(); bmRender(); document.getElementById('bmOverlay').classList.add('open'); }
+function bmClose(){ var o=document.getElementById('bmOverlay'); if(o) o.classList.remove('open'); }
 function remOpen(chip){
   remBuildDom(); if(chip) _remChip=chip; _remShowAll=false; remRender();
   document.getElementById('remOverlay').classList.add('open');
@@ -4758,13 +4862,14 @@ function remOpen(chip){
 function remClose(){ var o=document.getElementById('remOverlay'); if(o) o.classList.remove('open'); }
 function remIsOpen(){ var o=document.getElementById('remOverlay'); return !!(o && o.classList.contains('open')); }
 function remRender(){
-  var L=remLists(), chips=[['now','Now',L.now.length],['today','Today',L.today.length],['over','Overdue',L.over.length],['all','Overview',L.all.length]];
+  var L=remLists(), chips=[['now','Now',L.now.length],['today','Today',L.today.length+L.week.length],['over','Overdue',L.over.length],['all','Overview',L.all.length]];
   document.getElementById('remChips').innerHTML=chips.map(function(c){
     return '<label class="rem-chip'+(_remChip===c[0]?' on':'')+'"><input type="radio" name="remchip" value="'+c[0]+'"'+(_remChip===c[0]?' checked':'')+'>'+c[1]+' <b>'+c[2]+'</b></label>';
   }).join('');
-  var list=L[_remChip]||[], cap=REMINDER_LIST_CAP, shown=_remShowAll?list:list.slice(0,cap), h='';
-  if(!list.length) h='<div class="rem-empty">'+({now:'Nothing is due right now.',today:'Nothing else is due today.',over:'Nothing overdue.',all:'No open tasks.'})[_remChip]+'</div>';
-  else h=shown.map(function(t){ return remRowHtml(t); }).join('');
+  var list=(_remChip==='today') ? L.today.concat(L.week) : (L[_remChip]||[]), cap=REMINDER_LIST_CAP, shown=_remShowAll?list:list.slice(0,cap), h='';
+  var wkIds={}; L.week.forEach(function(t){ wkIds[t.id]=1; });
+  if(!list.length) h='<div class="rem-empty">'+({now:'Nothing is due right now.',today:'Nothing else is due today or in the next 7 days.',over:'Nothing overdue.',all:'No open tasks.'})[_remChip]+'</div>';
+  else{ var wkHdr=false; shown.forEach(function(t){ if(_remChip==='today' && wkIds[t.id] && !wkHdr){ h+='<div class="loc-grp">Next 7 days · '+L.week.length+'</div>'; wkHdr=true; } h+=remRowHtml(t); }); }
   if(list.length>shown.length) h+='<button class="rem-more" data-act="more">Show '+(list.length-shown.length)+' more</button>';
   document.getElementById('remList').innerHTML=h;
   remUpdateBell();
@@ -4777,6 +4882,7 @@ function remUpdateBell(){
 
 // ── when does it open by itself? ──
 function remSilentNow(){
+  if(hrsSilentNow()) return true;                  // v31: quiet hours and Brahma Muhurta
   if(SETTINGS.remMode==='all') return true;
   if(SETTINGS.remMode==='hw' && LOC.quiet) return true;
   return false;
@@ -4811,7 +4917,7 @@ function remTick(){
 var LOC_MOVE_M=40, LOC_NOTICE_S=60, LOC_CONFIRM_S=120;   // moved this far in 1 minute = moving; stayed inside it for 2 minutes = still
 var LOC_WINDOW_DAYS=7;                                   // a dated task shows from 7 days before it is due, and stays once overdue
 var LOC_NUDGE_MIN=60;
-var LOC_NEW_DAYS=7, LOC_STALE_DAYS=120;                  // v30 freshness tags inside Overdue: New up to 7 days late, Aging after that, Stale from 120 days                                    // a task with a time nudges this many minutes before it starts
+var LOC_NEW_DAYS=7;                                      // v31 tags inside Overdue (DK): New up to 7 days late, Stale after that                                    // a task with a time nudges this many minutes before it starts
 var LOC_QUOTE_WORDS=8;                                   // the AI's quote can be at most this many words
 var LOC={watch:null, tick:null, lat:null, lng:null, acc:null, speed:null, at:0, quiet:null, perm:'unknown', status:'GPS is off.', area:'', place:null, cls:{}, clsSig:'', matches:[], sig:'', lookupAt:0, lookupLat:null, lookupLng:null, calls:[], shown:{}, notNow:{}, busy:false, hist:[], motion:'still', mph:0, ai:null, chip:'', nudged:{}};
 function locNowMs(){ return (typeof window.__LOC_NOW==='number') ? window.__LOC_NOW : Date.now(); }
@@ -4838,9 +4944,11 @@ function locOnErr(err){
   else if(LOC.lat===null){ if(err && err.code===2) locSetStatus('The phone could not find your position right now.'); else locSetStatus('Waiting for the phone to answer…'); }
 }
 function locZone(lat,lng){
-  var z=null;
-  [['home',SETTINGS.home],['work',SETTINGS.work]].forEach(function(p){ if(p[1] && typeof p[1].lat==='number' && locHav(lat,lng,p[1].lat,p[1].lng)<=HOME_WORK_RADIUS_M) z=p[0]; });
-  return z;
+  var hit=[];
+  [['home',SETTINGS.home],['work',SETTINGS.work]].forEach(function(p){ if(p[1] && typeof p[1].lat==='number' && locHav(lat,lng,p[1].lat,p[1].lng)<=HOME_WORK_RADIUS_M) hit.push(p[0]); });
+  // v30 fix, v31: when Home and Work are the same address both match. Work wins only during your ITC hours (My hours), otherwise it is home.
+  if(hit.length===2) return hrsBlock()==='itc' ? 'work' : 'home';
+  return hit.length?hit[0]:null;
 }
 
 // ── movement: still, moving or driving. Moving is noticed after 1 minute; still is confirmed after 2 minutes. ──
@@ -4948,24 +5056,27 @@ function locHit(t, words){
   return null;
 }
 function locKey(t){ var s=locTaskText(t), h=5381; for(var i=0;i<s.length;i++){ h=((h<<5)+h+s.charCodeAt(i))|0; } return String(h); }
-// v30 (DK, 16 Oct 2026): ONE clock for the pop-up. Overdue means overdue by the task's date; a task with no date is overdue by the days since it was entered.
-//   today = due today (or no date and entered today) · week = due in the next 7 days · over = overdue. Further out than 7 days: not listed here.
+// v31 (DK, 17 Oct 2026): ONE clock for the pop-up.
+//   today = due today (or no date and entered today) · week = due in the next 7 days · over = overdue
+//   someday = leisure and parking-lot tasks with no date (they never count as overdue), and dated tasks more than 7 days away (these show only when they belong to this very place)
+//   Overdue means overdue by the task's date. A task with no date at all (and not leisure) is overdue by the days since it was entered.
 function locClock(t){
   var today=startOfDay(nowWall()), D=null;
   var hasClock=!!(t.dueDate || (t.timeHorizonType && t.timeHorizonType!=='parkingLot'));
   if(hasClock) D=dueMoment(t);
   if(D){
     var diff=Math.round((startOfDay(D).getTime()-today.getTime())/86400000);
-    if(diff<0) return {w:'over', days:-diff, D:D, age:false};
-    if(diff===0) return {w:'today', days:0, D:D, age:false};
-    if(diff<=LOC_WINDOW_DAYS) return {w:'week', days:0, D:D, age:false};
-    return null;
+    if(diff<0) return {w:'over', days:-diff, D:D, age:false, later:false};
+    if(diff===0) return {w:'today', days:0, D:D, age:false, later:false};
+    if(diff<=LOC_WINDOW_DAYS) return {w:'week', days:0, D:D, age:false, later:false};
+    return {w:'someday', days:0, D:D, age:false, later:true};
   }
+  if(t.timeHorizonType==='parkingLot' || t.bucket==='Vishram') return {w:'someday', days:sittingDays(t), D:null, age:true, later:false};
   var d=sittingDays(t);
-  return d>0 ? {w:'over', days:d, D:null, age:true} : {w:'today', days:0, D:null, age:true};
+  return d>0 ? {w:'over', days:d, D:null, age:true, later:false} : {w:'today', days:0, D:null, age:true, later:false};
 }
-function locEligible(t){ return !t.completed && t.bucket!=='Tyaga' && t.bucket!=='Prarabdha' && t.bucket!=='Dhairya' && locClock(t)!==null; }
-function locPill(t){ return topArea(t)==='ITC' ? 'itc' : 'personal'; }     // Personal pill = Personal/Family + Picturizze + other. ITC pill = ITC only.
+function locEligible(t){ return !t.completed && t.bucket!=='Tyaga' && t.bucket!=='Prarabdha' && t.bucket!=='Dhairya'; }
+function locPill(t){ var a=topArea(t); return a==='ITC' ? 'itc' : (a==='Picturizze' ? 'pic' : 'personal'); }     // v31: Personal = Personal/Family and other. Picturizze has its own pill. ITC = ITC only.
 function locTaskList(place){
   var all=sortTasks(state.tasks.filter(locEligible));
   var words=(place && !place.kind)?locWords(place):[], hits=[], rest=[];
@@ -5124,7 +5235,7 @@ function locNudgeTasks(){
   }).sort(function(a,b){ return dueMoment(a).getTime()-dueMoment(b).getTime(); });
 }
 function locNudgeCheck(){
-  if(SETTINGS.remMode==='all') return;
+  if(SETTINGS.remMode==='all' || hrsSilentNow()) return;
   var fresh=locNudgeTasks().filter(function(t){ return !LOC.nudged[t.id+'|'+(t.dueDate||'')+'|'+(t.dueTime||'')]; });
   if(!fresh.length || remAnyModalOpen()) return;
   fresh.forEach(function(t){ LOC.nudged[t.id+'|'+(t.dueDate||'')+'|'+(t.dueTime||'')]=true; });
@@ -5137,21 +5248,23 @@ function locTodayRank(i, now){ return i.t.dueTime && i.D ? (i.D.getTime()<=now ?
 // v30 order (DK): a place match first, then due now, then due today, then overdue with the NEWEST overdue first.
 function locSortItems(items){
   var base={}; sortTasks(items.map(function(i){ return i.t; })).forEach(function(t,ix){ base[t.id]=ix; });
-  var now=nowWall().getTime(), wo={today:0,week:1,over:2};
+  var now=nowWall().getTime(), wo={today:0,week:1,over:2,someday:3};
   items.sort(function(a,b){
     if(a.place!==b.place) return a.place?-1:1;
     if(a.w!==b.w) return wo[a.w]-wo[b.w];
     if(a.w==='over'){ if(a.days!==b.days) return a.days-b.days; }
     else if(a.w==='today'){ var ra=locTodayRank(a,now), rb=locTodayRank(b,now); if(ra!==rb) return ra-rb; if(ra<2 && a.D.getTime()!==b.D.getTime()) return a.D.getTime()-b.D.getTime(); }
+    else if(a.w==='someday'){ if(a.later!==b.later) return a.later?1:-1; if(a.later){ if(a.D.getTime()!==b.D.getTime()) return a.D.getTime()-b.D.getTime(); } else if(a.days!==b.days) return a.days-b.days; }
     else { var da=a.D?a.D.getTime():0, db=b.D?b.D.getTime():0; if(da!==db) return da-db; }
     return base[a.t.id]-base[b.t.id];
   });
   return items;
 }
-// v30 (DK): a task shows only if it belongs to this place, or it can be done by voice with hands and eyes free.
+// v31 (DK): a task shows only if it belongs to this place, or it can be done by voice with hands and eyes free.
+//   With no AI, only the place matches show (the old "can do while moving" mark is no longer used).
 //   At home or at work (standing still) only the chores that belong there show: the AI's "home" or "work", including tasks where DK says home or office.
 function locBuildView(){
-  var mode=SETTINGS.remMode, zone=LOC.quiet, v={place:[], personal:[], itc:[], nudge:[], off:false, zone:zone||null};
+  var mode=SETTINGS.remMode, zone=LOC.quiet, v={place:[], personal:[], pic:[], itc:[], nudge:[], off:false, zone:zone||null};
   if(mode==='all') { v.off=true; return v; }
   v.nudge=locNudgeTasks();
   if(mode==='hw' && zone){ v.off=true; return v; }
@@ -5159,21 +5272,18 @@ function locBuildView(){
     if(LOC.notNow[t.id]) return;
     var c=LOC.cls[t.id]; if(c && c.k!==locKey(t)) c=null;
     var known=!!(c && c.at!=='unknown'), k=locClock(t); if(!k) return;
-    var item={t:t, c:c, why:'', w:k.w, days:k.days, D:k.D, age:k.age, place:false, here:false};
+    var item={t:t, c:c, why:'', w:k.w, days:k.days, D:k.D, age:k.age, later:k.later, place:false, here:false};
     if(zone){
       if(known && c.at===zone){ item.why=zone; item.here=true; v[locPill(t)].push(item); }
-    }else if(known && c.at==='place'){ item.place=true; item.here=true; v.place.push(item); }
-    else{
-      var vo=(c && typeof c.voice==='boolean') ? c.voice : null;          // the AI could not be asked: fall back to the multitask mark
-      if(vo===null ? t.multitask===true : vo){ item.why='voice'; v[locPill(t)].push(item); }
-    }
+    }else if(known && c.at==='place'){ item.place=true; item.here=true; v.place.push(item); }                  // a place match shows whatever its date
+    else if(!k.later && c && c.voice===true){ item.why='voice'; v[locPill(t)].push(item); }                    // far-off dated tasks show only as place matches
   });
-  ['place','personal','itc'].forEach(function(k){ locSortItems(v[k]); });
+  ['place','personal','pic','itc'].forEach(function(k){ locSortItems(v[k]); });
   return v;
 }
 // what is worth a pop-up or a count: everything due today, plus anything that belongs to this very place
-function locAttn(v){ return v.place.concat(v.personal, v.itc).filter(function(i){ return i.place || i.w==='today'; }); }
-function locVisible(){ var v=locBuildView(); return v.place.concat(v.personal, v.itc).map(function(i){ return {id:i.t.id}; }); }
+function locAttn(v){ return v.place.concat(v.personal, v.pic, v.itc).filter(function(i){ return i.place || i.w==='today'; }); }
+function locVisible(){ var v=locBuildView(); return v.place.concat(v.personal, v.pic, v.itc).map(function(i){ return {id:i.t.id}; }); }
 function locUpdatePill(){
   var p=document.getElementById('locPill'); if(!p) return;
   var v=locBuildView(), n=locAttn(v).length+v.nudge.length;
@@ -5216,12 +5326,14 @@ function locAnnounce(n, force){
 var _LVL={here:'📍 here',nearby:'🛒 near you',city:'🏙 this city',metro:'🏙 metro area'};
 var _WHYTAG={voice:'🎙 by voice',home:'🏠 at home',work:'🏢 at work'};
 function locOv(i){
-  if(!i.age || i.w!=='over') return null;
-  return {txt:i.days+' day'+(i.days===1?'':'s')+' late', st:(i.days>7?'TAMAS':'OVERDUE'), col:(i.days>7?'#5A0F0F':'#C62828')};
+  if(!i.age) return null;
+  if(i.w==='over') return {txt:i.days+' day'+(i.days===1?'':'s')+' late', st:(i.days>7?'TAMAS':'OVERDUE'), col:(i.days>7?'#5A0F0F':'#C62828')};
+  if(i.w==='someday') return {txt:'No date', st:'SOMEDAY', col:'#7A6A99'};
+  return null;
 }
 function locFresh(i){
   if(i.w!=='over') return '';
-  var f=i.days>=LOC_STALE_DAYS?['stale','Stale']:(i.days>LOC_NEW_DAYS?['aging','Aging']:['new','New']);
+  var f=i.days>LOC_NEW_DAYS?['stale','Stale']:['new','New'];
   return '<span class="loc-fresh '+f[0]+'">'+f[1]+' · '+i.days+' day'+(i.days===1?'':'s')+' late</span>';
 }
 function locRowExtra(i){
@@ -5239,7 +5351,7 @@ function locListHtml(items, cap){
   if(items.length>shown) h+='<button class="rem-more" data-act="lmore">Show '+(items.length-shown)+' more</button>';
   return h;
 }
-var LOC_WHEN_CHIPS=[['today','Today'],['week','This week'],['over','Overdue']];
+var LOC_WHEN_CHIPS=[['today','Today'],['week','This week'],['over','Overdue'],['someday','Someday']];
 function locRender(){
   var ttl=document.getElementById('locTtl'); if(!ttl) return;
   var v=locBuildView(), z=v.zone, h='';
@@ -5248,7 +5360,7 @@ function locRender(){
   ttl.textContent='📍 '+where+((!z && LOC.motion!=='still' && LOC.area)?' · near '+LOC.area:'');
   var W=LOC.when||'today';
   function inW(list){ return list.filter(function(i){ return i.w===W; }); }
-  var chips=[]; if(!z) chips.push(['place','At this place',inW(v.place)]); chips.push(['personal','Personal',inW(v.personal)]); chips.push(['itc','ITC',inW(v.itc)]);
+  var chips=[]; if(!z) chips.push(['place','At this place',inW(v.place)]); chips.push(['personal','Personal',inW(v.personal)]); chips.push(['pic','Picturizze',inW(v.pic)]); chips.push(['itc','ITC',inW(v.itc)]);
   var cur=LOC.chip; if(!chips.some(function(c){return c[0]===cur;})) cur='';
   if(!cur){ var f=chips.filter(function(c){return c[2].length;})[0]; cur=(f||chips[0])[0]; }
   LOC.chip=cur;
@@ -5268,10 +5380,10 @@ function locRender(){
   cb.innerHTML=noChips?'':chips.map(function(c){ return '<label class="rem-chip'+(cur===c[0]?' on':'')+'"><input type="radio" name="locchip" value="'+c[0]+'"'+(cur===c[0]?' checked':'')+'>'+c[1]+' <b>'+c[2].length+'</b></label>'; }).join('');
   cb.style.display=noChips?'none':'flex';
   // v30: the time pills. Today is the focus. Overdue says how many of its tasks belong to this very place.
-  var allItems=v.place.concat(v.personal, v.itc);
+  var allItems=v.place.concat(v.personal, v.pic, v.itc);
   cw.innerHTML=noChips?'':LOC_WHEN_CHIPS.map(function(c){
     var n=allItems.filter(function(i){ return i.w===c[0]; }).length, here=allItems.filter(function(i){ return i.w===c[0] && i.here; }).length;
-    var badge=(c[0]==='over') ? (here?' <b>· '+here+' here</b>':'') : ' <b>'+n+'</b>';
+    var badge=(c[0]==='over' || c[0]==='someday') ? (here?' <b>· '+here+' here</b>':'') : ' <b>'+n+'</b>';
     return '<label class="rem-chip'+(W===c[0]?' on':'')+'"><input type="radio" name="locwhen" value="'+c[0]+'"'+(W===c[0]?' checked':'')+'>'+c[1]+badge+'</label>';
   }).join('');
   cw.style.display=noChips?'none':'flex';
@@ -5280,7 +5392,7 @@ function locRender(){
     if(sel.length) h+=locListHtml(sel, _locShowAll?9999:REMINDER_LIST_CAP);
     else{
       var anyHere=chips.some(function(c){ return c[2].length; });
-      h+='<div class="rem-empty">'+(W==='today' ? ((cur==='place' && anyHere)?'Nothing for this place today.':'Nothing for today.'+(LOC.motion==='driving'?' Enjoy the drive.':'')) : (W==='week' ? 'Nothing due in the next 7 days.' : (cur==='place'?'No overdue tasks for this place.':'Nothing overdue here.')))+'</div>';
+      h+='<div class="rem-empty">'+(W==='today' ? ((cur==='place' && anyHere)?'Nothing for this place today.':'Nothing for today.'+(LOC.motion==='driving'?' Enjoy the drive.':'')) : (W==='week' ? 'Nothing due in the next 7 days.' : (W==='someday' ? (cur==='place'?'Nothing parked for this place.':'Nothing parked here.') : (cur==='place'?'No overdue tasks for this place.':'Nothing overdue here.'))))+'</div>';
     }
   }else if(!v.nudge.length) h+='<div class="rem-empty">Nothing to show.</div>';
   list.innerHTML=h;
@@ -5350,6 +5462,57 @@ function locSettingsHtml(){
     +'<div class="rs-row rs-savebar"><button class="rs-btn rs-save" onclick="rsSaveAll()">💾 Save settings</button><div class="rs-sm" id="rsSaved">'+esc(rsSavedText())+'</div></div>'
     +'</div>';
 }
+// ── v31: My hours card ──
+function hrsStr(m){ var h=Math.floor(m/60), mm=m%60; return (h<10?'0':'')+h+':'+(mm<10?'0':'')+mm; }
+function hrsMin(v){ var m=/^(\d{1,2}):(\d{2})/.exec(v||''); return m?(+m[1])*60+(+m[2]):null; }
+function hrsRowHtml(kind, ic, label, d){
+  var w=d[kind], on=!!w, pre={itc:[540,1020],pic:[540,1020],quiet:[1380,300]}[kind], s=on?w[0]:pre[0], e=on?w[1]:pre[1];
+  return '<div class="rs-row"><label class="rs-opt"><input type="checkbox" id="hrs-on-'+kind+'"'+(on?' checked':'')+' onchange="hrsEdit()"> '+ic+' '+label+'</label>'
+    +'<div class="hrs-t"><input type="time" class="rs-in" id="hrs-s-'+kind+'" value="'+hrsStr(s)+'"'+(on?'':' disabled')+' onchange="hrsEdit()"><span>to</span><input type="time" class="rs-in" id="hrs-e-'+kind+'" value="'+hrsStr(e)+'"'+(on?'':' disabled')+' onchange="hrsEdit()"></div></div>';
+}
+function hrsCardHtml(){
+  if(!HRS_DRAFT) HRS_DRAFT=JSON.parse(JSON.stringify(hrsDays()));
+  var d=HRS_DRAFT[HRS_VIEW], order=[1,2,3,4,5,6,0];
+  var chips='<div class="hrs-chips">'+order.map(function(i){ return '<button type="button" class="rem-chip'+(i===HRS_VIEW?' on':'')+'" onclick="hrsPick('+i+')">'+HRS_DAYS[i]+'</button>'; }).join('')+'</div>';
+  var b=null; try{ b=hrsBM(); }catch(e){}
+  var bm=b ? ('🙏 Brahma Muhurta today: '+fmtClock(b.start)+' – '+fmtClock(b.end)+' (sunrise '+fmtClock(b.sunrise)+'). Quiet too.') : '🙏 Brahma Muhurta is quiet too. Save your Home address under Reminders and location, and Chakra works it out from sunrise.';
+  return '<div class="rs-card"><div class="rs-h">🕒 My hours</div>'
+    +'<div class="rs-sm" style="margin-bottom:8px">Chakra follows these everywhere: reminders, pop-ups, and Home or Work. Saved on this phone.</div>'
+    +chips+'<div class="rs-sub">'+HRS_DAYS_LONG[HRS_VIEW]+'</div>'
+    +hrsRowHtml('itc','💼','ITC hours',d)+hrsRowHtml('pic','📸','Picturizze hours',d)+hrsRowHtml('quiet','🌙','Quiet hours',d)
+    +'<div class="rs-sm">🏠 Personal is everything else. If hours overlap, Quiet comes first, then ITC, then Picturizze.</div>'
+    +'<div class="rs-sm" id="hrsBm">'+esc(bm)+'</div>'
+    +'<div class="rs-row"><button class="rs-btn" onclick="hrsCopy()">Copy '+HRS_DAYS_LONG[HRS_VIEW]+' to all weekdays</button></div>'
+    +'<div class="rs-row rs-savebar"><button class="rs-btn rs-save" onclick="hrsSave()">💾 Save hours</button><div class="rs-sm" id="hrsSaved">'+esc(SETTINGS&&SETTINGS.hours?'Your hours are saved on this phone.':'Showing the old default hours. Tap Save hours to keep your own.')+'</div></div></div>';
+}
+function hrsRender(){ var e=document.getElementById('hrsCard'); if(e) e.innerHTML=hrsCardHtml(); }
+function hrsEdit(){
+  if(!HRS_DRAFT) return; var d=HRS_DRAFT[HRS_VIEW];
+  ['itc','pic','quiet'].forEach(function(k){
+    var on=document.getElementById('hrs-on-'+k), si=document.getElementById('hrs-s-'+k), ei=document.getElementById('hrs-e-'+k); if(!on||!si||!ei) return;
+    si.disabled=!on.checked; ei.disabled=!on.checked;
+    if(!on.checked){ d[k]=null; return; }
+    var a=hrsMin(si.value), b=hrsMin(ei.value); if(a!==null && b!==null) d[k]=[a,b];
+  });
+}
+function hrsPick(i){ hrsEdit(); HRS_VIEW=i; hrsRender(); }
+function hrsCopy(){
+  hrsEdit(); var src=HRS_DRAFT[HRS_VIEW];
+  for(var i=1;i<=5;i++){ if(i!==HRS_VIEW) HRS_DRAFT[i]=JSON.parse(JSON.stringify(src)); }
+  toast('✓ '+HRS_DAYS_LONG[HRS_VIEW]+' copied to Monday to Friday. Tap Save hours to keep it.','ok',3500);
+}
+function hrsSave(){
+  hrsEdit();
+  for(var i=0;i<7;i++){
+    var bad=null;
+    ['itc','pic'].forEach(function(k){ var w=HRS_DRAFT[i][k]; if(w && w[0]>=w[1]) bad=(k==='itc'?'ITC':'Picturizze')+' hours on '+HRS_DAYS_LONG[i]+': the end must be after the start'; });
+    if(bad){ toast(bad,'warn',4500); return; }
+  }
+  SETTINGS.hours={days:JSON.parse(JSON.stringify(HRS_DRAFT))}; saveSettings();
+  toast('✓ Hours saved on this phone','ok',3000);
+  try{ bmUpdate(); remUpdateBell(); locUpdatePill(); }catch(e){}
+  hrsRender();
+}
 function rsSavedText(){ return SETTINGS.savedAt ? ('Saved on this phone, '+SETTINGS.savedAt+'. Key: '+(SETTINGS.mapsKey?'saved':'not set')+' · Home: '+(SETTINGS.home?'saved':'not set')+' · Work: '+(SETTINGS.work?'saved':'not set')+' · GPS: '+(SETTINGS.gps?'on':'off')) : 'Not saved yet. Tap Save settings after you fill the boxes.'; }
 function rsSaveAll(){
   var v=function(id){ var e=document.getElementById(id); return e?e.value:''; };
@@ -5407,13 +5570,14 @@ function remInit(){
   if(!_remStarted){
     _remStarted=true;
     setInterval(remTick, 60000);
+    setInterval(bmUpdate, 30000); setTimeout(bmUpdate, 600);
     document.addEventListener('visibilitychange', function(){
       if(document.visibilityState==='visible'){ setTimeout(remTick,800); if(SETTINGS.gps){ if(LOC.watch===null) locStart(); else locCheckNow(false); } }
     });
     setTimeout(remTick, 2500);
   }
   try{ renderUtilities(); }catch(e){}
-  if(!window._uhWrapped){ window._uhWrapped=true; var _uh=updateHeader; updateHeader=function(){ _uh.apply(this,arguments); try{ remUpdateBell(); locUpdatePill(); }catch(e){} }; }
+  if(!window._uhWrapped){ window._uhWrapped=true; var _uh=updateHeader; updateHeader=function(){ _uh.apply(this,arguments); try{ remUpdateBell(); locUpdatePill(); bmUpdate(); }catch(e){} }; }
 }
 
 
@@ -5434,7 +5598,7 @@ var V27={open:false, mode:'one', draft:null, one:null, sep:[], chips:null, attac
 
 // ── dates ──
 function v27PhoneNow(){ if(window.__PHONE_HOUR!==undefined){ var d=new Date(); d.setHours(window.__PHONE_HOUR,window.__PHONE_MIN||0,0,0); return d; } return new Date(); }
-function v27IsNight(){ var h=v27PhoneNow().getHours(); return h>=23 || h<5; }
+function v27IsNight(){ return hrsQuietNow(v27PhoneNow()); }   // v31: the night rule is now your Quiet hours
 var V27_NUMW={one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,a:1,an:1};
 function v27RelWord(text){
   var t=String(text||'').toLowerCase();
