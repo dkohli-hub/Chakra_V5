@@ -11,8 +11,10 @@ def _get_client() -> anthropic.AsyncAnthropic:
     if _client is None:
         # The page gives up after ~9 s (text) and falls back to its keyword reader,
         # so keep each attempt short and retry at most once.
+        workspace = settings.ANTHROPIC_WORKSPACE_ID.strip()
         _client = anthropic.AsyncAnthropic(
-            api_key=settings.ANTHROPIC_API_KEY, timeout=15.0, max_retries=1
+            api_key=settings.ANTHROPIC_API_KEY, timeout=15.0, max_retries=1,
+            default_headers={"anthropic-workspace-id": workspace} if workspace else None,
         )
     return _client
 

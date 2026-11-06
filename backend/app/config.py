@@ -16,6 +16,9 @@ class Settings(BaseSettings):
     # photo reading stays on Gemini.
     ANTHROPIC_API_KEY: str = ""
     ANTHROPIC_MODEL: str = "claude-haiku-4-5-20251001"
+    # Needed when ANTHROPIC_API_KEY is not scoped to a workspace: Anthropic then requires the
+    # workspace id (wrkspc_...) on every request. Leave empty for a workspace-scoped key.
+    ANTHROPIC_WORKSPACE_ID: str = ""
     USER_ACCOUNTS: str = '[{"id":"dk","password":"CHANGE_ME_1","displayName":"DK"}]'
 
     def get_user_accounts(self):
