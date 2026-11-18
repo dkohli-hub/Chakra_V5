@@ -27,13 +27,39 @@
 
   var token = null;
 
+  // V36 has no password on its home page ("Enter" opens Chakra). The backend still needs a
+  // sign-in, so the password is asked ONCE per phone; the 30-day sign-in is kept on this
+  // phone and Enter just works after that. A sign-in the backend refuses is forgotten.
+  var TOKEN_KEY = 'chakra_v24_signin';
+  function tokenExp(tk) {
+    try {
+      var p = tk.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      return JSON.parse(atob(p + '===='.slice(p.length % 4 || 4))).exp * 1000;
+    } catch (e) { return 0; }
+  }
+  function loadSavedToken() {
+    try {
+      var s = JSON.parse(localStorage.getItem(TOKEN_KEY) || 'null');
+      if (s && s.token && s.api === API && tokenExp(s.token) > Date.now() + 60000) return s;
+    } catch (e) {}
+    return null;
+  }
+  function saveToken(res) {
+    try {
+      localStorage.setItem(TOKEN_KEY, JSON.stringify({ token: res.access_token, user: res.user_id, name: res.display_name, api: API }));
+    } catch (e) {}
+  }
+  function forgetToken() { try { localStorage.removeItem(TOKEN_KEY); } catch (e) {} }
+  var saved = loadSavedToken();
+  if (saved) token = saved.token;
+
   function request(method, path, body) {
     var opts = { method: method, headers: { 'Content-Type': 'application/json' } };
     if (token) opts.headers.Authorization = 'Bearer ' + token;
     if (body !== undefined) opts.body = JSON.stringify(body);
     return fetch(API + path, opts).then(function (r) {
       if (r.status === 401 && token) {
-        token = null;
+        token = null; forgetToken();
         toast('Session expired — please log in again', 'warn', 3500);
         setTimeout(function () { location.reload(); }, 1500);
       }
@@ -89,6 +115,12 @@
       followsId: t.follows_id || null,
       followUpSpawnedId: t.follow_up_spawned_id || null,
       cc: t.cc || null,
+      // V36: links, one WhatsApp message, deck snooze / ignore times, background schedule
+      links: t.links || [],
+      waMsg: t.wa_msg || '',
+      snoozeUntil: t.snooze_until == null ? null : t.snooze_until,
+      ignoreUntil: t.ignore_until == null ? null : t.ignore_until,
+      schedule: t.schedule || null,
       lifeArea: t.life_area,
       multitask: t.multitask,
       linkedTasks: t.linked_tasks || [],
@@ -130,6 +162,11 @@
       follows_id: t.followsId || null,
       follow_up_spawned_id: t.followUpSpawnedId || null,
       cc: t.cc || null,
+      links: t.links || [],
+      wa_msg: t.waMsg || null,
+      snooze_until: t.snoozeUntil == null ? null : t.snoozeUntil,
+      ignore_until: t.ignoreUntil == null ? null : t.ignoreUntil,
+      schedule: t.schedule || null,
       life_area: t.lifeArea || null,
       multitask: t.multitask === true,
       linked_tasks: t.linkedTasks || [],
@@ -234,25 +271,79 @@
 
   // ── Replacements for the HTML's own functions ─────────────────────────────
 
-  window.attemptLogin = function () {
-    var idVal = (document.getElementById('loginId').value || '').trim().toLowerCase();
-    var pwVal = document.getElementById('loginPw').value || '';
-    var err = document.getElementById('loginError');
-    if (!idVal || !pwVal) { if (err) err.textContent = 'Incorrect ID or password.'; return; }
-    if (err) err.textContent = '';
-    request('POST', '/auth/login', { user_id: idVal, password: pwVal }).then(function (res) {
-      token = res.access_token;
-      currentUser = { id: res.user_id, displayName: res.display_name };
-      DB_KEY = 'chakra_' + currentUser.id + '_tasks_v1';
-      var overlay = document.getElementById('loginOverlay');
-      if (overlay) overlay.className = 'login-overlay hidden';
-      renderUserBadge();
-      loadState();
-    }, function (e) {
-      if (err) err.textContent = (e.status === 401) ? 'Incorrect ID or password.'
-        : 'Cannot reach Chakra right now. Try again in a moment.';
-    });
+  // Opens Chakra with the backend sign-in (the page's own "Enter" and its Enter key both land here).
+  function openChakra(user, name) {
+    var overlay = document.getElementById('loginOverlay');
+    if (overlay) overlay.className = 'login-overlay hidden';
+    if (window._homeLightsTimer) { clearInterval(window._homeLightsTimer); window._homeLightsTimer = null; }
+    if (currentUser) return;                       // already opened once: Enter from Home just hides Home again
+    currentUser = { id: user, displayName: name || user };
+    DB_KEY = 'chakra_' + currentUser.id + '_tasks_v1';
+    loadState();
+    try { window.aiPing(); } catch (e) {}
+  }
+
+  // The one-time password box, shown over the home page the first time Enter is pressed on a phone.
+  function askPassword() {
+    var box = document.getElementById('signinBox');
+    if (!box) {
+      box = document.createElement('div');
+      box.id = 'signinBox';
+      box.setAttribute('role', 'dialog');
+      box.setAttribute('aria-label', 'Sign in to Chakra');
+      box.style.cssText = 'position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:20px;';
+      box.innerHTML = '<form id="signinForm" style="background:#F5F3EE;color:#1A1A1A;border-radius:18px;padding:20px 18px;width:100%;max-width:340px;font-family:Montserrat,sans-serif;box-shadow:0 10px 40px rgba(0,0,0,.4);">'
+        + '<div style="font-family:\'Cormorant Garamond\',serif;font-size:24px;font-weight:700;color:#1A6B5A;">Sign in once</div>'
+        + '<div style="font-size:12.5px;color:#4A463E;margin:4px 0 12px;line-height:1.45;">Enter your Chakra password. This phone will remember it for 30 days, and Enter will just work after that.</div>'
+        + '<input id="signinPw" type="password" autocomplete="current-password" placeholder="Password" style="width:100%;box-sizing:border-box;padding:12px;border:1px solid #D4CCBC;border-radius:10px;font-size:16px;">'
+        + '<div id="signinErr" style="color:#8B1A1A;font-size:12.5px;min-height:18px;margin-top:6px;"></div>'
+        + '<div style="display:flex;gap:8px;margin-top:6px;"><button type="button" id="signinCancel" style="flex:1;padding:12px;border-radius:10px;border:1px solid #D4CCBC;background:transparent;font-size:14px;">Cancel</button>'
+        + '<button type="submit" style="flex:1;padding:12px;border-radius:10px;border:0;background:#1A6B5A;color:#fff;font-weight:700;font-size:14px;">Enter</button></div></form>';
+      document.body.appendChild(box);
+      document.getElementById('signinCancel').onclick = function () { box.style.display = 'none'; };
+      document.getElementById('signinForm').onsubmit = function (e) {
+        e.preventDefault();
+        var pw = document.getElementById('signinPw').value || '', err = document.getElementById('signinErr');
+        if (!pw) { err.textContent = 'Type your password.'; return; }
+        err.textContent = '';
+        request('POST', '/auth/login', { user_id: 'dk', password: pw }).then(function (res) {
+          token = res.access_token; saveToken(res);
+          document.getElementById('signinPw').value = '';
+          box.style.display = 'none';
+          openChakra(res.user_id, res.display_name);
+        }, function (er) {
+          err.textContent = (er.status === 401) ? 'That password is not right.' : 'Cannot reach Chakra right now. Try again in a moment.';
+        });
+      };
+    }
+    box.style.display = 'flex';
+    setTimeout(function () { var i = document.getElementById('signinPw'); if (i) i.focus(); }, 50);
+  }
+
+  window.enterChakra = function () {
+    if (currentUser && token) { openChakra(currentUser.id, currentUser.displayName); return; }
+    var s = loadSavedToken();
+    if (s) { token = s.token; openChakra(s.user, s.name); return; }
+    var box = document.getElementById('signinBox');
+    if (box && box.style.display === 'flex') return;   // the box is open: its own Enter button submits
+    askPassword();
   };
+  window.attemptLogin = window.enterChakra;
+
+  // V36's AI light on the home page: ask the backend, not the page's /api/ai.
+  if (typeof window.aiPing === 'function') {
+    window.aiPing = function () {
+      try { _aiLastPing = Date.now(); } catch (e) {}
+      if (!token || navigator.onLine === false) { aiLight(false); return; }
+      var done = false;
+      var timer = setTimeout(function () { if (!done) { done = true; aiLight(false); } }, 12000);
+      request('POST', '/llm/parse', { prompt: 'Reply with the single word OK.', max_tokens: 5 }).then(function (res) {
+        if (done) return; done = true; clearTimeout(timer);
+        if (typeof res.text === 'string') { try { _aiDownUntil = 0; } catch (e) {} aiLight(true); } else aiLight(false);
+      }, function () { if (done) return; done = true; clearTimeout(timer); aiLight(false); });
+    };
+    setTimeout(function () { window.aiPing(); }, 300);   // the page pinged /api/ai at start; ask again the right way
+  }
 
   window.loadState = function () {
     var ldr = document.getElementById('loader'); if (ldr) ldr.style.display = 'flex';

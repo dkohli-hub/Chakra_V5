@@ -83,6 +83,11 @@ async def create_task(
         follows_id=body.follows_id,
         follow_up_spawned_id=body.follow_up_spawned_id,
         cc=body.cc,
+        links=body.links or [],
+        wa_msg=body.wa_msg,
+        snooze_until=body.snooze_until,
+        ignore_until=body.ignore_until,
+        schedule=body.schedule,
     )
     db.add(task)
     await db.commit()
@@ -210,6 +215,11 @@ async def bulk_import(
                 follows_id=raw.get("follows_id") or raw.get("followsId"),
                 follow_up_spawned_id=raw.get("follow_up_spawned_id") or raw.get("followUpSpawnedId"),
                 cc=raw.get("cc"),
+                links=raw.get("links") or [],
+                wa_msg=raw.get("wa_msg") or raw.get("waMsg"),
+                snooze_until=raw.get("snooze_until") or raw.get("snoozeUntil"),
+                ignore_until=raw.get("ignore_until") or raw.get("ignoreUntil"),
+                schedule=raw.get("schedule"),
             )
             db.add(t)
             added += 1

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Boolean, DateTime, JSON, Integer, Text, func
+from sqlalchemy import Column, String, Boolean, DateTime, JSON, Integer, BigInteger, Text, func
 from .database import Base
 
 
@@ -49,3 +49,10 @@ class Task(Base):
     follows_id = Column(String, nullable=True)
     follow_up_spawned_id = Column(String, nullable=True)
     cc = Column(String(8), nullable=True)
+    # V36: labelled links on a task, its one WhatsApp message, deck snooze / ignore times
+    # (milliseconds since 1970, as the page stores them) and the background-schedule record.
+    links = Column(JSON, nullable=True)
+    wa_msg = Column(Text, nullable=True)
+    snooze_until = Column(BigInteger, nullable=True)
+    ignore_until = Column(BigInteger, nullable=True)
+    schedule = Column(JSON, nullable=True)

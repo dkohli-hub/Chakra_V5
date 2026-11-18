@@ -37,6 +37,11 @@ class TaskCreate(BaseModel):
     follows_id: Optional[str] = None
     follow_up_spawned_id: Optional[str] = None
     cc: Optional[str] = None
+    links: Optional[List[Any]] = None
+    wa_msg: Optional[str] = None
+    snooze_until: Optional[int] = None
+    ignore_until: Optional[int] = None
+    schedule: Optional[Any] = None
 
 
 class TaskUpdate(BaseModel):
@@ -72,6 +77,11 @@ class TaskUpdate(BaseModel):
     follows_id: Optional[str] = None
     follow_up_spawned_id: Optional[str] = None
     cc: Optional[str] = None
+    links: Optional[List[Any]] = None
+    wa_msg: Optional[str] = None
+    snooze_until: Optional[int] = None
+    ignore_until: Optional[int] = None
+    schedule: Optional[Any] = None
 
 
 class TaskOut(BaseModel):
@@ -110,6 +120,11 @@ class TaskOut(BaseModel):
     follows_id: Optional[str] = None
     follow_up_spawned_id: Optional[str] = None
     cc: Optional[str] = None
+    links: Optional[List[Any]] = None
+    wa_msg: Optional[str] = None
+    snooze_until: Optional[int] = None
+    ignore_until: Optional[int] = None
+    schedule: Optional[Any] = None
 
     class Config:
         from_attributes = True

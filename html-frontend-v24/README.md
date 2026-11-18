@@ -1,15 +1,22 @@
 # html-frontend-v24
 
-DK's current prototype (V31; the folder keeps its V24 name so the Render site is unchanged), served as its own static site. It uses the same backend
+DK's current prototype (V36; the folder keeps its V24 name so the Render site is unchanged), served as its own static site. It uses the same backend
 and the same database as `html-frontend` (V22), which stays as it is.
 
-- `index.html` — DK's prototype (now V31), unchanged (it already has
+- `index.html` — DK's prototype (now V36), unchanged (it already has
   `var USER_ACCOUNTS = [];` and `<script src="chakra-api.js"></script>`).
 - `chakra-api.js` — a copy of the V22 adapter with two V24 additions:
   - after tasks load it calls `remInit()`, which starts the reminders bell and Location AI mode;
   - `locAiCall` (Location AI matching) goes to the backend's `/llm/parse`.
 
-V24 adds no task fields, so no backend or database change is needed.
+V36 changes (adapter + backend):
+- No password on V36's home page. The adapter asks for the password once per phone and keeps
+  the 30-day sign-in on that phone, so Enter just works after that. A refused sign-in is forgotten.
+- The home page's AI light asks the backend (`/llm/parse`), not the page's `/api/ai`.
+- Five new task fields are stored: `links`, `wa_msg`, `snooze_until`, `ignore_until`, `schedule`
+  (columns added by `chakra-mcp/add_v36_columns.py`).
+- The scheduler server V36 can call (`/schedule`, `/cancel`, `/status`) is not built yet; until an
+  address is set in Config, scheduled tasks show "waiting for scheduler link".
 Tasks are shared with the V22 site: a change in one shows in the other after a reload.
 
 ## Reminders and location settings
